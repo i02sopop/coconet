@@ -1,0 +1,32 @@
+coconet pruebas/configuracion.txt pruebas/cancer/cancer.train pruebas/cancer/cancer.gen -o salida1.txt
+coconet pruebas/configuracion.txt pruebas/cancer/cancer.train pruebas/cancer/cancer.gen -o salida2.txt
+coconet pruebas/configuracion.txt pruebas/cancer/cancer.train pruebas/cancer/cancer.gen -o salida3.txt
+coconet pruebas/configuracion.txt pruebas/cancer/cancer.train pruebas/cancer/cancer.gen -o salida4.txt
+coconet pruebas/configuracion.txt pruebas/cancer/cancer.train pruebas/cancer/cancer.gen -o salida5.txt
+coconet pruebas/configuracion.txt pruebas/cancer/cancer.train pruebas/cancer/cancer.gen -o salida6.txt
+coconet pruebas/configuracion.txt pruebas/cancer/cancer.train pruebas/cancer/cancer.gen -o salida7.txt
+coconet pruebas/configuracion.txt pruebas/cancer/cancer.train pruebas/cancer/cancer.gen -o salida8.txt
+coconet pruebas/configuracion.txt pruebas/cancer/cancer.train pruebas/cancer/cancer.gen -o salida9.txt
+coconet pruebas/configuracion.txt pruebas/cancer/cancer.train pruebas/cancer/cancer.gen -o salida10.txt
+coconet pruebas/configuracion.txt pruebas/cancer/cancer.train pruebas/cancer/cancer.gen -o salida11.txt
+coconet pruebas/configuracion.txt pruebas/cancer/cancer.train pruebas/cancer/cancer.gen -o salida12.txt
+coconet pruebas/configuracion.txt pruebas/cancer/cancer.train pruebas/cancer/cancer.gen -o salida13.txt
+coconet pruebas/configuracion.txt pruebas/cancer/cancer.train pruebas/cancer/cancer.gen -o salida14.txt
+coconet pruebas/configuracion.txt pruebas/cancer/cancer.train pruebas/cancer/cancer.gen -o salida15.txt
+coconet pruebas/configuracion.txt pruebas/cancer/cancer.train pruebas/cancer/cancer.gen -o salida16.txt
+coconet pruebas/configuracion.txt pruebas/cancer/cancer.train pruebas/cancer/cancer.gen -o salida17.txt
+coconet pruebas/configuracion.txt pruebas/cancer/cancer.train pruebas/cancer/cancer.gen -o salida18.txt
+coconet pruebas/configuracion.txt pruebas/cancer/cancer.train pruebas/cancer/cancer.gen -o salida19.txt
+coconet pruebas/configuracion.txt pruebas/cancer/cancer.train pruebas/cancer/cancer.gen -o salida20.txt
+coconet pruebas/configuracion.txt pruebas/cancer/cancer.train pruebas/cancer/cancer.gen -o salida21.txt
+coconet pruebas/configuracion.txt pruebas/cancer/cancer.train pruebas/cancer/cancer.gen -o salida22.txt
+coconet pruebas/configuracion.txt pruebas/cancer/cancer.train pruebas/cancer/cancer.gen -o salida23.txt
+coconet pruebas/configuracion.txt pruebas/cancer/cancer.train pruebas/cancer/cancer.gen -o salida24.txt
+coconet pruebas/configuracion.txt pruebas/cancer/cancer.train pruebas/cancer/cancer.gen -o salida25.txt
+coconet pruebas/configuracion.txt pruebas/cancer/cancer.train pruebas/cancer/cancer.gen -o salida26.txt
+coconet pruebas/configuracion.txt pruebas/cancer/cancer.train pruebas/cancer/cancer.gen -o salida27.txt
+coconet pruebas/configuracion.txt pruebas/cancer/cancer.train pruebas/cancer/cancer.gen -o salida28.txt
+coconet pruebas/configuracion.txt pruebas/cancer/cancer.train pruebas/cancer/cancer.gen -o salida29.txt
+coconet pruebas/configuracion.txt pruebas/cancer/cancer.train pruebas/cancer/cancer.gen -o salida30.txt
+cat salida*.txt > sCancer.txt
+rm salida*.txt

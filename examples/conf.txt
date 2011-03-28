@@ -1,0 +1,20 @@
+Redes: 100
+Nodos: 50
+Nodulos: 100
+Htan a: 1.7165
+Htan b: 0.6666
+Logistic a: 1.7165
+Logistic b: 1.5000
+Epsilon: 0.4000
+Sustitucion: 3.0
+Diferencia: 6.0
+Mejores: 0.1
+Redes Seleccionadas: 3
+Nodulos Seleccionados: 3
+Iteraciones SA: 100
+To SA: 1.0
+alpha SA: 0.95
+Delta Minimo: 1
+Delta Maximo: 4
+Limite Evolucion: 0.05
+Alpha Retropropagacion: 0.25

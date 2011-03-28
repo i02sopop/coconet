@@ -1,0 +1,12 @@
+Source: coconet
+Section: unknown
+Priority: extra
+Maintainer: Pablo Alvarez de Sotomayor Posadillo <i02sopop@gmail.com>
+Build-Depends: debhelper (>= 5), autotools-dev
+Standards-Version: 3.7.2
+
+Package: coconet
+Architecture: any
+Depends: ${shlibs:Depends}, ${misc:Depends}
+Description: Redes Neuronales Cooperativas Coevolutivas
+ Este programa genera Redes Neuronales Cooperativas Coevolutivas para problemas de clasificacion.

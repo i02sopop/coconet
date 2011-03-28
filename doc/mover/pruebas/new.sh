@@ -1,0 +1,32 @@
+coconet pruebas/configuracion.txt pruebas/new-thyroid/new-thyroid.train pruebas/new-thyroid/new-thyroid.gen -o salida1.txt
+coconet pruebas/configuracion.txt pruebas/new-thyroid/new-thyroid.train pruebas/new-thyroid/new-thyroid.gen -o salida2.txt
+coconet pruebas/configuracion.txt pruebas/new-thyroid/new-thyroid.train pruebas/new-thyroid/new-thyroid.gen -o salida3.txt
+coconet pruebas/configuracion.txt pruebas/new-thyroid/new-thyroid.train pruebas/new-thyroid/new-thyroid.gen -o salida4.txt
+coconet pruebas/configuracion.txt pruebas/new-thyroid/new-thyroid.train pruebas/new-thyroid/new-thyroid.gen -o salida5.txt
+coconet pruebas/configuracion.txt pruebas/new-thyroid/new-thyroid.train pruebas/new-thyroid/new-thyroid.gen -o salida6.txt
+coconet pruebas/configuracion.txt pruebas/new-thyroid/new-thyroid.train pruebas/new-thyroid/new-thyroid.gen -o salida7.txt
+coconet pruebas/configuracion.txt pruebas/new-thyroid/new-thyroid.train pruebas/new-thyroid/new-thyroid.gen -o salida8.txt
+coconet pruebas/configuracion.txt pruebas/new-thyroid/new-thyroid.train pruebas/new-thyroid/new-thyroid.gen -o salida9.txt
+coconet pruebas/configuracion.txt pruebas/new-thyroid/new-thyroid.train pruebas/new-thyroid/new-thyroid.gen -o salida10.txt
+coconet pruebas/configuracion.txt pruebas/new-thyroid/new-thyroid.train pruebas/new-thyroid/new-thyroid.gen -o salida11.txt
+coconet pruebas/configuracion.txt pruebas/new-thyroid/new-thyroid.train pruebas/new-thyroid/new-thyroid.gen -o salida12.txt
+coconet pruebas/configuracion.txt pruebas/new-thyroid/new-thyroid.train pruebas/new-thyroid/new-thyroid.gen -o salida13.txt
+coconet pruebas/configuracion.txt pruebas/new-thyroid/new-thyroid.train pruebas/new-thyroid/new-thyroid.gen -o salida14.txt
+coconet pruebas/configuracion.txt pruebas/new-thyroid/new-thyroid.train pruebas/new-thyroid/new-thyroid.gen -o salida15.txt
+coconet pruebas/configuracion.txt pruebas/new-thyroid/new-thyroid.train pruebas/new-thyroid/new-thyroid.gen -o salida16.txt
+coconet pruebas/configuracion.txt pruebas/new-thyroid/new-thyroid.train pruebas/new-thyroid/new-thyroid.gen -o salida17.txt
+coconet pruebas/configuracion.txt pruebas/new-thyroid/new-thyroid.train pruebas/new-thyroid/new-thyroid.gen -o salida18.txt
+coconet pruebas/configuracion.txt pruebas/new-thyroid/new-thyroid.train pruebas/new-thyroid/new-thyroid.gen -o salida19.txt
+coconet pruebas/configuracion.txt pruebas/new-thyroid/new-thyroid.train pruebas/new-thyroid/new-thyroid.gen -o salida20.txt
+coconet pruebas/configuracion.txt pruebas/new-thyroid/new-thyroid.train pruebas/new-thyroid/new-thyroid.gen -o salida21.txt
+coconet pruebas/configuracion.txt pruebas/new-thyroid/new-thyroid.train pruebas/new-thyroid/new-thyroid.gen -o salida22.txt
+coconet pruebas/configuracion.txt pruebas/new-thyroid/new-thyroid.train pruebas/new-thyroid/new-thyroid.gen -o salida23.txt
+coconet pruebas/configuracion.txt pruebas/new-thyroid/new-thyroid.train pruebas/new-thyroid/new-thyroid.gen -o salida24.txt
+coconet pruebas/configuracion.txt pruebas/new-thyroid/new-thyroid.train pruebas/new-thyroid/new-thyroid.gen -o salida25.txt
+coconet pruebas/configuracion.txt pruebas/new-thyroid/new-thyroid.train pruebas/new-thyroid/new-thyroid.gen -o salida26.txt
+coconet pruebas/configuracion.txt pruebas/new-thyroid/new-thyroid.train pruebas/new-thyroid/new-thyroid.gen -o salida27.txt
+coconet pruebas/configuracion.txt pruebas/new-thyroid/new-thyroid.train pruebas/new-thyroid/new-thyroid.gen -o salida28.txt
+coconet pruebas/configuracion.txt pruebas/new-thyroid/new-thyroid.train pruebas/new-thyroid/new-thyroid.gen -o salida29.txt
+coconet pruebas/configuracion.txt pruebas/new-thyroid/new-thyroid.train pruebas/new-thyroid/new-thyroid.gen -o salida30.txt
+cat salida*.txt > sNew-thyroid.txt
+rm salida*.txt

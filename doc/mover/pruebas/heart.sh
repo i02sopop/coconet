@@ -1,0 +1,32 @@
+coconet pruebas/configuracion.txt pruebas/heart/heart.train pruebas/heart/heart.gen -o salida1.txt
+coconet pruebas/configuracion.txt pruebas/heart/heart.train pruebas/heart/heart.gen -o salida2.txt
+coconet pruebas/configuracion.txt pruebas/heart/heart.train pruebas/heart/heart.gen -o salida3.txt
+coconet pruebas/configuracion.txt pruebas/heart/heart.train pruebas/heart/heart.gen -o salida4.txt
+coconet pruebas/configuracion.txt pruebas/heart/heart.train pruebas/heart/heart.gen -o salida5.txt
+coconet pruebas/configuracion.txt pruebas/heart/heart.train pruebas/heart/heart.gen -o salida6.txt
+coconet pruebas/configuracion.txt pruebas/heart/heart.train pruebas/heart/heart.gen -o salida7.txt
+coconet pruebas/configuracion.txt pruebas/heart/heart.train pruebas/heart/heart.gen -o salida8.txt
+coconet pruebas/configuracion.txt pruebas/heart/heart.train pruebas/heart/heart.gen -o salida9.txt
+coconet pruebas/configuracion.txt pruebas/heart/heart.train pruebas/heart/heart.gen -o salida10.txt
+coconet pruebas/configuracion.txt pruebas/heart/heart.train pruebas/heart/heart.gen -o salida11.txt
+coconet pruebas/configuracion.txt pruebas/heart/heart.train pruebas/heart/heart.gen -o salida12.txt
+coconet pruebas/configuracion.txt pruebas/heart/heart.train pruebas/heart/heart.gen -o salida13.txt
+coconet pruebas/configuracion.txt pruebas/heart/heart.train pruebas/heart/heart.gen -o salida14.txt
+coconet pruebas/configuracion.txt pruebas/heart/heart.train pruebas/heart/heart.gen -o salida15.txt
+coconet pruebas/configuracion.txt pruebas/heart/heart.train pruebas/heart/heart.gen -o salida16.txt
+coconet pruebas/configuracion.txt pruebas/heart/heart.train pruebas/heart/heart.gen -o salida17.txt
+coconet pruebas/configuracion.txt pruebas/heart/heart.train pruebas/heart/heart.gen -o salida18.txt
+coconet pruebas/configuracion.txt pruebas/heart/heart.train pruebas/heart/heart.gen -o salida19.txt
+coconet pruebas/configuracion.txt pruebas/heart/heart.train pruebas/heart/heart.gen -o salida20.txt
+coconet pruebas/configuracion.txt pruebas/heart/heart.train pruebas/heart/heart.gen -o salida21.txt
+coconet pruebas/configuracion.txt pruebas/heart/heart.train pruebas/heart/heart.gen -o salida22.txt
+coconet pruebas/configuracion.txt pruebas/heart/heart.train pruebas/heart/heart.gen -o salida23.txt
+coconet pruebas/configuracion.txt pruebas/heart/heart.train pruebas/heart/heart.gen -o salida24.txt
+coconet pruebas/configuracion.txt pruebas/heart/heart.train pruebas/heart/heart.gen -o salida25.txt
+coconet pruebas/configuracion.txt pruebas/heart/heart.train pruebas/heart/heart.gen -o salida26.txt
+coconet pruebas/configuracion.txt pruebas/heart/heart.train pruebas/heart/heart.gen -o salida27.txt
+coconet pruebas/configuracion.txt pruebas/heart/heart.train pruebas/heart/heart.gen -o salida28.txt
+coconet pruebas/configuracion.txt pruebas/heart/heart.train pruebas/heart/heart.gen -o salida29.txt
+coconet pruebas/configuracion.txt pruebas/heart/heart.train pruebas/heart/heart.gen -o salida30.txt
+cat salida*.txt > sHeart.txt
+rm salida*.txt

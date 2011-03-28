@@ -1,0 +1,18 @@
+AC_INIT(src/main.c)
+
+dnl Find and test de C compiler
+AC_PROG_CC
+AC_LANG_C
+
+AC_PROG_INSTALL
+
+AC_PROG_MAKE_SET
+
+AC_HEADER_STDC
+AC_CHECK_FUNC(atol,,AC_MSG_ERROR(Oops! no atol ?!?))
+
+VERSION="1.0.0"
+AC_SUBST(VERSION)
+
+dnl Read Makefile.in and write Makefile
+AC_OUTPUT(Makefile)

@@ -1,0 +1,8 @@
+Aptitud: 0.37666467
+Generalizacion: 0.39433953
+Número de Nódulos: 2
+Número de Nodos de Entrada: 9
+Número de Nodos Ocultos: 43.1
+Número de Nodos de Salida: 6
+Número de Conexiones de Entrada: 185.73333
+Número de Conexiones de Salida: 125.8

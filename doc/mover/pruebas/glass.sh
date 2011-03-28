@@ -1,0 +1,32 @@
+coconet pruebas/configuracion.txt pruebas/glass/glass.train pruebas/glass/glass.gen -o salida1.txt
+coconet pruebas/configuracion.txt pruebas/glass/glass.train pruebas/glass/glass.gen -o salida2.txt
+coconet pruebas/configuracion.txt pruebas/glass/glass.train pruebas/glass/glass.gen -o salida3.txt
+coconet pruebas/configuracion.txt pruebas/glass/glass.train pruebas/glass/glass.gen -o salida4.txt
+coconet pruebas/configuracion.txt pruebas/glass/glass.train pruebas/glass/glass.gen -o salida5.txt
+coconet pruebas/configuracion.txt pruebas/glass/glass.train pruebas/glass/glass.gen -o salida6.txt
+coconet pruebas/configuracion.txt pruebas/glass/glass.train pruebas/glass/glass.gen -o salida7.txt
+coconet pruebas/configuracion.txt pruebas/glass/glass.train pruebas/glass/glass.gen -o salida8.txt
+coconet pruebas/configuracion.txt pruebas/glass/glass.train pruebas/glass/glass.gen -o salida9.txt
+coconet pruebas/configuracion.txt pruebas/glass/glass.train pruebas/glass/glass.gen -o salida10.txt
+coconet pruebas/configuracion.txt pruebas/glass/glass.train pruebas/glass/glass.gen -o salida11.txt
+coconet pruebas/configuracion.txt pruebas/glass/glass.train pruebas/glass/glass.gen -o salida12.txt
+coconet pruebas/configuracion.txt pruebas/glass/glass.train pruebas/glass/glass.gen -o salida13.txt
+coconet pruebas/configuracion.txt pruebas/glass/glass.train pruebas/glass/glass.gen -o salida14.txt
+coconet pruebas/configuracion.txt pruebas/glass/glass.train pruebas/glass/glass.gen -o salida15.txt
+coconet pruebas/configuracion.txt pruebas/glass/glass.train pruebas/glass/glass.gen -o salida16.txt
+coconet pruebas/configuracion.txt pruebas/glass/glass.train pruebas/glass/glass.gen -o salida17.txt
+coconet pruebas/configuracion.txt pruebas/glass/glass.train pruebas/glass/glass.gen -o salida18.txt
+coconet pruebas/configuracion.txt pruebas/glass/glass.train pruebas/glass/glass.gen -o salida19.txt
+coconet pruebas/configuracion.txt pruebas/glass/glass.train pruebas/glass/glass.gen -o salida20.txt
+coconet pruebas/configuracion.txt pruebas/glass/glass.train pruebas/glass/glass.gen -o salida21.txt
+coconet pruebas/configuracion.txt pruebas/glass/glass.train pruebas/glass/glass.gen -o salida22.txt
+coconet pruebas/configuracion.txt pruebas/glass/glass.train pruebas/glass/glass.gen -o salida23.txt
+coconet pruebas/configuracion.txt pruebas/glass/glass.train pruebas/glass/glass.gen -o salida24.txt
+coconet pruebas/configuracion.txt pruebas/glass/glass.train pruebas/glass/glass.gen -o salida25.txt
+coconet pruebas/configuracion.txt pruebas/glass/glass.train pruebas/glass/glass.gen -o salida26.txt
+coconet pruebas/configuracion.txt pruebas/glass/glass.train pruebas/glass/glass.gen -o salida27.txt
+coconet pruebas/configuracion.txt pruebas/glass/glass.train pruebas/glass/glass.gen -o salida28.txt
+coconet pruebas/configuracion.txt pruebas/glass/glass.train pruebas/glass/glass.gen -o salida29.txt
+coconet pruebas/configuracion.txt pruebas/glass/glass.train pruebas/glass/glass.gen -o salida30.txt
+cat salida*.txt > sGlass.txt
+rm salida*.txt

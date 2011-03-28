@@ -1,0 +1,240 @@
+Aptitud: 0.381250
+Generalizacion: 0.905660
+Número de Nódulos: 2
+Número de Nodos de Entrada: 9
+Número de Nodos Ocultos: 35
+Número de Nodos de Salida: 6
+Número de Conexiones de Entrada: 148
+Número de Conexiones de Salida: 100
+Aptitud: 0.375000
+Generalizacion: 0.830189
+Número de Nódulos: 2
+Número de Nodos de Entrada: 9
+Número de Nodos Ocultos: 67
+Número de Nodos de Salida: 6
+Número de Conexiones de Entrada: 301
+Número de Conexiones de Salida: 192
+Aptitud: 0.381250
+Generalizacion: 0.886792
+Número de Nódulos: 2
+Número de Nodos de Entrada: 9
+Número de Nodos Ocultos: 30
+Número de Nodos de Salida: 6
+Número de Conexiones de Entrada: 117
+Número de Conexiones de Salida: 66
+Aptitud: 0.362500
+Generalizacion: 0.773585
+Número de Nódulos: 2
+Número de Nodos de Entrada: 9
+Número de Nodos Ocultos: 47
+Número de Nodos de Salida: 6
+Número de Conexiones de Entrada: 214
+Número de Conexiones de Salida: 128
+Aptitud: 0.381248
+Generalizacion: 0.773585
+Número de Nódulos: 2
+Número de Nodos de Entrada: 9
+Número de Nodos Ocultos: 39
+Número de Nodos de Salida: 6
+Número de Conexiones de Entrada: 155
+Número de Conexiones de Salida: 117
+Aptitud: 0.437500
+Generalizacion: 0.811321
+Número de Nódulos: 2
+Número de Nodos de Entrada: 9
+Número de Nodos Ocultos: 77
+Número de Nodos de Salida: 6
+Número de Conexiones de Entrada: 350
+Número de Conexiones de Salida: 216
+Aptitud: 0.393747
+Generalizacion: 0.641509
+Número de Nódulos: 2
+Número de Nodos de Entrada: 9
+Número de Nodos Ocultos: 65
+Número de Nodos de Salida: 6
+Número de Conexiones de Entrada: 288
+Número de Conexiones de Salida: 214
+Aptitud: 0.381250
+Generalizacion: 0.792453
+Número de Nódulos: 2
+Número de Nodos de Entrada: 9
+Número de Nodos Ocultos: 79
+Número de Nodos de Salida: 6
+Número de Conexiones de Entrada: 377
+Número de Conexiones de Salida: 223
+Aptitud: 0.375000
+Generalizacion: 0.773585
+Número de Nódulos: 2
+Número de Nodos de Entrada: 9
+Número de Nodos Ocultos: 27
+Número de Nodos de Salida: 6
+Número de Conexiones de Entrada: 116
+Número de Conexiones de Salida: 71
+Aptitud: 0.443736
+Generalizacion: 0.943396
+Número de Nódulos: 2
+Número de Nodos de Entrada: 9
+Número de Nodos Ocultos: 25
+Número de Nodos de Salida: 6
+Número de Conexiones de Entrada: 102
+Número de Conexiones de Salida: 63
+Aptitud: 0.450000
+Generalizacion: 0.754717
+Número de Nódulos: 2
+Número de Nodos de Entrada: 9
+Número de Nodos Ocultos: 68
+Número de Nodos de Salida: 6
+Número de Conexiones de Entrada: 294
+Número de Conexiones de Salida: 200
+Aptitud: 0.362500
+Generalizacion: 0.924528
+Número de Nódulos: 2
+Número de Nodos de Entrada: 9
+Número de Nodos Ocultos: 41
+Número de Nodos de Salida: 6
+Número de Conexiones de Entrada: 186
+Número de Conexiones de Salida: 116
+Aptitud: 0.368750
+Generalizacion: 0.867925
+Número de Nódulos: 2
+Número de Nodos de Entrada: 9
+Número de Nodos Ocultos: 56
+Número de Nodos de Salida: 6
+Número de Conexiones de Entrada: 254
+Número de Conexiones de Salida: 177
+Aptitud: 0.368750
+Generalizacion: 0.962264
+Número de Nódulos: 2
+Número de Nodos de Entrada: 9
+Número de Nodos Ocultos: 36
+Número de Nodos de Salida: 6
+Número de Conexiones de Entrada: 165
+Número de Conexiones de Salida: 107
+Aptitud: 0.487485
+Generalizacion: 0.622642
+Número de Nódulos: 2
+Número de Nodos de Entrada: 9
+Número de Nodos Ocultos: 33
+Número de Nodos de Salida: 6
+Número de Conexiones de Entrada: 152
+Número de Conexiones de Salida: 110
+Aptitud: 0.362500
+Generalizacion: 0.811321
+Número de Nódulos: 2
+Número de Nodos de Entrada: 9
+Número de Nodos Ocultos: 21
+Número de Nodos de Salida: 6
+Número de Conexiones de Entrada: 90
+Número de Conexiones de Salida: 59
+Aptitud: 0.381250
+Generalizacion: 0.830189
+Número de Nódulos: 2
+Número de Nodos de Entrada: 9
+Número de Nodos Ocultos: 33
+Número de Nodos de Salida: 6
+Número de Conexiones de Entrada: 124
+Número de Conexiones de Salida: 70
+Aptitud: 0.468747
+Generalizacion: 0.811321
+Número de Nódulos: 2
+Número de Nodos de Entrada: 9
+Número de Nodos Ocultos: 3
+Número de Nodos de Salida: 6
+Número de Conexiones de Entrada: 1
+Número de Conexiones de Salida: 2
+Aptitud: 0.418750
+Generalizacion: 0.811321
+Número de Nódulos: 2
+Número de Nodos de Entrada: 9
+Número de Nodos Ocultos: 32
+Número de Nodos de Salida: 6
+Número de Conexiones de Entrada: 136
+Número de Conexiones de Salida: 88
+Aptitud: 0.424997
+Generalizacion: 0.792453
+Número de Nódulos: 2
+Número de Nodos de Entrada: 9
+Número de Nodos Ocultos: 55
+Número de Nodos de Salida: 6
+Número de Conexiones de Entrada: 247
+Número de Conexiones de Salida: 155
+Aptitud: 0.443750
+Generalizacion: 0.396226
+Número de Nódulos: 2
+Número de Nodos de Entrada: 9
+Número de Nodos Ocultos: 63
+Número de Nodos de Salida: 6
+Número de Conexiones de Entrada: 277
+Número de Conexiones de Salida: 175
+Aptitud: 0.356250
+Generalizacion: 0.849057
+Número de Nódulos: 2
+Número de Nodos de Entrada: 9
+Número de Nodos Ocultos: 37
+Número de Nodos de Salida: 6
+Número de Conexiones de Entrada: 165
+Número de Conexiones de Salida: 92
+Aptitud: 0.381250
+Generalizacion: 0.830189
+Número de Nódulos: 2
+Número de Nodos de Entrada: 9
+Número de Nodos Ocultos: 53
+Número de Nodos de Salida: 6
+Número de Conexiones de Entrada: 214
+Número de Conexiones de Salida: 161
+Aptitud: 0.400000
+Generalizacion: 0.716981
+Número de Nódulos: 2
+Número de Nodos de Entrada: 9
+Número de Nodos Ocultos: 12
+Número de Nodos de Salida: 6
+Número de Conexiones de Entrada: 44
+Número de Conexiones de Salida: 28
+Aptitud: 0.356250
+Generalizacion: 0.981132
+Número de Nódulos: 2
+Número de Nodos de Entrada: 9
+Número de Nodos Ocultos: 43
+Número de Nodos de Salida: 6
+Número de Conexiones de Entrada: 169
+Número de Conexiones de Salida: 119
+Aptitud: 0.387500
+Generalizacion: 0.867925
+Número de Nódulos: 2
+Número de Nodos de Entrada: 9
+Número de Nodos Ocultos: 30
+Número de Nodos de Salida: 6
+Número de Conexiones de Entrada: 140
+Número de Conexiones de Salida: 102
+Aptitud: 0.406250
+Generalizacion: 0.792453
+Número de Nódulos: 2
+Número de Nodos de Entrada: 9
+Número de Nodos Ocultos: 58
+Número de Nodos de Salida: 6
+Número de Conexiones de Entrada: 266
+Número de Conexiones de Salida: 169
+Aptitud: 0.393750
+Generalizacion: 0.735849
+Número de Nódulos: 2
+Número de Nodos de Entrada: 9
+Número de Nodos Ocultos: 4
+Número de Nodos de Salida: 6
+Número de Conexiones de Entrada: 18
+Número de Conexiones de Salida: 9
+Aptitud: 0.412500
+Generalizacion: 0.867925
+Número de Nódulos: 2
+Número de Nodos de Entrada: 9
+Número de Nodos Ocultos: 25
+Número de Nodos de Salida: 6
+Número de Conexiones de Entrada: 93
+Número de Conexiones de Salida: 66
+Aptitud: 0.437497
+Generalizacion: 0.792453
+Número de Nódulos: 2
+Número de Nodos de Entrada: 9
+Número de Nodos Ocultos: 8
+Número de Nodos de Salida: 6
+Número de Conexiones de Entrada: 42
+Número de Conexiones de Salida: 21
