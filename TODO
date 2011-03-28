@@ -1,0 +1,19 @@
+
+* Create the project info structure.
+   Create the project info structore (AUTHORS, TRANSLATORS, ...)
+
+* Refactorize the source to optimize it and correct bugs.
+   Refactorize the source code to optimize the timing of the program
+   and to correct bugs.
+
+* Translate code to english
+   Traslate the code to english to facilitate the colaboration of
+   other people.
+
+* Create a graphical interface.
+   Create a graphical interface to enhace the interacion with the
+   program.
+
+* Create the web of the project.
+   Create the web of the project in github.
+
