@@ -1,6 +1,5 @@
-
-* Create the project info structure.
-   Create the project info structore (AUTHORS, TRANSLATORS, ...)
+o [i02sopop] Create the project info structure. DONE
+   Create the project info structure (AUTHORS, TRANSLATORS, ...).
 
 * Refactorize the source to optimize it and correct bugs.
    Refactorize the source code to optimize the timing of the program
@@ -8,7 +7,10 @@
 
 * Translate code to english
    Traslate the code to english to facilitate the colaboration of
-   other people.
+   others.
+
+* Improve the documentation
+   Improve the documentation to facilitate the colaboration of others.
 
 * Create a graphical interface.
    Create a graphical interface to enhace the interacion with the
@@ -16,4 +18,7 @@
 
 * Create the web of the project.
    Create the web of the project in github.
+
+* Finish the INSTALL file.
+   Finish the INSTALL file both in english and in spanish.
 
