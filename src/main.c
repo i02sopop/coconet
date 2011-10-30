@@ -33,7 +33,7 @@
 	aptitudRedes: Float. Store the average flair of the networks.
  Return Value: 0 with no errors and -1 otherwise.
  Calling Functions:
-	error(): Function to show an error message depending of an error number.
+	error(): Function to show an error message depending on an error number.
 	cargarFichero(): Function to load the data from config and training files.
 	escalarDatosEntrada(): Scale the data from the input nodes.
 	escalarDatosSalida(): Scale the data from the output nodes.
