@@ -37,22 +37,18 @@
 	cargarFichero(): Function to load the data from config and training files.
 	escalarDatosEntrada(): Scale the data from the input nodes.
 	escalarDatosSalida(): Scale the data from the output nodes.
-	medirCambio(): Mide el cambio en la aptitud media de la poblacion de
-			       redes.
-	crearPoblacionNodulos()->Crea una nueva subpoblacion de nodulos.
-	anadirNoduloRedes()->Añade una nueva subpoblacion de nodulos a la
-			             poblacion de redes.
-	evolucionarPoblaciones()->Evoluciona las poblaciones de nodulos y de
-				              redes.
+	medirCambio(): Measure the average flair change in the network population.
+	crearPoblacionNodulos(): Create a new subpopulation of nodes.
+	anadirNoduloRedes(): Add a new node subpopulation to the networks
+                         population.
+	evolucionarPoblaciones(): Evolve the networks and nodes populations.
 	ordenarRedes()->Ordena las redes en funcion de su aptitud.
-	leerGeneralizacion()->Lee los datos para medir la generalizacion de las
-				          redes.
-	exportarMejorRed()->Se mide la generalización de la red que mejor se
-				        adapta al problema y se muestran sus datos en un
-				        fichero.
-	ajustarMatrices()->Se ajusta el tamaño de las matrices que se utilizan
-			           en la nueva subpoblacion de nodulos
+	leerGeneralizacion(): Read the data to measure the network generalization.
+	exportarMejorRed(): Export the best network in the generalization process.
+	ajustarMatrices(): Adjust the size of the matrix used in the new nodes
+                       subpopulation.
 ******************************************************************************/
+
 int main(int argc, char **argv) {
 	int i;
 	double aptitudRedes;
