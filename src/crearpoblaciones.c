@@ -1,45 +1,38 @@
 /******************************************************************************
-* Copyright (c) 2004-2011 coconet project (see AUTHORS)			              *
-*									                                          *
-* This file is part of Coconet.						                          *
-*									                                          *
-* Coconet is free software: you can redistribute it and/or modify it under the*
-* terms of the GNU General Public License as published by the Free Software   *
-* Foundation, either version 3 of the License, or (at your option) any later  *
-* version.                                                                    *
-*									                                          *
-* Coconet is distributed in the hope that it will be useful, but WITHOUT ANY  *
-* WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR*
-* A PARTICULAR PURPOSE.  See the GNU General Public License for more details. *
-*									                                          *
-* You should have received a copy of the GNU General Public License along with*
-* coconet. If not, see <http://www.gnu.org/licenses/>.                        *
+ Copyright (c) 2004-2011 coconet project (see AUTHORS)
+
+ This file is part of Coconet.
+
+ Coconet is free software: you can redistribute it and/or modify it under the
+ terms of the GNU General Public License as published by the Free Software
+ Foundation, either version 3 of the License, or (at your option) any later
+ version.
+
+ Coconet is distributed in the hope that it will be useful, but WITHOUT ANY
+ WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR
+ A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
+
+ You should have received a copy of the GNU General Public License along with
+ coconet. If not, see <http://www.gnu.org/licenses/>.
 ******************************************************************************/
 
 #include <definiciones.h>
 
-/*******************************************************************************
- * File: crearPoblaciones.c						                               *
- *									                                           *
- * Function: anadirNoduloRedes()						                       *
- *									                                           *
- * Author: Pablo Alvarez de Sotomayor Posadillo				                   *
- *									                                           *
- * Functionality: Add a new nodule subpopulation to the network population.    *
- *									                                           *
- * Input parameters: None       					                           *
- *									                                           *
- * Internal parameters: None						                           *
- *									                                           *
- * Output parameters: None      						                       *
- *									                                           *
- * Functions that calls:                 					                   *
- *	crearRedes(): Create a new network population from the previous nodes      *
- *                population.                                                  *
- *	crearDescendencia(): Create a new network population from the nodule       *
- *                       subpopulation and the previous network population.    *
- *	error(): Function to print an error message.                               *
- *******************************************************************************/
+/******************************************************************************
+ File: crearPoblaciones.c
+ Function: anadirNoduloRedes()
+ Author: Pablo Alvarez de Sotomayor Posadillo
+ Description: Add a new nodule subpopulation to the network population.
+ Input Parameters: None
+ Local Variables: None
+ Return Value: None
+ Calling Functions:
+   crearRedes(): Create a new network population from the previous nodes
+                 population.
+   crearDescendencia(): Create a new network population from the nodule
+                        subpopulation and the previous network population.
+   error(): Function to show an error message depending on an error number.
+*****************************************************************************/
 
 void anadirNodulosRedes()
 {
@@ -55,31 +48,24 @@ void anadirNodulosRedes()
 	}
 }
 
-/*******************************************************************************
- * File: crearPoblaciones.c						                               *
- *					                                     				       *
- * Function: crearDescendencia()						                       *
- *									                                           *
- * Author: Pablo Álvarez de Sotomayor Posadillo         				       *
- *									                                           *
- * Functionality: Create a new network population from a new nodule population *
- *                and the previous network population.                         *
- *									                                           *
- * Input parameters: None       					                           *
- * 									                                           *
- * Internal parameters:							                               *
- * 	i: Integer. Counter.						                               *
- * 	j: Integer. Counter.						                               *
- * 	redsel: Integer. Selection of a network of the present network.            *
- * 	nodsel: Integer. Selection of a nodule from the new subpopulation.         *
- * 	nueva: Array of networks. New network population.                          *
- * 									                                           *
- * Output parameters: None      						                       *
- * 									                                           *
- * Functions that calls:                 					                   *
- *	liberarRed(): Function to free a given network.			                   *
- *	error(): Function to print an error message.                               *
- *******************************************************************************/
+/******************************************************************************
+ File: crearPoblaciones.c
+ Function: crearDescendencia()
+ Author: Pablo Álvarez de Sotomayor Posadillo
+ Description: Create a new network population from a new nodule population
+			  and the previous network population.
+ Input parameters: None
+ Local Variables:
+   i: Integer. Counter.
+   j: Integer. Counter.
+   redsel: Integer. Selection of a network of the present network.
+   nodsel: Integer. Selection of a nodule from the new subpopulation.
+   nueva: Array of networks. New network population.
+ Return Value: None
+ Calling Functions:
+   liberarRed(): Function to free a given network.
+   error(): Function to show an error message depending on an error number.
+*****************************************************************************/
 
 void crearDescendencia()
 {
@@ -89,6 +75,7 @@ void crearDescendencia()
 	/* Creation of the new network. */
 	if((nueva = (red **)malloc(max_redes * sizeof(red))) == NULL)
 		error(RES_MEM);
+
 	for(i = 0; i < max_redes; i++) {
 		if((nueva[i] = (red *)malloc(sizeof(red))) == NULL)
 			error(RES_MEM);
@@ -109,6 +96,7 @@ void crearDescendencia()
 		/* Creation of the new network. */
 		for(j = 0; j < pnodulos.n_subpobl - 1; j++)
 			nueva[i]->nodulos[j] = predes.redes[redsel]->nodulos[j];
+
 		nueva[i]->nodulos[pnodulos.n_subpobl - 1] = pnodulos.nodulos[(pnodulos.n_subpobl - 1) * num_nodulos + nodsel];
 	}
 
@@ -122,25 +110,18 @@ void crearDescendencia()
 	free(nueva);
 }
 
-/*******************************************************************************
- * File: crearPoblaciones.c						                               *
- *									                                           *
- * Function: liberarRed()							                           *
- *	                                    								       *
- * Author: Pablo Álvarez de Sotomayor Posadillo	            			       *
- *									                                           *
- * Functionality: Function to free a given network.		                       *
- *									                                           *
- * Input parameters:            					                           *
- * 	borrar: Red. Network to delete.				                               *
- * 									                                           *
- * Internal parameters:							                               *
- * 	i: Integer. Counter.						                               *
- * 									                                           *
- * Output parameters: None      						                       *
- * 									                                           *
- * Functions that calls: None              					                   *
- *******************************************************************************/
+/******************************************************************************
+ File: crearPoblaciones.c
+ Function: liberarRed()
+ Author: Pablo Álvarez de Sotomayor Posadillo
+ Description: Function to free a given network.
+ Input Parameters:
+   borrar: Red. Network to delete.
+ Local Variables:
+   i: Integer. Counter.
+ Return Value: None
+ Calling Functions: None
+ *****************************************************************************/
 
 void liberarRed(red *borrar)
 {
@@ -155,27 +136,20 @@ void liberarRed(red *borrar)
 	free(borrar);
 }
 
-/*******************************************************************************
- * File: crearPoblaciones.c						                               *
- *									                                           *
- * Function: crearNodulos()	                        					       *
- *									                                           *
- * Author: Pablo Álvarez de Sotomayor Posadillo				                   *
- *									                                           *
- * Functionality: Create a new nodule subpopulation.                           *
- *									                                           *
- * Input parameters: None       					                           *
- * 									                                           *
- * Internal parameters:							                               *
- * 	i: Integer. Counter.						                               *
- * 	j: Integer. Counter.						                               *
- * 	k: Integer. Counter.				                        		       *
- * 	                                    								       *
- * Output parameters: None      						                       *
- *                                  									       *
- * Functions that calls:                					                   *
- *	error(): Function to print an error message.                               *
- *******************************************************************************/
+/******************************************************************************
+ File: crearPoblaciones.c
+ Function: crearNodulos()
+ Author: Pablo Álvarez de Sotomayor Posadillo
+ Description: Create a new nodule subpopulation.
+ Input OParameters: None
+ Local Variables:
+   i: Integer. Counter.
+   j: Integer. Counter.
+   k: Integer. Counter.
+ Return Value: None
+ Calling Functions:
+   error(): Function to show an error message depending on an error number.
+ *****************************************************************************/
 
 void crearNodulos()
 {
@@ -186,26 +160,30 @@ void crearNodulos()
 		if((pnodulos.nodulos[i] = (nodulo *)malloc(sizeof(nodulo))) == NULL)
 			error(RES_MEM);
 
-		pnodulos.nodulos[i]->id = i;   /* Nodule id. */
-		pnodulos.nodulos[i]->n_nodos = random() % max_nodos;     /* Number of hidden nodes of the nodule. */
+		/* Nodule id. */
+		pnodulos.nodulos[i]->id = i;
+		/* Number of hidden nodes of the nodule. */
+		pnodulos.nodulos[i]->n_nodos = random() % max_nodos;
+		/* Initial aptitude. */
+		pnodulos.nodulos[i]->aptitud = 0;
+
 		if(pnodulos.nodulos[i]->n_nodos == 0)
 			pnodulos.nodulos[i]->n_nodos++;
-		pnodulos.nodulos[i]->aptitud = 0; /* Initial aptitude. */
 
-		/* Reserva de memoria para la creación de conexiones y pesos. */
-		/* Conexiones nodos de entrada->nodos ocultos. */
+		/* Memory allocation for the creation of connections and weights. */
+		/* Connections from input to hidden nodes. */
 		if((pnodulos.nodulos[i]->conexiones_entrada = (int **)malloc(predes.n_nodos_entrada * sizeof(int))) == NULL)
 			error(RES_MEM);
 
-		/* Conexiones nodos ocultos->nodos de salida. */
+		/* Connections from hidden to output nodes. */
 		if((pnodulos.nodulos[i]->conexiones_salida = (int **)malloc(max_nodos * sizeof(int))) == NULL)
 			error(RES_MEM);
 
-		/* Pesos de conexiones nodos de entrada->nodos ocultos. */
+		/* Weights of connections between input and hidden nodes. */
 		if((pnodulos.nodulos[i]->pesos_entrada = (double **)malloc(predes.n_nodos_entrada * sizeof(double))) == NULL)
 			error(RES_MEM);
 
-		/* Pesos de conexiones nodos ocultos->nodos de salida. */
+		/* Weights of connections between hidden and output nodes. */
 		if((pnodulos.nodulos[i]->pesos_salida = (double **)malloc(max_nodos * sizeof(double))) == NULL)
 			error(RES_MEM);
 
@@ -220,8 +198,8 @@ void crearNodulos()
 				pnodulos.nodulos[i]->salidas_parciales[j][k] = 0.0;
 		}
 
-		/* Creación de conexiones junto con sus pesos. */
-		/* Conexiones y pesos de entrada. */
+		/* Creation of connections and weigths. */
+		/* Entry connections and weights. */
 		for(j = 0; j < predes.n_nodos_entrada; j++) {
 			if((pnodulos.nodulos[i]->conexiones_entrada[j] = (int *)malloc(max_nodos * sizeof(int))) == NULL)
 				error(RES_MEM);
@@ -240,7 +218,7 @@ void crearNodulos()
 			}
 		}
 
-		/* Connections and output weights. */
+		/* Output connections and weights. */
 		for(j = 0; j < max_nodos; j++) {
 			if((pnodulos.nodulos[i]->conexiones_salida[j] = (int *)malloc(predes.n_nodos_salida * sizeof(int))) == NULL)
 				error(RES_MEM);
@@ -259,7 +237,7 @@ void crearNodulos()
 			}
 		}
 
-		/*Asignación de la función de transferencia a cada nodo*/
+		/* Assign the transfer function to each node. */
 		if((pnodulos.nodulos[i]->transf = (func *)malloc(max_nodos * sizeof(func))) == NULL)
 			error(RES_MEM);
 
@@ -272,33 +250,29 @@ void crearNodulos()
 	}
 }
 
-/*******************************************************************************
- * File: crearPoblaciones.c                     						       *
- *									                                           *
- * Function: crearPoblacionNodulos()					                       *
- *									                                           *
- * Author: Pablo Álvarez de Sotomayor Posadillo				                   *
- *									                                           *
- * Functionality: Create or expand the nodule population.                      *
- *									                                           *
- * Input parameters: None       					                           *
- * 									                                           *
- * Internal parameters:	None					                               *
- * 	                                    								       *
- * Output parameters: None      						                       *
- * 									                                           *
- * Functions that calls:                					                   *
- *	crearNodulos(): Function to create a new nodule subpopulation.             *
- *	error(): Function to print an error message.                               *
- *******************************************************************************/
+/******************************************************************************
+ File: crearPoblaciones.c
+ Function: crearPoblacionNodulos()
+ Author: Pablo Álvarez de Sotomayor Posadillo
+ Description: Create or expand the nodule population.
+ Input Parameters: None
+ Local Variables: None
+ Return Value: None
+ Callimg Functions:
+   crearNodulos(): Function to create a new nodule subpopulation.
+   error(): Function to show an error message depending on an error number.
+******************************************************************************/
 
 void crearPoblacionNodulos()
 {
-	/* Se actualizan el número de subpoblaciones y el número de nódulos de la población de nódulos. */
+	/*
+	  We update the number of subpopulations and nodules of the nodule
+	  population.
+	*/
 	pnodulos.n_subpobl++;
 	pnodulos.n_nodulos = pnodulos.n_subpobl*num_nodulos;
 
-	/* Se reserva memoria para la nueva subpoblación. */
+	/* Memory allocation for the new subpopulation. */
 	if(pnodulos.n_subpobl == 1) {
 		if((pnodulos.nodulos = (nodulo **)malloc(num_nodulos * sizeof(nodulo))) == NULL)
 			error(RES_MEM);
@@ -307,45 +281,38 @@ void crearPoblacionNodulos()
 			error(RES_MEM);
 	}
 
-	/* Se crean los nódulos de la nueva subpoblación. */
+	/* We create the nodules of the new subpopulation. */
 	crearNodulos();
 }
 
-/*******************************************************************************
- * File: crearPoblaciones.c						                               *
- *									                                           *
- * Function: crearRedes()							                           *
- *									                                           *
- * Author: Pablo Alvarez de Sotomayor Posadillo				                   *
- *									                                           *
- * Functionality: Create a new network population.                             *
- *									                                           *
- * Input parameters: None       					                           *
- * 									                                           *
- * Internal parameters:	    					                               *
- * 	i: Integer. Counter.						                               *
- * 	j: Integer. Counter.						                               *
- *									                                           *
- * Output parameters: None      						                       *
- *									                                           *
- * Functions that calls:                					                   *
- *	error(): Function to print an error message.                               *
- *******************************************************************************/
+/******************************************************************************
+ File: crearPoblaciones.c
+ Function: crearRedes()
+ Author: Pablo Alvarez de Sotomayor Posadillo
+ Description: Create a new network population.
+ Input Parameters: None
+ Local Variables:
+   i: Integer. Counter.
+   j: Integer. Counter.
+ Return Value: None
+ Calling Functions:
+   error(): Function to show an error message depending on an error number.
+ *****************************************************************************/
 
 void crearRedes()
 {
 	int i, j;
-  
+
 	for(i = 0; i < num_nodulos; i++) {
 		if((predes.redes[i] = (red *)malloc(sizeof(red))) == NULL)
 			error(RES_MEM);
 
-		/* Se reserva memoria y se inicializan las variables */
+		/* Allocation of memory and initialization of variables. */
 		predes.redes[i]->aptitud = 0.0;
 		if((predes.redes[i]->nodulos = (nodulo **)malloc(sizeof(nodulo))) == NULL)
 			error(RES_MEM);
 
-		/* Se le asigna la red su primer nódulo. */
+		/* We assign to the net its first nodule. */
 		predes.redes[i]->nodulos[0] = pnodulos.nodulos[i];
 		if((predes.redes[i]->valores_salida = (double *)malloc(predes.n_nodos_salida * sizeof(double))) == NULL)
 			error(RES_MEM);

@@ -28,28 +28,29 @@
 	argc: Integer. Number of arguments of the program.
 	argv: Vector of strings. Arguments passed to the program.
  Local Variables:
-	i: Integer. Counter.
-	j: Integer. Counter.
-	aptitudRedes: Float. Store the average flair of the networks.
+   i: Integer. Counter.
+   j: Integer. Counter.
+   aptitudRedes: Float. Store the average flair of the networks.
  Return Value: 0 with no errors and -1 otherwise.
  Calling Functions:
-	error(): Function to show an error message depending on an error number.
-	cargarFichero(): Function to load the data from config and training files.
-	escalarDatosEntrada(): Scale the data from the input nodes.
-	escalarDatosSalida(): Scale the data from the output nodes.
-	medirCambio(): Measure the average flair change in the network population.
-	crearPoblacionNodulos(): Create a new subpopulation of nodes.
-	anadirNoduloRedes(): Add a new node subpopulation to the networks
-                         population.
-	evolucionarPoblaciones(): Evolve the networks and nodes populations.
-	ordenarRedes()->Ordena las redes en funcion de su aptitud.
-	leerGeneralizacion(): Read the data to measure the network generalization.
-	exportarMejorRed(): Export the best network in the generalization process.
-	ajustarMatrices(): Adjust the size of the matrix used in the new nodes
-                       subpopulation.
+   error(): Function to show an error message depending on an error number.
+   cargarFichero(): Function to load the data from config and training files.
+   escalarDatosEntrada(): Scale the data from the input nodes.
+   escalarDatosSalida(): Scale the data from the output nodes.
+   medirCambio(): Measure the average flair change in the network population.
+   crearPoblacionNodulos(): Create a new subpopulation of nodes.
+   anadirNoduloRedes(): Add a new node subpopulation to the networks
+                        population.
+   evolucionarPoblaciones(): Evolve the networks and nodes populations.
+   ordenarRedes(): Order the networks by aptitude.
+   leerGeneralizacion(): Read the data to measure the network generalization.
+   exportarMejorRed(): Export the best network in the generalization process.
+   ajustarMatrices(): Adjust the size of the matrix used in the new nodes
+				      subpopulation.
 ******************************************************************************/
 
-int main(int argc, char **argv) {
+int main(int argc, char **argv)
+{
 	int i;
 	double aptitudRedes;
 
