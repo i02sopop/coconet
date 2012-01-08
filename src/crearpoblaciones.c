@@ -60,7 +60,7 @@ void anadirNodulosRedes()
    j: Integer. Counter.
    redsel: Integer. Selection of a network of the present network.
    nodsel: Integer. Selection of a nodule from the new subpopulation.
-   nueva: Array of networks. New network population.
+   dnet: Array of networks. New descendant network population.
  Return Value: None
  Calling Functions:
    liberarRed(): Function to free a given network.
@@ -70,21 +70,21 @@ void anadirNodulosRedes()
 void crearDescendencia()
 {
 	int i, j, redsel, nodsel;
-	red **nueva; /* New network population. Descend of the actual population. */
+	red **dnet; /* New network population. Descend of the actual population. */
 
 	/* Creation of the new network. */
-	if((nueva = (red **)malloc(max_redes * sizeof(red))) == NULL)
+	if((dnet = (red **)malloc(max_redes * sizeof(red))) == NULL)
 		error(RES_MEM);
 
 	for(i = 0; i < max_redes; i++) {
-		if((nueva[i] = (red *)malloc(sizeof(red))) == NULL)
+		if((dnet[i] = (red *)malloc(sizeof(red))) == NULL)
 			error(RES_MEM);
 
-		nueva[i]->aptitud = 0;
-		if((nueva[i]->valores_salida = (double *)malloc(predes.n_nodos_salida * sizeof(double))) == NULL)
+		dnet[i]->aptitud = 0;
+		if((dnet[i]->valores_salida = (double *)malloc(predes.n_nodos_salida * sizeof(double))) == NULL)
 			error(RES_MEM);
 
-		if((nueva[i]->nodulos = (nodulo **)malloc(pnodulos.n_subpobl * sizeof(nodulo))) == NULL)
+		if((dnet[i]->nodulos = (nodulo **)malloc(pnodulos.n_subpobl * sizeof(nodulo))) == NULL)
 			error(RES_MEM);
 
 		/* Select a new network randomly. */
@@ -95,9 +95,9 @@ void crearDescendencia()
 
 		/* Creation of the new network. */
 		for(j = 0; j < pnodulos.n_subpobl - 1; j++)
-			nueva[i]->nodulos[j] = predes.redes[redsel]->nodulos[j];
+			dnet[i]->nodulos[j] = predes.redes[redsel]->nodulos[j];
 
-		nueva[i]->nodulos[pnodulos.n_subpobl - 1] = pnodulos.nodulos[(pnodulos.n_subpobl - 1) * num_nodulos + nodsel];
+		dnet[i]->nodulos[pnodulos.n_subpobl - 1] = pnodulos.nodulos[(pnodulos.n_subpobl - 1) * num_nodulos + nodsel];
 	}
 
 	/* We fix the new network. */
@@ -105,9 +105,8 @@ void crearDescendencia()
 		liberarRed(predes.redes[i]);
 
 	free(predes.redes);
-	predes.redes = nueva;
-	nueva = NULL;
-	free(nueva);
+	predes.redes = dnet;
+	dnet = NULL;
 }
 
 /******************************************************************************
@@ -116,24 +115,24 @@ void crearDescendencia()
  Author: Pablo Álvarez de Sotomayor Posadillo
  Description: Function to free a given network.
  Input Parameters:
-   borrar: Red. Network to delete.
+   network: Red. Network to delete.
  Local Variables:
    i: Integer. Counter.
  Return Value: None
  Calling Functions: None
- *****************************************************************************/
+*****************************************************************************/
 
-void liberarRed(red *borrar)
+void liberarRed(red *network)
 {
 	int i;
 
 	/* We delete all the network. */
 	for(i = 0; i < pnodulos.n_subpobl; i++)
-		borrar->nodulos[i] = NULL;
+		network->nodulos[i] = NULL;
 
-	free(borrar->nodulos);
-	free(borrar->valores_salida);
-	free(borrar);
+	free(network->nodulos);
+	free(network->valores_salida);
+	free(network);
 }
 
 /******************************************************************************

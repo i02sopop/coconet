@@ -1,229 +1,206 @@
-/********************************************************************************
-* Copyright (c) 2004-2011 coconet project (see AUTHORS)			        *
-*									        *
-* This file is part of Coconet.						        *
-*									        *
-* Coconet is free software: you can redistribute it and/or modify it under the  *
-* terms of the GNU General Public License as published by the Free Software     *
-* Foundation, either version 3 of the License, or (at your option) any later    *
-* version.                                                                      *
-*									        *
-* Coconet is distributed in the hope that it will be useful, but WITHOUT ANY    *
-* WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR *
-* A PARTICULAR PURPOSE.  See the GNU General Public License for more details.   *
-*									        *
-* You should have received a copy of the GNU General Public License along with  *
-* coconet. If not, see <http://www.gnu.org/licenses/>.                          *
-********************************************************************************/
+/******************************************************************************
+ Copyright (c) 2004-2011 coconet project (see AUTHORS)
+
+ This file is part of Coconet.
+
+ Coconet is free software: you can redistribute it and/or modify it under the
+ terms of the GNU General Public License as published by the Free Software
+ Foundation, either version 3 of the License, or (at your option) any later
+ version.
+
+ Coconet is distributed in the hope that it will be useful, but WITHOUT ANY
+ WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR
+ A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
+
+ You should have received a copy of the GNU General Public License along with
+ coconet. If not, see <http://www.gnu.org/licenses/>.
+******************************************************************************/
 
 #include <definiciones.h>
 
-/********************************************************************************
-* Fichero: mutacionEstructural.c					        *
-*									        *
-* Función: copiarDescendencia()						        *
-*									        *
-* Autor: Pablo Álvarez de Sotomayor Posadillo				        *
-*									        *
-* Finalidad de la función: Copia la población de nòdulos actual en una nueva    *
-*			   población de nódulos descendente.		        *
-*									        *
-* Parámetros de Entrada: NINGUNO					        *
-* 									        *
-* Parámetros Internos:							        *
-* 	i: Entero. Contador.						        *
-* 	j: Entero. Contador.						        *
-* 	k: Entero. Contador.						        *
-* 									        *
-* Parámetros de Salida:	NINGUNO						        *
-* 									        *
-* Funciones a las que llama la función:					        *
-*	error()->Funcion que muestra un mensaje de error.		        *
-*									        *
-********************************************************************************/
+/******************************************************************************
+ File: mutacionEstructural.c
+ Function: copiarDescendencia()
+ Author: Pablo Álvarez de Sotomayor Posadillo
+ Description: Copy the actual nodule population into a new descendant
+              population.
+ Input Parameters: None
+ Local Variables:
+   i: Integer. Counter.
+   j: Integer. Counter.
+   k: Integer. Counter.
+ Return Value: None
+ Calling Functions:
+   error(): Function to show an error message depending on an error number.
+******************************************************************************/
 
 void copiarDescendencia()
 {
-  int i,j,k;
+	int i, j, k, noduleOrig, initialNodule;
 
-  if((descendencia=(nodulo **)malloc(num_nodulos*sizeof(nodulo)))==NULL)
-    error(RES_MEM);
+	/* Initialization of variables. */
+	initialNodule = num_nodulos * (pnodulos.n_subpobl - 1);
+	descendencia = (nodulo **)malloc(num_nodulos * sizeof(nodulo));
+	if(descendencia == NULL)
+		error(RES_MEM);
 
-  /*Se copian los nódulos a la nueva población*/
-  for(i=0;i<num_nodulos;i++){
-    if((descendencia[i]=(nodulo *)malloc(sizeof(nodulo)))==NULL)
-      error(RES_MEM);
+	/* We copy the nodules to the new population. */
+	for(i = 0; i < num_nodulos; i++) {
+		descendencia[i] = (nodulo *)malloc(sizeof(nodulo));
+		if(descendencia[i] == NULL)
+			error(RES_MEM);
 
-    /*Se copia del nódulo origen al destino*/
-    descendencia[i]->id=pnodulos.nodulos[(num_nodulos*(pnodulos.n_subpobl-1))+i]->id;
-    descendencia[i]->n_nodos=pnodulos.nodulos[(num_nodulos*(pnodulos.n_subpobl-1))+i]->n_nodos;
-    descendencia[i]->aptitud=pnodulos.nodulos[(num_nodulos*(pnodulos.n_subpobl-1))+i]->aptitud;
-    
-    if((descendencia[i]->conexiones_salida=(int **)malloc(max_nodos*sizeof(int)))==NULL)
-      error(RES_MEM);
+		/* We copy the nodule from the old to the new population. */
+		noduleOrig = initialNodule + i;
+		descendencia[i]->id = pnodulos.nodulos[noduleOrig]->id;
+		descendencia[i]->n_nodos = pnodulos.nodulos[noduleOrig]->n_nodos;
+		descendencia[i]->aptitud = pnodulos.nodulos[noduleOrig]->aptitud;
 
-    if((descendencia[i]->pesos_salida=(double **)malloc(max_nodos*sizeof(double)))==NULL)
-      error(RES_MEM);
+		descendencia[i]->conexiones_salida = (int **)malloc(max_nodos * sizeof(int));
+		descendencia[i]->pesos_salida = (double **)malloc(max_nodos * sizeof(double));
+		descendencia[i]->transf = (func *)malloc(max_nodos * sizeof(func));
+		if(descendencia[i]->conexiones_salida == NULL ||
+		   descendencia[i]->pesos_salida == NULL ||
+		   descendencia[i]->transf == NULL)
+			error(RES_MEM);
 
-    if((descendencia[i]->transf=(func *)malloc(max_nodos*sizeof(func)))==NULL)
-      error(RES_MEM);
+		for(j = 0; j < max_nodos; j++) {
+			descendencia[i]->conexiones_salida[j] = (int *)malloc(predes.n_nodos_salida * sizeof(int));
+			descendencia[i]->pesos_salida[j] = (double *)malloc(predes.n_nodos_salida * sizeof(double));
+			if(descendencia[i]->conexiones_salida[j] == NULL ||
+				descendencia[i]->pesos_salida[j] == NULL)
+				error(RES_MEM);
 
-    for(j=0;j<max_nodos;j++){
-      if((descendencia[i]->conexiones_salida[j]=(int *)malloc(predes.n_nodos_salida*sizeof(int)))==NULL)
-        error(RES_MEM);
+			descendencia[i]->transf[j] = pnodulos.nodulos[noduleOrig]->transf[j];
 
-      if((descendencia[i]->pesos_salida[j]=(double *)malloc(predes.n_nodos_salida*sizeof(double)))==NULL)
-        error(RES_MEM);
+			for(k = 0; k < predes.n_nodos_salida; k++) {
+				descendencia[i]->conexiones_salida[j][k] = pnodulos.nodulos[noduleOrig]->conexiones_salida[j][k];
+				descendencia[i]->pesos_salida[j][k] = pnodulos.nodulos[noduleOrig]->pesos_salida[j][k];
+			} /* end for */
+		} /* end for */
 
-      descendencia[i]->transf[j]=pnodulos.nodulos[num_nodulos*(pnodulos.n_subpobl-1)+i]->transf[j];
+		descendencia[i]->pesos_entrada = (double **)malloc(predes.n_nodos_entrada * sizeof(double));
+		descendencia[i]->conexiones_entrada = (int **)malloc(predes.n_nodos_entrada * sizeof(int));
+		if(descendencia[i]->pesos_entrada == NULL ||
+			descendencia[i]->conexiones_entrada == NULL)
+			error(RES_MEM);
 
-      for(k=0;k<predes.n_nodos_salida;k++){
-        descendencia[i]->conexiones_salida[j][k]=pnodulos.nodulos[num_nodulos*(pnodulos.n_subpobl-1)+i]->conexiones_salida[j][k];
-        descendencia[i]->pesos_salida[j][k]=pnodulos.nodulos[num_nodulos*(pnodulos.n_subpobl-1)+i]->pesos_salida[j][k];
-      } /* end for */
-    } /* end for */
+		for(j = 0; j < predes.n_nodos_entrada; j++) {
+			descendencia[i]->conexiones_entrada[j] = (int *)malloc(max_nodos * sizeof(int));
+			descendencia[i]->pesos_entrada[j] = (double *)malloc(max_nodos * sizeof(double))
+			if(descendencia[i]->conexiones_entrada[j] == NULL ||
+				descendencia[i]->pesos_entrada[j] == NULL)
+				error(RES_MEM);
 
-    if((descendencia[i]->pesos_entrada=(double **)malloc(predes.n_nodos_entrada*sizeof(double)))==NULL)
-      error(RES_MEM);
+			for(k = 0; k < max_nodos; k++) {
+				descendencia[i]->conexiones_entrada[j][k] = pnodulos.nodulos[noduleOrig]->conexiones_entrada[j][k];
+				descendencia[i]->pesos_entrada[j][k] = pnodulos.nodulos[noduleOrig]->pesos_entrada[j][k];
+			} /* end for */
+		} /* end for */
 
-    if((descendencia[i]->conexiones_entrada=(int **)malloc(predes.n_nodos_entrada*sizeof(int)))==NULL)
-      error(RES_MEM);
+		descendencia[i]->salidas_parciales = (double **)malloc(n_entrenamiento * sizeof(double));
+		if(descendencia[i]->salidas_parciales == NULL)
+			error(RES_MEM);
 
-    for(j=0;j<predes.n_nodos_entrada;j++){
-      if((descendencia[i]->conexiones_entrada[j]=(int *)malloc(max_nodos*sizeof(int)))==NULL)
-        error(RES_MEM);
+		for(j = 0; j < n_entrenamiento; j++) {
+			descendencia[i]->salidas_parciales[j] = (double *)malloc(predes.n_nodos_salida * sizeof(double));
+			if(descendencia[i]->salidas_parciales[j] == NULL)
+				error(RES_MEM);
 
-      if((descendencia[i]->pesos_entrada[j]=(double *)malloc(max_nodos*sizeof(double)))==NULL)
-        error(RES_MEM);
-
-      for(k=0;k<max_nodos;k++){
-        descendencia[i]->conexiones_entrada[j][k]=pnodulos.nodulos[num_nodulos*(pnodulos.n_subpobl-1)+i]->conexiones_entrada[j][k];
-        descendencia[i]->pesos_entrada[j][k]=pnodulos.nodulos[num_nodulos*(pnodulos.n_subpobl-1)+i]->pesos_entrada[j][k];
-      } /* end for */
-    } /* end for */
-
-    if((descendencia[i]->salidas_parciales=(double **)malloc(n_entrenamiento*sizeof(double)))==NULL)
-      error(RES_MEM);
-
-    for(j=0;j<n_entrenamiento;j++){
-      if((descendencia[i]->salidas_parciales[j]=(double *)malloc(predes.n_nodos_salida*sizeof(double)))==NULL)
-        error(RES_MEM);
-
-      for(k=0;k<predes.n_nodos_salida;k++)
-        descendencia[i]->salidas_parciales[j][k]=pnodulos.nodulos[(num_nodulos*(pnodulos.n_subpobl-1))+i]->salidas_parciales[j][k];
-    } /* end for */
-  } /* end for */
+			for(k = 0; k < predes.n_nodos_salida; k++)
+				descendencia[i]->salidas_parciales[j][k] = pnodulos.nodulos[noduleOrig]->salidas_parciales[j][k];
+		} /* end for */
+	} /* end for */
 }
 
-/********************************************************************************
-* Fichero: mutacionEstructural.c						*
-*									        *
-* Función: mutarNodulos()						        *
-*									        *
-* Autor: Pablo Álvarez de Sotomayor Posadillo				        *
-*									        *
-* Finalidad de la función: Muta estructuralmente un nódulo dado.	        *
-*									        *
-* Parámetros de Entrada:						        *
-* 	numNodulo: Entero. Número de nódulo que se va a mutar.		        *
-* 									        *
-* Parámetros Internos:							        *
-* 	i: Entero. Contador.						        *
-* 	j: Entero. Contador.						        *
-* 	num: Entero. Parámetro que determina la cantidad de elementos a mutar.  *
-* 									        *
-* Parámetros de Salida:	NINGUNO						        *
-* 									        *
-* Funciones a las que llama la función:					        *
-*	anadirNodo()->Añade un nodo al nódulo.				        *
-*	borrarNodo()->Borra un nodo al nódulo.				        *
-*	anadirConexion()->Añade una conexión al nódulo.			        *
-*	borrarConexion()->Borra una conexión al nódulo.			        *
-*	medirCambioNodulo()->Mide el cambio en la aptitud del nódulo.	        *
-*									        *
-********************************************************************************/
+/******************************************************************************
+ File: mutacionEstructural.c
+ Function: mutarNodulos()
+ Author: Pablo Álvarez de Sotomayor Posadillo
+ Description: Make an estructural mutation in a given nodule.
+ Input Parameters:
+   nodule: Integer. Number of nodule to mutate.
+ Local Variables:
+   i: Integer. Counter.
+   j: Integer. Counter.
+   num: Integer. Number of mutation elements.
+ Return Value: None
+ Calling Functions: 
+   anadirNodo(): Add a node to the nodule.
+   borrarNodo(): Delete a node from the nodule.
+   anadirConexion(): Add a connection to the nodule.
+   borrarConexion(): Delete a connection from the nodule.
+   medirCambioNodulo(): Calculate the nodules aptitude variation after the
+                        mutation.
+******************************************************************************/
 
-void mutarNodulos(int numNodulo)
+void mutarNodulos(int nodule)
 {
-  int i,j,num;
+	int i, j, num;
 
-  /*Se realiza la mutacion estructural*/
-  /*Borrar nodos*/
-  num=(int)(delta_min+aleatorio()*(1-pnodulos.nodulos[numNodulo]->aptitud)*(delta_min-delta_max));
+	/* We made the estructural mutation. */
+	/* Deletion of nodes. */
+	num = (int)(delta_min + aleatorio() * (1 - pnodulos.nodulos[nodule]->aptitud) * (delta_min - delta_max));
+	if(num < 0)
+		num = 0;
+	else if(pnodulos.nodulos[numNodulo]->n_nodos < num)
+		num = pnodulos.nodulos[nodule]->n_nodos;
+	else if(num > 0)
+		borrarNodo(nodule, num);
 
-  if(num<0)
-    num=0;
+	/* Add nodes. */
+	num = (int)(delta_min + aleatorio() * (1 - pnodulos.nodulos[nodule]->aptitud) * (delta_min - delta_max));
+	if(num < 0)
+		num = 0;
+	else if((pnodulos.nodulos[numNodulo]->n_nodos + num) > max_nodos)
+		num = max_nodos - pnodulos.nodulos[nodule]->n_nodos;
+	else if(num > 0)
+		anadirNodo(nodule, num); /* We add a new node,*/
 
-  if(pnodulos.nodulos[numNodulo]->n_nodos<num)
-    num=pnodulos.nodulos[numNodulo]->n_nodos;
+	/* Delete connections. */
+	num = (int)(delta_min + aleatorio() * (1 - pnodulos.nodulos[nodule]->aptitud) * (delta_min - delta_max));
+	if(num < 0)
+		num = 0;
 
-  if(num>0)
-    borrarNodo(numNodulo,num);
-  
-  /*Añadir nodos*/
-  num=(int)(delta_min+aleatorio()*(1-pnodulos.nodulos[numNodulo]->aptitud)*(delta_min-delta_max));
+	for(i = 0; i <num && pnodulos.nodulos[nodule]->n_nodos > 0; i++) {
+		j = random() % (predes.n_nodos_entrada + predes.n_nodos_salida);
+		borrarConexion(nodule, j);
+	}
 
-  if(num<0)
-    num=0;
+	/* Add connections. */
+	num = (int)(delta_min + aleatorio() * (1 - pnodulos.nodulos[nodule]->aptitud) * (delta_min - delta_max));
+	if(num < 0)
+		num = 0;
 
-  if((pnodulos.nodulos[numNodulo]->n_nodos+num)>max_nodos)
-    num=max_nodos-pnodulos.nodulos[numNodulo]->n_nodos;
+	for(i = 0; i < num && pnodulos.nodulos[nodule]->n_nodos > 0; i++)
+		anadirConexion(nodule);
 
-  if(num>0)
-    anadirNodo(numNodulo,num);/*Se añade un nuevo nodo*/
-
-  /*Borrar conexiones*/
-  num=(int)(delta_min+aleatorio()*(1-pnodulos.nodulos[numNodulo]->aptitud)*(delta_min-delta_max));
-
-  if(num<0)
-    num=0;
-
-  for(i=0;i<num && pnodulos.nodulos[numNodulo]->n_nodos>0;i++){
-    j=random()%(predes.n_nodos_entrada+predes.n_nodos_salida);
-    borrarConexion(numNodulo,j);
-  }
-
-  /*Añadir conexiones*/
-  num=(int)(delta_min+aleatorio()*(1-pnodulos.nodulos[numNodulo]->aptitud)*(delta_min-delta_max));
-
-  if(num<0)
-    num=0;
-
-  for(i=0;i<num && pnodulos.nodulos[numNodulo]->n_nodos>0;i++)
-    anadirConexion(numNodulo);
-
-  /*Se mide el nódulo modificado, tanto sus salidas parciales como su aptitud*/
-  medirCambioNodulo(numNodulo);
+	/*
+	  We make the calculations over the modified nodule, both his partial
+	  outputs and his aptitude.
+	*/
+	medirCambioNodulo(nodule);
 }
 
-/********************************************************************************
-* Fichero: mutacionEstructural.c					        *
-*									        *
-* Función: anadirConexion()						        *
-*									        *
-* Autor: Pablo Álvarez de Sotomayor Posadillo				        *
-*									        *
-* Finalidad de la función: Añadir una conexión a un ódulo determinado.	        *
-*									        *
-* Parámetros de Entrada:						        *
-* 	numNodulo: Entero. Número de nódulo al que se le va a añadir la         *
-* 		   conexión.						        *
-* 									        *
-* Parámetros Internos:							        *
-* 	i. Entero. Contador.						        *
-*	j: Entero. Contador.						        *
-*	sel: Entero. Tipo de conexión a añadir (entrada, interna, salida).      *
-*	origen: Vector de Enteros. Posibles nodos de origen para la conexión.   *
-*	destino: Vector de Enteros. Posibles nodos de destino para la conexión. *
-*	num: Entero. Contador.						        *
-*	pos: Entero. Posicion en la que se añade la conexion.		        *
-* 									        *
-* Parámetros de Salida: NINGUNO						        *
-* 									        *
-* Funciones a las que llama la función: NINGUNA				        *
-*	error()->Funcion que muestra un mensaje de error por pantalla.	        *
-*									        *
-********************************************************************************/
+/******************************************************************************
+ File: mutacionEstructural.c
+ Function: anadirConexion()
+ Author: Pablo Álvarez de Sotomayor Posadillo
+ Finalidad de la función: Añadir una conexión a un ódulo determinado.
+ Input Parameters:
+   numNodulo: Integer. Number of nodule to modify.
+ Local Variables:
+   i. Integer. Counter.
+   j: Integer. Counter.
+   sel: Integer. Type of connection to add (input, internal or outpunt).
+   origen: Integer vector. Posibles nodos de origen para la conexión.
+   destino: Integer vector. Posibles nodos de destino para la conexión.
+   num: Integer. Counter.
+   pos: Integer. Position to add the connection.
+ Return Value: None
+ Calling Functions
+   error(): Function to show an error message depending on an error number.
+******************************************************************************/
 
 void anadirConexion(int numNodulo)
 {
