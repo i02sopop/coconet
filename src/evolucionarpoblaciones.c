@@ -1,66 +1,52 @@
-/********************************************************************************
-* Copyright (c) 2004-2011 coconet project (see AUTHORS)			        *
-*									        *
-* This file is part of Coconet.						        *
-*									        *
-* Coconet is free software: you can redistribute it and/or modify it under the  *
-* terms of the GNU General Public License as published by the Free Software     *
-* Foundation, either version 3 of the License, or (at your option) any later    *
-* version.                                                                      *
-*									        *
-* Coconet is distributed in the hope that it will be useful, but WITHOUT ANY    *
-* WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR *
-* A PARTICULAR PURPOSE.  See the GNU General Public License for more details.   *
-*									        *
-* You should have received a copy of the GNU General Public License along with  *
-* coconet. If not, see <http://www.gnu.org/licenses/>.                          *
-********************************************************************************/
+/******************************************************************************
+ Copyright (c) 2004-2011 coconet project (see AUTHORS)
+
+ This file is part of Coconet.
+
+ Coconet is free software: you can redistribute it and/or modify it under the
+ terms of the GNU General Public License as published by the Free Software
+ Foundation, either version 3 of the License, or (at your option) any later
+ version.
+
+ Coconet is distributed in the hope that it will be useful, but WITHOUT ANY
+ WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR
+ A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
+
+ You should have received a copy of the GNU General Public License along with
+ coconet. If not, see <http://www.gnu.org/licenses/>.
+******************************************************************************/
 
 #include <definiciones.h>
 
-/*******************************************************************************
-* Fichero: evolucionarPoblaciones.c					       *
-*									       *
-* Función: evolucionarPoblaciones()					       *
-*									       *
-* Autor: Pablo Álvarez de Sotomayor Posadillo				       *
-*									       *
-* Finalidad de la función: Evoluciona las poblaciones de redes y de nódulos.   *
-*									       *
-* Parámetros de Entrada: NINGUNO					       *
-* 									       *
-* Parámetros Internos:							       *
-* 	i: Entero. Contador.						       *
-* 	j: Entero. Contador.						       *
-* 	k: Entero. Contador.						       *
-* 	aptitudRedes: Real. Almacena la aptitud media de las redes.	       *
-* 									       *
-* Parámetros de Salida:	NINGUNO						       *
-* 									       *
-* Funciones a las que llama la función:					       *
-*	retropropagacion()->Ejecuta el algoritmo de retropropagación sobre un  *
-*			    nódulo dado.  				       *
-*	generarSalidaNodulo()->Genera la salida de un nódulo en función de unos*
-*			       datos de entrada.			       *
-*	generarSalidaRed()->Genera la salida de una red en función de la salida*
-*			    de sus nódulos				       *
-* 	medirAptitudRed()->Mide la aptitud de una red en función de las salidas*
-*			   generadas.					       *
-* 	medirAptitudNodulos()->Mide la aptitud de los nódulos basándose en tres*
-*			       parámetros.				       *
-* 	normalizarAptitudNodulos()->Hace que la aptitud mínima de la población *
-*				    de nódulos sea cero.		       *
-* 	ordenarRedes()->Ordena las redes en función de su aptitud.	       *
-* 	enfriamientoSimulado()->Ejecuta el enfriamiento simulado sobre un      *
-*				nódulo determinado.			       *
-* 	ordenarNodulos()->Ordena los nódulos en función de su aptitud.	       *
-* 	copiarDescendencia()->Hace una copia de la subpoblación de nódulos.    *
-* 	mutarNodulos()->Muta estructuralmente un nódulo.		       *
-* 	sustituirNodulos()->Sustituye los peores nódulos de la subpoblación por*
-*			    la mutación de los mejores nódulos de la	       *
-*			    subpoblación.				       *
-* 									       *
-*******************************************************************************/
+/*****************************************************************************
+ File: evolucionarPoblaciones.c
+ Function: evolucionarPoblaciones()
+ Author: Pablo Álvarez de Sotomayor Posadillo
+ Description: Evolve the networks and nodules populations.
+ Input Parameters: None
+ Local Variables:
+   i: Integer. Counter.
+   j: Integer. Counter.
+   k: Integer. Counter.
+   aptitudRedes: Float. Store the average aptitude of the networks.
+ Return Value: None
+ Calling Functions:
+   retropropagacion(): Run the backpropagation algorithm over a given nodule.
+   generarSalidaNodulo(): Generate the outout of a nodule with an input data
+                          given.
+   generarSalidaRed(): Generate the output of a network combining the nodule
+                       outputs.
+   medirAptitudRed(): Measure the network aptitude.
+   medirAptitudNodulos(): Measure the nodule aptitude.
+   normalizarAptitudNodulos(): Normalize the nodule aptitude.
+   ordenarRedes(): Sort the networks by aptitude.
+   enfriamientoSimulado(): Run the simulated annealing over a nodule.
+   ordenarNodulos(): Sort the nodules by aptitude.
+   copiarDescendencia(): Make a copy of the nodules subpopulation.
+   mutarNodulos(): Make an structural mutation of a nodule.
+   sustituirNodulos(): Substitution of the worst nodules by the mutation of
+                       the best nodules in the subpopulation.
+*****************************************************************************/
 
 void evolucionarPoblaciones()
 {
