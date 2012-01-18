@@ -28,7 +28,8 @@
    i: Integer. Counter.
    j: Integer. Counter.
    k: Integer. Counter.
-   aptitudRedes: Float. Store the average aptitude of the networks.
+   initialNumNodules: Integer. Initial number of nodules of the subpopulation.
+   networkAptitude: Float. Store the average aptitude of the networks.
  Return Value: None
  Calling Functions:
    retropropagacion(): Run the backpropagation algorithm over a given nodule.
@@ -50,188 +51,206 @@
 
 void evolucionarPoblaciones()
 {
-  int i,j,k;
-  double aptitudRedes;
+	int i, j, k, initialNumNodules;
+	double networkAptitude;
 
-  /*Se inicializan las variables*/
-  aptitudRedes=0.0;
-  for(i=0;i<predes.n_redes;i++)
-    predes.redes[i]->aptitud=0;
-  /*Se hace la evolución hasta que la aptitud media de las redes no mejore lo suficiente*/
-  for(i=0;medirCambio(&aptitudRedes,i)==false;i++)
-  {
-    if(i==0)
-    {
-      /*Si se acaba de crear una nueva subpoblación de nódulos se ejecuta la retropropagación para que reduzca su error*/
-      fprintf(stderr,"retropropagacion\n");
-      for(j=0;j<num_nodulos;j++)
-        retropropagacion(num_nodulos*(pnodulos.n_subpobl-1)+j,n_entrenamiento,5000);
-      fprintf(stderr,"Entrenar\n");
-      /*Se entrenan por primera vez las redes para tener un valor inicial de la aptitud de los nódulos y de las redes*/
-      for(j=0;j<n_entrenamiento;j++)
-      {
-        /*Se genera la salida de los nódulos*/
-        for(k=pnodulos.n_nodulos-num_nodulos;k<pnodulos.n_nodulos;k++)
-          generarSalidaNodulo(entrada[j],k,j,NULL);
-	/*Se mide la aptitud de las redes*/
-	for(k=0;k<predes.n_redes;k++)
-        {
-          generarSalidaRed(k,j);
-          medirAptitudRed(salida[j],k);
-        }
-      }
-      /*Se normalizan las aptitudes de las redes*/
-      for(j=0;j<predes.n_redes;j++)
-        predes.redes[j]->aptitud/=n_entrenamiento;
-      /*Se miden y se normalizan las aptitudes de los nódulos*/
-      for(j=0;j<pnodulos.n_nodulos;j++)
-        medirAptitudNodulos(j);
-      normalizarAptitudNodulos();
-    }
-    /*Se ordenan las redes según su aptitud*/
-    fprintf(stderr,"ordenar redes\n");
-    ordenarRedes();
-    /*Se entrenan las redes mediante el enfriamiento simulado*/
-    fprintf(stderr,"enfriamiento\n");
-    for(j=num_nodulos*(pnodulos.n_subpobl-1);j<pnodulos.n_nodulos;j++)
-      enfriamientoSimulado(j);
-    /*Se normalizan las aptitudes de los nódulos*/
-    fprintf(stderr,"normalizar aptitud nodulos\n");
-    normalizarAptitudNodulos();
-    /*Se ordenan los nódulos según su aptitud*/
-    fprintf(stderr,"ordenar nodulos\n");
-    ordenarNodulos();
-    /*Se crea una población descendente a partir de la actual*/
-    fprintf(stderr,"copiar descendencia\n");
-    copiarDescendencia();
-    /*Se mutan estructuralmente los nódulos*/
-    fprintf(stderr,"mutar nodulos\n");
-    for(j=num_nodulos*(pnodulos.n_subpobl-1);j<pnodulos.n_nodulos;j++)
-      mutarNodulos(j);
-    /*Se sustituyen los peores nódulos de la población padre por los mejores nódulos de la población descendente*/
-    fprintf(stderr,"Sustituir peores nodulos\n");
-    sustituirNodulos();
-    fprintf(stderr,"Fin de la evolucion\n");
-  }
+	/* Local variables initialization. */
+	networkAptitude = 0.0;
+	for(i = 0; i < predes.n_redes; i++)
+		predes.redes[i]->aptitud=0;
+
+	/* We evolve the networks until its average aptitude doesn't get enhaced
+	   enough. */
+	for(i = 0; medirCambio(&networkAptitude, i) == false; i++) {
+		initialNumNodules = num_nodulos * (pnodulos.n_subpobl - 1);
+		if(i == 0) {
+			/* If the subpopulation is new we run the backpropagation to reduce
+			   its error. */
+			fprintf(stderr, "Doing the backpropagation to a new nodule "
+					"subpopulation. \n");
+			for(j = 0; j < num_nodulos; j++)
+				retropropagacion(initialNumNodules + j, n_entrenamiento, 5000);
+
+			/* We train by first time the networks to have an initial value of
+			   the nodules and networks aptitude. */
+			fprintf(stderr,"We train by first time the networks.\n");
+			for(j = 0; j < n_entrenamiento; j++) {
+				/* We generate the nodules output. */
+				for(k = pnodulos.n_nodulos - num_nodulos; k < pnodulos.n_nodulos ;k++)
+					generarSalidaNodulo(entrada[j], k, j, NULL);
+
+				/* We measure the networks aptitude. */
+				for(k = 0; k < predes.n_redes; k++) {
+					generarSalidaRed(k, j);
+					medirAptitudRed(salida[j], k);
+				}
+			}
+
+			/* We normalize the network aptitude. */
+			for(j = 0; j < predes.n_redes; j++)
+				predes.redes[j]->aptitud /= n_entrenamiento;
+
+			/* We measure and normalize the nodules aptitude. */
+			for(j = 0; j < pnodulos.n_nodulos; j++)
+				medirAptitudNodulos(j);
+			normalizarAptitudNodulos();
+		}
+
+		/* We sort the networks by aptitude. */
+		fprintf(stderr, "Sorting networks.\n");
+		ordenarRedes();
+
+		/* We train the networks by simulate annealing. */
+		fprintf(stderr,"Training the networks by simulate annealing.\n");
+		for(j = initialNumNodules; j < pnodulos.n_nodulos; j++)
+			enfriamientoSimulado(j);
+
+		/* We normalize the nodules aptitude. */
+		fprintf(stderr, "Normalization of the nodules aptitude.\n");
+		normalizarAptitudNodulos();
+
+		/* We sort the nodules by aptitude. */
+		fprintf(stderr,"Sorting nodules.\n");
+		ordenarNodulos();
+
+		/* We create a new subpopulation descendant of the actual one. */
+		fprintf(stderr,"Creating new subpopulation.\n");
+		copiarDescendencia();
+
+		/* We make the structural mutation of the nodules. */
+		fprintf(stderr,"Nodules mutation.\n");
+		for(j = initialNumNodules; j < pnodulos.n_nodulos; j++)
+			mutarNodulos(j);
+
+		/* We substitude the worst nodules by the best ones in the descendant
+		   population. */
+		fprintf(stderr,"Susbstitution of the worst nodules by the bes ones.\n");
+		sustituirNodulos();
+
+		fprintf(stderr,"End of the evolve.\n");
+	}
 }
 
-/*******************************************************************************
-* Fichero: evolucionarPoblaciones.c					       *
-*									       *
-* Función: retropropagacion()						       *
-*									       *
-* Autor: Pablo Álvarez de Sotomayor Posadillo				       *
-*									       *
-* Finalidad de la función: Ejecuta el algoritmo de retropropagación sobre un   *
-*			   nódulo determinado.				       *
-*									       *
-* Parámetros de Entrada: 						       *
-* 	numNodulo: Entero. Número del nódulo a tratar.			       *
-* 	n_patrones: Entero. Número de patrones de entrada.		       *
-* 	iteraciones: Entero. Número de iteraciones que va a tener el algoritmo.*
-* 									       *
-* Parámetros Internos:							       *
-* 	i: Entero. Contador.						       *
-* 	j: Entero. Contador.						       *
-* 	iter: Entero. Contador.						       *
-* 	patron: Entero. Número de patrón elegido para ejecutar la	       *
-*		retropropagación.					       *
-* 	numNodos: Entero. Número de nodos que tiene el nódulo.		       *
-* 	einicial: Vector de reales. Almacena el error inicial del nódulo.     *
-* 	F_W: Matriz de reales. Almacena el cambio que se debe de introducir en *
-*	     los pesos del nódulo.					       *
-* 	out: Vector de reales. Almacena la salida de cada nodo del nódulo.     *
-* 	pesos: Matriz de reales. Almacena los pesos de conexión de todo el     *
-*	       nódulo.							       *
-* 	transf: Vector de funciones. Almacena las funciones de transferencia de*
-*		todos los nodos del nódulo.				       *
-* 									       *
-* Parámetros de Salida:	NINGUNO						       *
-* 									       *
-* Funciones a las que llama la función:					       *
-* 	generarSalidaNodulo()->Genera la salida de un nódulo a partir de un    *
-*			       patrón de entrada.			       *
-*	cambioPesos()->Función que calcula el valor en que tiene que cambiar   *
-*		       cada peso para reducir el error.			       *
-*	error()->Funcion que imprime por pantalla un mensaje de error.	       *
-*									       *
-*******************************************************************************/
+/******************************************************************************
+ File: evolucionarPoblaciones.c
+ Function: retropropagacion()
+ Author: Pablo Álvarez de Sotomayor Posadillo
+ Description: Run the backpropagation algorithm to a given nodule.
+ Input Parameters:
+   numNodulo: Integer. Number of the nodule to work with.
+   n_patrones: Integer. Number of input patterns.
+   iteraciones: Integer. Number of iterations of the algorithm.
+ Local Variables:
+   i: Integer. Counter.
+   j: Integer. Counter.
+   iter: Integer. Counter.
+   patron: Integer. Pattern number selected to run the backpropagation.
+   numNodos: Integer. Number of nodes of the nodule.
+   einicial: Float array. Store the initial error of each nodule.
+   F_W: Float array. Store the change to apply over the nodule weights.
+   out: Float array. Store the output of each node of the nodule.
+   pesos: Float array. Store the connection weights of the nodule.
+   transf: Functions array. Store the transfer functions of each node of the
+           nodule.
+ Return Value: None
+ Calling Functions:
+   generarSalidaNodulo(): Generate the output of a nodule given an entry
+                          pattern.
+   cambioPesos(): Function to calculate the change value of each weight to
+                  reduce the output error.
+   error(): Function to print an error message.
+******************************************************************************/
 
 void retropropagacion(int numNodulo,int n_patrones,int iteraciones)
 {
-  int i,j,iter,patron,numNodos;
-  double *einicial,**F_W,*out,**pesos;
-  func *transf;
+	int i, j, iter, patron, numNodos;
+	double *einicial, **F_W, *out,* *pesos;
+	func *transf;
 
-  /*Se inicializan todas las variables*/
-  numNodos=pnodulos.nodulos[numNodulo]->n_nodos+predes.n_nodos_entrada+predes.n_nodos_salida;
-  if((transf=(func *)malloc((predes.n_nodos_salida+pnodulos.nodulos[numNodulo]->n_nodos)*sizeof(func)))==NULL)
-    error(RES_MEM);
-  if((out=(double *)malloc(numNodos*sizeof(double)))==NULL)
-      error(RES_MEM);
-  if((F_W=(double **)malloc(numNodos*sizeof(double)))==NULL)
-    error(RES_MEM);
-  if((pesos=(double **)malloc(numNodos*sizeof(double)))==NULL)
-    error(RES_MEM);
-  if((einicial=(double *)malloc(predes.n_nodos_salida*sizeof(double)))==NULL)
-    error(RES_MEM);
-  for(i=0;i<numNodos;i++)
-  {
-    if((F_W[i]=(double *)malloc(numNodos*sizeof(double)))==NULL)
-      error(RES_MEM);
-    if((pesos[i]=(double *)malloc(numNodos*sizeof(double)))==NULL)
-      error(RES_MEM);
-    for(j=0;j<numNodos;j++)
-    {
-      F_W[i][j]=0.0;
-      pesos[i][j]=0.0;
-    }
-  }
-  for (i=0;i<pnodulos.nodulos[numNodulo]->n_nodos;i++)
-    transf[i]=pnodulos.nodulos[numNodulo]->transf[i];
-  for (;i<pnodulos.nodulos[numNodulo]->n_nodos+predes.n_nodos_salida;i++)
-    transf[i]=net_transf;
+	/* We initializate the local variables. */
+	numNodos = pnodulos.nodulos[numNodulo]->n_nodos + predes.n_nodos_entrada +
+		predes.n_nodos_salida;
 
-  /* Retropropagación. */
-  for(iter=0;iter<iteraciones;iter++)
-  {
-    /* Seleccionar un patrón. */
-    patron=random()%n_patrones;
-    generarSalidaNodulo(entrada[patron],numNodulo,patron, out);
+	transf = (func *)malloc((predes.n_nodos_salida + pnodulos.nodulos[numNodulo]->n_nodos) * sizeof(func));
+	out = (double *)malloc(numNodos * sizeof(double));
+	F_W = (double **)malloc(numNodos * sizeof(double));
+	pesos = (double **)malloc(numNodos * sizeof(double));
+	einicial = (double *)malloc(predes.n_nodos_salida * sizeof(double));
 
-    /*Se asignan los pesos a la matriz de pesos. */
-    for(j=0;j<predes.n_nodos_salida;j++)
-      einicial[j]=out[j+predes.n_nodos_entrada+pnodulos.nodulos[numNodulo]->n_nodos]-salida[patron][j];
-    for(i=0;i<pnodulos.nodulos[numNodulo]->n_nodos;i++)
-      for(j=0;j<predes.n_nodos_entrada;j++)
-        pesos[i+predes.n_nodos_entrada][j]=pnodulos.nodulos[numNodulo]->pesos_entrada[j][i];
-    for(i=0;i<predes.n_nodos_salida;i++)
-      for(j=0;j<pnodulos.nodulos[numNodulo]->n_nodos;j++)
-        pesos[i+predes.n_nodos_entrada+pnodulos.nodulos[numNodulo]->n_nodos][j+predes.n_nodos_entrada]=pnodulos.nodulos[numNodulo]->pesos_salida[j][i];
-    /* Obtener el cambio de pesos. */
-    cambioPesos(einicial,pesos,out,F_W,pnodulos.nodulos[numNodulo]->n_nodos,transf);
+	if(transf == NULL || out == NULL || F_W == NULL || pesos == NULL ||
+	   einicial == NULL)
+		error(RES_MEM);
 
-    /* Se realiza la actualización de pesos. */
-    for(i=0;i<pnodulos.nodulos[numNodulo]->n_nodos;i++)
-      for(j=0;j<predes.n_nodos_entrada;j++)
-        pnodulos.nodulos[numNodulo]->pesos_entrada[j][i]-=alpharet*F_W[i+predes.n_nodos_entrada][j];
-    for(i=0;i<predes.n_nodos_salida;i++)
-      for(j=0;j<pnodulos.nodulos[numNodulo]->n_nodos;j++)
-        pnodulos.nodulos[numNodulo]->pesos_salida[j][i]-=alpharet*F_W[i+predes.n_nodos_entrada+pnodulos.nodulos[numNodulo]->n_nodos][j+predes.n_nodos_entrada];
-  }
-  free(einicial);
-  free(out);
-  free(transf);
-  for(i=0;i<numNodos;i++)
-  {
-    free(pesos[i]);
-    free(F_W[i]);
-  }
-  free(pesos);
-  free(F_W);
+	for(i = 0; i < numNodos; i++) {
+		F_W[i] = (double *)malloc(numNodos * sizeof(double));
+		pesos[i] = (double *)malloc(numNodos * sizeof(double))
+		if(F_W[i] == NULL || pesos[i] == NULL)
+			error(RES_MEM);
+
+		for(j = 0; j < numNodos; j++) {
+			F_W[i][j] = 0.0;
+			pesos[i][j] = 0.0;
+		}
+	}
+
+	for(i = 0; i < pnodulos.nodulos[numNodulo]->n_nodos; i++)
+		transf[i] = pnodulos.nodulos[numNodulo]->transf[i];
+
+	for(;i < pnodulos.nodulos[numNodulo]->n_nodos + predes.n_nodos_salida; i++)
+		transf[i] = net_transf;
+
+	/* Backpropagation. */
+	for(iter = 0; iter < iteraciones; iter++) {
+		/* We pick a pattern. */
+		patron = random() % n_patrones;
+		generarSalidaNodulo(entrada[patron], numNodulo, patron, out);
+
+		/* We assign the weight to the weights matrix*/
+		for(j = 0; j < predes.n_nodos_salida; j++)
+			einicial[j] = out[j + predes.n_nodos_entrada + pnodulos.nodulos[numNodulo]->n_nodos] -
+				salida[patron][j];
+
+		for(i = 0; i < pnodulos.nodulos[numNodulo]->n_nodos; i++)
+			for(j = 0; j < predes.n_nodos_entrada; j++)
+				pesos[i + predes.n_nodos_entrada][j] =
+					pnodulos.nodulos[numNodulo]->pesos_entrada[j][i];
+
+		for(i = 0; i < predes.n_nodos_salida; i++)
+			for(j = 0; j < pnodulos.nodulos[numNodulo]->n_nodos; j++)
+				pesos[i + predes.n_nodos_entrada + pnodulos.nodulos[numNodulo]->n_nodos][j + predes.n_nodos_entrada] =
+					pnodulos.nodulos[numNodulo]->pesos_salida[j][i];
+
+		/* Obtain the weight change. */
+		cambioPesos(einicial, pesos, out, F_W, pnodulos.nodulos[numNodulo]->n_nodos,
+					transf);
+
+		/* We update the weigths. */
+		for(i = 0; i < pnodulos.nodulos[numNodulo]->n_nodos; i++)
+			for(j = 0; j < predes.n_nodos_entrada; j++)
+				pnodulos.nodulos[numNodulo]->pesos_entrada[j][i] -= alpharet *
+					F_W[i + predes.n_nodos_entrada][j];
+
+		for(i = 0; i < predes.n_nodos_salida; i++)
+			for(j = 0; j < pnodulos.nodulos[numNodulo]->n_nodos; j++)
+				pnodulos.nodulos[numNodulo]->pesos_salida[j][i] -= alpharet *
+					F_W[i + predes.n_nodos_entrada + pnodulos.nodulos[numNodulo]->n_nodos][j + predes.n_nodos_entrada];
+	}
+
+	/* Free memory. */
+	free(einicial);
+	free(out);
+	free(transf);
+
+	for(i = 0; i < numNodos; i++) {
+		free(pesos[i]);
+		free(F_W[i]);
+	}
+
+	free(pesos);
+	free(F_W);
 }
 
-/*******************************************************************************
+/******************************************************************************
 * Fichero: evolucionarPoblaciones.c					       *
 *									       *
 * Función: cambioPesos()						       *
