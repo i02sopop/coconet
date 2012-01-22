@@ -237,10 +237,6 @@ void retropropagacion(int numNodulo,int n_patrones,int iteraciones)
 	}
 
 	/* Free memory. */
-	free(einicial);
-	free(out);
-	free(transf);
-
 	for(i = 0; i < numNodos; i++) {
 		free(pesos[i]);
 		free(F_W[i]);
@@ -248,220 +244,205 @@ void retropropagacion(int numNodulo,int n_patrones,int iteraciones)
 
 	free(pesos);
 	free(F_W);
+	free(einicial);
+	free(out);
+	free(transf);
 }
 
 /******************************************************************************
-* Fichero: evolucionarPoblaciones.c					       *
-*									       *
-* Función: cambioPesos()						       *
-*									       *
-* Autor: Pablo Álvarez de Sotomayor Posadillo				       *
-*									       *
-* Finalidad de la función: Calcula el valor que tiene que cambiar cada peso    *
-*			   para reducir el error.			       *
-*									       *
-* Parámetros de Entrada: 						       *
-* 	nodos: Entero. Número de nodos que tiene el nódulo.		       *
-* 	einicial: Vector de reales. Almacena el error inicial del nódulo.     *
-* 	F_W: Matriz de reales. Almacena el cambio que se debe de introducir en *
-*	     los pesos del nódulo.					       *
-* 	out: Vector de reales. Almacena la salida de cada nodo del nódulo.     *
-* 	pesos: Matriz de reales. Almacena los pesos de conexión de todo el     *
-*	       nódulo.							       *
-* 	transf: Vector de funciones. Almacena las funciones de transferencia de*
-*		todos los nodos del nódulo.				       *
-* 									       *
-* Parámetros Internos:							       *
-* 	i: Entero. Contador.						       *
-* 	j: Entero. Contador.						       *
-* 	N: Entero. Número de nodos de entrada y ocultos quetiene el nódulo.    *
-* 	enodo: Vector de reales. Error de salida de un nódulo.		       *
-* 	ered: Vector de reales. Error de la red en un nodo determinado.        *
-* 									       *
-* Parámetros de Salida:	NINGUNO						       *
-* 									       *
-* Funciones a las que llama la función:	NINGUNA				       *
-*	error()->Funcion que muestra un mensaje de error por pantalla	       *
-*									       *
-*******************************************************************************/
+ File: evolucionarPoblaciones.c
+ Function: cambioPesos()
+ Author: Pablo Álvarez de Sotomayor Posadillo
+ Description: Calculate the differential value to apply to each weight to
+              reduce the error of a nodule.
+ Input Parameters:
+   nodos: Integer. Number of nodes at the nodule.
+   einicial: Array of floats. Store the initial error of the nodule.
+   F_W: Matrix of floats. Store the change to apply in each nodule weight.
+   out: Array of floats. Store the output of each node of the nodule.
+   pesos: Matrix of floats. Store all the connection weights of the nodule.
+   transf: Array of functions. Store the transfer functions of each node of the
+           nodule.
+ Local Variables:
+   i: Integer. Counter.
+   j: Integer. Counter.
+   N: Integer. Number of input and hidden nodes of the nodule.
+   enodo: Array of floats. Output error of a nodule.
+   ered: Array of floats. Network error in a given node.
+ Return Value: None
+ Calling functions:
+   error(): Function to print an error message.
+******************************************************************************/
 
-void cambioPesos(double *einicial,double **pesos,double *out,double **F_W,int nodos,func *transf)
+void cambioPesos(double *einicial, double **pesos, double *out, double **F_W,
+				 int nodos, func *transf)
 {
-  int i,j,N;
-  double *enodo,*ered;
+	int i, j, N;
+	double *enodo, *ered;
 
-  N=predes.n_nodos_entrada+nodos;
-  if((enodo=(double *)malloc((N+predes.n_nodos_salida)*sizeof(double)))==NULL)
-    error(RES_MEM);
-  if((ered=(double *)malloc((N+predes.n_nodos_salida)*sizeof(double)))==NULL)
-    error(RES_MEM);
+	/* Variable initialization. */
+	N = predes.n_nodos_entrada + nodos;
+	enodo = (double *)malloc((N + predes.n_nodos_salida) * sizeof(double));
+	ered = (double *)malloc((N + predes.n_nodos_salida) * sizeof(double));
+	if(enodo == NULL || ered == NULL)
+		error(RES_MEM);
 
-  /* Se inicializan las variables. */
+	for(i = 0; i < N; i++)
+		enodo[i] = 0.0;
 
-  for(i=0;i<N;i++)
-    enodo[i]=0.0;
+	for(i = 0; i < predes.n_nodos_salida; i++)
+		enodo[N + i] = einicial[i];
 
-  for(i=0;i<predes.n_nodos_salida;i++)
-    enodo[i+N]=einicial[i];
+	/* We get the updates. */
+	for(i = N + predes.n_nodos_salida - 1; i >= predes.n_nodos_entrada; i--) {
+		for(j = i + 1; j < N + predes.n_nodos_salida; j++)
+			enodo[i] += pesos[j][i] * ered[j];
 
-  /* Se obtienen las actualizaciones. */
-  for(i=N+predes.n_nodos_salida-1;i>=predes.n_nodos_entrada;i--)
-  {
-    for(j=i+1;j<N+predes.n_nodos_salida;j++)
-      enodo[i]+=pesos[j][i]*ered[j];
+		if(transf[i - predes.n_nodos_entrada] == (func)&Logistic)
+			ered[i] = enodo[i] * ptransferencia.logistic_b * out[i] *
+				(1.0 - out[i] / ptransferencia.logistic_a);
+		else if(transf[i - predes.n_nodos_entrada] == (func)&HyperbolicTangent)
+			ered[i] = enodo[i] * (ptransferencia.htan_b / ptransferencia.htan_a) *
+				(ptransferencia.htan_a - out[i]) *
+				(ptransferencia.htan_a + out[i]);
 
-    if(transf[i-predes.n_nodos_entrada]==(func)&Logistic)
-      ered[i]=enodo[i]*ptransferencia.logistic_b*out[i]*(1.0-out[i]/ptransferencia.logistic_a);
-    else if (transf[i-predes.n_nodos_entrada]==(func)&HyperbolicTangent)
-      ered[i]=enodo[i]*(ptransferencia.htan_b/ptransferencia.htan_a)*(ptransferencia.htan_a-out[i])*(ptransferencia.htan_a+out[i]);
-
-    for(j=0;j<i;j++)
-      F_W[i][j]=ered[i]*out[j];
-  }
+		for(j = 0; j < i; j++)
+			F_W[i][j] = ered[i] *out[j];
+	}
 }
 
-/*******************************************************************************
-* Fichero: evolucionarPoblaciones.c					       *
-*									       *
-* Función: enfriamientoSimulado()					       *
-*									       *
-* Autor: Pablo Álvarez de Sotomayor Posadillo				       *
-*									       *
-* Finalidad de la función: Ejecuta el algoritmo del enfriaiento simulado sobre *
-*			   un nódulo dado.				       *
-*									       *
-* Parámetros de Entrada:						       *
-* 	numNodulo: Entero. Número del nódulo que se va a tratar.	       *
-* 									       *
-* Parámetros Internos:							       *
-* 	i: Entero. Contador.						       *
-* 	j: Entero. Contador.						       *
-* 	k: Entero. Contador.						       *
-* 	pasos: Entero. Número de iteraciones que va a tener el enfriamiento    *
-*	       simulado.						       *
-* 	T: Real. Temperatura del enfriamiento simulado.			       *
-* 	pesos: Vector de reales. Pesos antiguos.			       *
-* 	apt_antigua: Real. Aptitud antigua del nódulo.			       *
-* 									       *
-* Parámetros de Salida:	NINGUNO						       *
-* 									       *
-* Funciones a las que llama la función:					       *
-*	pasoAleatorio()->Da un paso aleatorio en los pesos de conexión.	       *
-*	medirCambioNodulo()->Mide el cambio de aptitud que ha tenido el nódulo.*
-*									       *
-*******************************************************************************/
+/******************************************************************************
+ File: evolucionarPoblaciones.c
+ Function: enfriamientoSimulado()
+ Author: Pablo Álvarez de Sotomayor Posadillo
+ Description: Run the simulated annealing over a given nodule.
+ Input Parameters:
+	numNodulo: Integer. Number of nodule to run over.
+ Local Variables:
+	i: Integer. Counter.
+	j: Integer. Counter.
+	k: Integer. Counter.
+	pasos: Integer. Number of iterations of the annealing.
+	T: Float. Temperature of the simulated annealing.
+	pesos: Array of floats. Old weights.
+	apt_antigua: Float. Old nodule aptitude.
+ Return Value: None
+ Calling functions:
+	pasoAleatorio(): Make a random step in the connection weights.
+	medirCambioNodulo(): Measure the aptitude change at the nodule.
+******************************************************************************/
 
 void enfriamientoSimulado(int numNodulo)
 {
-  int i,j,k,pasos;
-  double T,*pesos,apt_antigua;
+	int i, j, k, pasos;
+	double T, *pesos, apt_antigua;
 
-  T=ToSA;
-  pesos=NULL;
-  apt_antigua=pnodulos.nodulos[numNodulo]->aptitud;
-  
-  /*Enfriamiento simulado*/
-  for(pasos=0;pasos<iteraciones_sa;pasos++)
-  {
-    /*Se guardan los pesos antiguos*/
-    k=0;
-    /*Se guardan los pesos de entrada*/
-    for(i=0;i<predes.n_nodos_entrada;i++)
-      for(j=0;j<pnodulos.nodulos[numNodulo]->n_nodos;j++)
-        if(pnodulos.nodulos[numNodulo]->conexiones_entrada[i][j])
-        {
-          pesos=(double *)realloc(pesos,(k+1)*sizeof(double));
-          pesos[k]=pnodulos.nodulos[numNodulo]->pesos_entrada[i][j];
-          k++;
-        }
+	/* Variable initialization. */
+	T = ToSA;
+	pesos = NULL;
+	apt_antigua = pnodulos.nodulos[numNodulo]->aptitud;
 
-    /*Se guardan los pesos de salida*/
-    for(i=0;i<pnodulos.nodulos[numNodulo]->n_nodos;i++)
-      for(j=0;j<predes.n_nodos_salida;j++)
-        if(pnodulos.nodulos[numNodulo]->conexiones_salida[i][j])
-        {
-          pesos=(double *)realloc(pesos,(k+1)*sizeof(double));
-          pesos[k]=pnodulos.nodulos[numNodulo]->pesos_salida[i][j];
-          k++;
-        }
+	/* Simulated annealing. */
+	for(pasos = 0; pasos < iteraciones_sa; pasos++) {
+		/* We keep the old weights. */
+		k = 0;
 
-    /*Se realiza un paso aleatorio*/
-    pasoAleatorio(numNodulo);
+		/* Input weights. */
+		for(i = 0; i < predes.n_nodos_entrada; i++) {
+			for(j = 0; j < pnodulos.nodulos[numNodulo]->n_nodos; j++) {
+				if(pnodulos.nodulos[numNodulo]->conexiones_entrada[i][j]) {
+					pesos = (double *)realloc(pesos, (k + 1) * sizeof(double));
+					pesos[k] = pnodulos.nodulos[numNodulo]->pesos_entrada[i][j];
+					k++;
+				}
+			}
+		}
 
-    /*Se calcula la aptitud del nuevo nodulo*/
-    medirCambioNodulo(numNodulo);
-      
-    /*Si la aptitud ha empeorado mucho se rechaza el cambio*/
-    if((apt_antigua>pnodulos.nodulos[numNodulo]->aptitud) && aleatorio()<(apt_antigua-pnodulos.nodulos[numNodulo]->aptitud)*T)
-    {
-      /*Se recuperan los pesos antiguos*/
-      k=0;
-      /*Se recuperan los pesos de entrada*/
-      for(i=0;i<predes.n_nodos_entrada;i++)
-        for(j=0;j<pnodulos.nodulos[numNodulo]->n_nodos;j++)
-          if(pnodulos.nodulos[numNodulo]->conexiones_entrada[i][j]==1)
-	  {
- 	    pnodulos.nodulos[numNodulo]->pesos_entrada[i][j]=pesos[k];
-	    k++;
-	  }
+		/* Output weights. */
+		for(i = 0; i < pnodulos.nodulos[numNodulo]->n_nodos; i++) {
+			for(j = 0; j < predes.n_nodos_salida; j++) {
+				if(pnodulos.nodulos[numNodulo]->conexiones_salida[i][j]) {
+					pesos = (double *)realloc(pesos, (k + 1) * sizeof(double));
+					pesos[k] = pnodulos.nodulos[numNodulo]->pesos_salida[i][j];
+					k++;
+				}
+			}
+		}
 
-      /*Se recuperan los pesos de salida*/
-      for(i=0;i<pnodulos.nodulos[numNodulo]->n_nodos;i++)
-	for(j=0;j<predes.n_nodos_salida;j++)
-	  if(pnodulos.nodulos[numNodulo]->conexiones_salida[i][j]==1)
-	  {
-	    pnodulos.nodulos[numNodulo]->pesos_salida[i][j]=pesos[k];
-	    k++;
-	  }
-      
-      /*Se calcula la aptitud del nuevo nodulo*/
-      medirCambioNodulo(numNodulo);
-    }
-    else
-      apt_antigua=pnodulos.nodulos[numNodulo]->aptitud;
-    /*Se actualiza la temperatura de la aptitud*/
-    T = alphasa * T;
-  }
-  
-  free(pesos);
+		/* We make a randon step. */
+		pasoAleatorio(numNodulo);
+
+		/* We calculate the aptitude of the new nodule. */
+		medirCambioNodulo(numNodulo);
+
+		/* If the aptitude is worst we reject the change. */
+		if((apt_antigua > pnodulos.nodulos[numNodulo]->aptitud) &&
+		   aleatorio() < (apt_antigua - pnodulos.nodulos[numNodulo]->aptitud) * T) {
+			/* We restore the old weights. */
+			k = 0;
+
+			/* Input weights. */
+			for(i = 0; i < predes.n_nodos_entrada; i++) {
+				for(j = 0; j < pnodulos.nodulos[numNodulo]->n_nodos; j++) {
+					if(pnodulos.nodulos[numNodulo]->conexiones_entrada[i][j]) {
+						pnodulos.nodulos[numNodulo]->pesos_entrada[i][j] = pesos[k];
+						k++;
+					}
+				}
+			}
+
+			/* Output weights. */
+			for(i = 0; i < pnodulos.nodulos[numNodulo]->n_nodos; i++) {
+				for(j = 0; j < predes.n_nodos_salida; j++) {
+					if(pnodulos.nodulos[numNodulo]->conexiones_salida[i][j]) {
+						pnodulos.nodulos[numNodulo]->pesos_salida[i][j] = pesos[k];
+						k++;
+					}
+				}
+			}
+
+			/* We recalculate the aptitude of the nodule. */
+			medirCambioNodulo(numNodulo);
+		} else
+			apt_antigua = pnodulos.nodulos[numNodulo]->aptitud;
+
+		/* We update the aptitude temperature. */
+		T = alphasa * T;
+	}
+
+	free(pesos);
 }
 
-/*******************************************************************************
-* Fichero: evolucionarPoblaciones.c					       *
-*									       *
-* Función: pasoAleatorio()						       *
-*									       *
-* Autor: Pablo Álvarez de Sotomayor Posadillo				       *
-*									       *
-* Finalidad de la función: Da un paso aleatorio en cada peso del nódulo.       *
-*									       *
-* Parámetros de Entrada:						       *
-* 	numNodulo: Entero. Número del nódulo a tratar.			       *
-* 									       *
-* Parámetros Internos:							       *
-* 	i: Entero. Contador.						       *
-* 	j: Entero. Contador.						       *
-* 									       *
-* Parámetros de Salida:	NINGUNO						       *
-* 									       *
-* Funciones a las que llama la función:					       *
-*	Normal()->genera un valor aleatorio dentro de una distribución normal. *
-*									       *
-*******************************************************************************/
+/******************************************************************************
+ File: evolucionarPoblaciones.c
+ Function: pasoAleatorio()
+ Author: Pablo Álvarez de Sotomayor Posadillo
+ Description: Make a randon step in each nodule weight.
+ Input Parameters:
+	numNodulo: Integer. Number of the nodule to work with.
+ Local Variables:
+	i: Integer. Counter.
+	j: Integer. Counter.
+ Return Value: None
+ Calling Functions:
+	Normal(): Generate a randon value following a normal distribution.
+******************************************************************************/
 
 void pasoAleatorio(int numNodulo)
 {
-  int i,j;
+	int i, j;
 
-  /*Se da un paso aleatorio en los pesos de las conexiones de entrada*/
-  for(i=0;i<predes.n_nodos_entrada;i++)
-    for(j=0;j<pnodulos.nodulos[numNodulo]->n_nodos;j++)
-      if(pnodulos.nodulos[numNodulo]->conexiones_entrada[i][j]==1)
-        pnodulos.nodulos[numNodulo]->pesos_entrada[i][j]+=Normal(0.0,1.0);
+	/* Randon step in input connection weights. */
+	for(i = 0; i < predes.n_nodos_entrada; i++)
+		for(j = 0; j < pnodulos.nodulos[numNodulo]->n_nodos; j++)
+			if(pnodulos.nodulos[numNodulo]->conexiones_entrada[i][j])
+				pnodulos.nodulos[numNodulo]->pesos_entrada[i][j] +=
+					Normal(0.0, 1.0);
 
-  /*Se da un paso aleatorio en los pesos de las conexiones de salida*/
-  for(i=0;i<pnodulos.nodulos[numNodulo]->n_nodos;i++)
-    for(j=0;j<predes.n_nodos_salida;j++)
-      if(pnodulos.nodulos[numNodulo]->conexiones_salida[i][j]==1)
-        pnodulos.nodulos[numNodulo]->pesos_salida[i][j]+=Normal(0.0,1.0);  
+	/* Random step in output connection weights.  */
+	for(i = 0; i < pnodulos.nodulos[numNodulo]->n_nodos; i++)
+		for(j = 0; j < predes.n_nodos_salida; j++)
+			if(pnodulos.nodulos[numNodulo]->conexiones_salida[i][j] == 1)
+				pnodulos.nodulos[numNodulo]->pesos_salida[i][j] +=
+					Normal(0.0, 1.0);
 }
