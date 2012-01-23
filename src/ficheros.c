@@ -1,232 +1,195 @@
-/********************************************************************************
-* Copyright (c) 2004-2011 coconet project (see AUTHORS)			        *
-*									        *
-* This file is part of Coconet.						        *
-*									        *
-* Coconet is free software: you can redistribute it and/or modify it under the  *
-* terms of the GNU General Public License as published by the Free Software     *
-* Foundation, either version 3 of the License, or (at your option) any later    *
-* version.                                                                      *
-*									        *
-* Coconet is distributed in the hope that it will be useful, but WITHOUT ANY    *
-* WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR *
-* A PARTICULAR PURPOSE.  See the GNU General Public License for more details.   *
-*									        *
-* You should have received a copy of the GNU General Public License along with  *
-* coconet. If not, see <http://www.gnu.org/licenses/>.                          *
-********************************************************************************/
+/******************************************************************************
+ Copyright (c) 2004-2011 coconet project (see AUTHORS)
+
+ This file is part of Coconet.
+
+ Coconet is free software: you can redistribute it and/or modify it under the
+ terms of the GNU General Public License as published by the Free Software
+ Foundation, either version 3 of the License, or (at your option) any later
+ version.
+
+ Coconet is distributed in the hope that it will be useful, but WITHOUT ANY
+ WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR
+ A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
+
+ You should have received a copy of the GNU General Public License along with
+ coconet. If not, see <http://www.gnu.org/licenses/>.
+******************************************************************************/
 
 #include <definiciones.h>
 #include <time.h>
 
-/*******************************************************************************
-* Fichero: ficheros.c							       *
-*									       *
-* Funcion: cargarFichero()						       *
-*									       *
-* Autor: Pablo Alvarez de Sotomayor Posadillo				       *
-*									       *
-* Finalidad de la funcion: Cargar los datos de entrada de los ficheros de      *
-*			   configuracion y de entrenamiento.		       *
-*									       *
-* Parametros de Entrada:						       *
-* 	config: cadena de caracteres. Nombre del fichero de configuracion.     *
-* 	entrenamiento: cadena de caracteres. Nombre del fichero de	       *
-*		       entrenamiento.					       *
-*									       *
-* Parametros Internos:							       *
-* 	i: Entero. Contador.						       *
-* 	j: Entero. Contador.						       *
-* 	fichero_configuracion:	Puntero al fichero de configuracion.	       *
-* 	fichero_entrenamiento:	Puntero al fichero de entrenamiento.	       *
-*									       *
-* Parametros de Salida:	NINGUNO						       *
-*									       *
-* Funciones a las que llama la funcion:					       *
-*	error()->Muestra un mensaje de error segun el error producido.	       *
-*									       *
-*******************************************************************************/
+/******************************************************************************
+ File: ficheros.c
+ Function: cargarFichero()
+ Author: Pablo Alvarez de Sotomayor Posadillo
+ Description: Load the input data from training and configuration files.
+ Input Parameters:
+   config: String. Name of the configuration file.
+   entrenamiento: String. Name of the training file.
+ Local Variables:
+   i: Integer. Counter.
+   j: Integer. Counter.
+   fichero_configuracion:	Pointer to the configuration file.
+   fichero_entrenamiento:	Pointer to the training file.
+ Return Value: None
+ Calling Functions:
+   error(): Function to print an error message.
+******************************************************************************/
 
-void cargarFichero(char *config,char *entrenamiento)
+void cargarFichero(char *config, char *entrenamiento)
 {
-  int i,j;
-  FILE *fichero_configuracion, *fichero_entrenamiento;
+	int i, j;
+	FILE *fichero_configuracion, *fichero_entrenamiento;
   
-  pnodulos.n_subpobl=0;
+	pnodulos.n_subpobl = 0;
 
-  /* Se abren los ficheros de configuración y de datos de entrenamiento. */
-  if((fichero_configuracion=fopen(config,"r"))==NULL)
-    error(IO);
-  if((fichero_entrenamiento=fopen(entrenamiento,"r"))==NULL)
-    error(IO);
+	/* We open the configuration and training files. */
+	fichero_configuracion = fopen(config,"r");
+	fichero_entrenamiento = fopen(entrenamiento,"r");
+	if(fichero_configuracion == NULL || fichero_entrenamiento == NULL)
+		error(IO);
   
-  if(fscanf(fichero_entrenamiento,"$ %d\n",&n_entrenamiento)==EOF)
-    error(IO);
-  if(fscanf(fichero_entrenamiento,"$ %d\n",&predes.n_nodos_entrada)==EOF)
-    error(IO);
-  if(fscanf(fichero_entrenamiento,"$ %d\n",&predes.n_nodos_salida)==EOF)
-    error(IO);
+	if(fscanf(fichero_entrenamiento, "$ %d\n", &n_entrenamiento) == EOF ||
+	   fscanf(fichero_entrenamiento, "$ %d\n", &predes.n_nodos_entrada) == EOF ||
+	   fscanf(fichero_entrenamiento,"$ %d\n",&predes.n_nodos_salida) == EOF)
+		error(IO);
 
-  /*Cargar los datos de entrenamiento*/
-  if((entrada=(double **)malloc(n_entrenamiento*sizeof(double)))==NULL)
-    error(RES_MEM);
-  if((salida=(double **)malloc(n_entrenamiento*sizeof(double)))==NULL)
-    error(RES_MEM);
-  for(i=0;i<n_entrenamiento;i++)
-  {
-    if((entrada[i]=(double *)malloc(predes.n_nodos_entrada*sizeof(double)))==NULL)
-      error(RES_MEM);
-    if((salida[i]=(double *)malloc(predes.n_nodos_salida*sizeof(double)))==NULL)
-      error(RES_MEM);
-    for(j=0;j<predes.n_nodos_entrada;j++)
-      if(fscanf(fichero_entrenamiento,"%lf",&entrada[i][j])==EOF)
-        error(IO);
-    for(j=0;j<predes.n_nodos_salida;j++)
-      if(fscanf(fichero_entrenamiento,"%lf",&salida[i][j])==EOF)
-        error(IO);
-  }
+	/* Loading the training data. */
+	entrada = (double **)malloc(n_entrenamiento * sizeof(double));
+	salida = (double **)malloc(n_entrenamiento * sizeof(double));
+	if(entrada == NULL || salida == NULL)
+		error(RES_MEM);
+
+	for(i = 0; i < n_entrenamiento; i++) {
+		entrada[i] = (double *)malloc(predes.n_nodos_entrada * sizeof(double));
+		salida[i] = (double *)malloc(predes.n_nodos_salida * sizeof(double));
+		if(entrada[i] == NULL || salida[i] == NULL)
+			error(RES_MEM);
+
+		for(j = 0; j < predes.n_nodos_entrada; j++)
+			if(fscanf(fichero_entrenamiento, "%lf", &entrada[i][j]) == EOF)
+				error(IO);
+		
+		for(j = 0; j < predes.n_nodos_salida; j++)
+			if(fscanf(fichero_entrenamiento, "%lf", &salida[i][j]) == EOF)
+				error(IO);
+	}
   
-  if(fscanf(fichero_configuracion,"Redes: %d\n",&max_redes)==EOF)
-    error(IO);
-  if(fscanf(fichero_configuracion,"Nodos: %d\n",&max_nodos)==EOF)
-    error(IO);
-  if(fscanf(fichero_configuracion,"Nodulos: %d\n",&num_nodulos)==EOF)
-    error(IO);
+	if(fscanf(fichero_configuracion, "Redes: %d\n", &max_redes) == EOF ||
+	   fscanf(fichero_configuracion, "Nodos: %d\n", &max_nodos) == EOF ||
+	   fscanf(fichero_configuracion, "Nodulos: %d\n", &num_nodulos) == EOF)
+		error(IO);
 
-  /*parámetros de las funciones de transferencia*/
-  if(fscanf(fichero_configuracion,"Htan a: %lf\n",&ptransferencia.htan_a)==EOF)
-    error(IO);
-  if(fscanf(fichero_configuracion,"Htan b: %lf\n",&ptransferencia.htan_b)==EOF)
-    error(IO);
-  if(fscanf(fichero_configuracion,"Logistic a: %lf\n",&ptransferencia.logistic_a)==EOF)
-    error(IO);
-  if(fscanf(fichero_configuracion,"Logistic b: %lf\n",&ptransferencia.logistic_b)==EOF)
-    error(IO);
-  if(fscanf(fichero_configuracion,"Epsilon: %lf\n",&ptransferencia.epsilon)==EOF)
-    error(IO);
+	/* Parameters of the transfer functions. */
+	if(fscanf(fichero_configuracion, "Htan a: %lf\n", &ptransferencia.htan_a) == EOF ||
+	   fscanf(fichero_configuracion, "Htan b: %lf\n", &ptransferencia.htan_b) == EOF ||
+	   fscanf(fichero_configuracion, "Logistic a: %lf\n", &ptransferencia.logistic_a) == EOF ||
+	   fscanf(fichero_configuracion, "Logistic b: %lf\n", &ptransferencia.logistic_b) == EOF ||
+	   fscanf(fichero_configuracion, "Epsilon: %lf\n", &ptransferencia.epsilon) == EOF)
+		error(IO);
 
-  /*Ponderacion para la aptitud de los nodulos*/
-  if(fscanf(fichero_configuracion,"Sustitucion: %lf\n",&pond.sust)==EOF)
-    error(IO);
-  if(fscanf(fichero_configuracion,"Diferencia: %lf\n",&pond.dif)==EOF)
-    error(IO);
-  if(fscanf(fichero_configuracion,"Mejores: %lf\n",&pond.best)==EOF)
-    error(IO);
+	/* Ponderation for nodule aptitude. */
+	if(fscanf(fichero_configuracion, "Sustitucion: %lf\n", &pond.sust) == EOF ||
+	   fscanf(fichero_configuracion, "Diferencia: %lf\n", &pond.dif) == EOF ||
+	   fscanf(fichero_configuracion, "Mejores: %lf\n", &pond.best) == EOF)
+		error(IO);
 
-  if(fscanf(fichero_configuracion,"Redes Seleccionadas: %d\n",&redsel)==EOF)
-    error(IO);
-  if(fscanf(fichero_configuracion,"Nodulos Seleccionados: %d\n",&nodsel)==EOF)
-    error(IO);
+	if(fscanf(fichero_configuracion, "Redes Seleccionadas: %d\n", &redsel) == EOF ||
+	   fscanf(fichero_configuracion, "Nodulos Seleccionados: %d\n", &nodsel) == EOF)
+		error(IO);
 
-  if(fscanf(fichero_configuracion,"Iteraciones SA: %d\n",&iteraciones_sa)==EOF)
-    error(IO);
-  if(fscanf(fichero_configuracion,"To SA: %lf\n",&ToSA)==EOF)
-    error(IO);
-  if(fscanf(fichero_configuracion,"alpha SA: %lf\n",&alphasa)==EOF)
-    error(IO);
+	if(fscanf(fichero_configuracion, "Iteraciones SA: %d\n", &iteraciones_sa) == EOF ||
+	   fscanf(fichero_configuracion, "To SA: %lf\n", &ToSA) == EOF ||
+	   fscanf(fichero_configuracion, "alpha SA: %lf\n", &alphasa) == EOF)
+		error(IO);
 
-  if(fscanf(fichero_configuracion,"Delta Minimo: %d\n",&delta_min)==EOF)
-    error(IO);
-  if(fscanf(fichero_configuracion,"Delta Maximo: %d\n",&delta_max)==EOF)
-    error(IO);
+	if(fscanf(fichero_configuracion, "Delta Minimo: %d\n", &delta_min) == EOF ||
+	   fscanf(fichero_configuracion, "Delta Maximo: %d\n", &delta_max) == EOF)
+		error(IO);
 
-  if(fscanf(fichero_configuracion,"Limite Evolucion: %lf\n",&evolim)==EOF)
-    error(IO);
-  if(fscanf(fichero_configuracion,"Alpha Retropropagacion: %lf\n",&alpharet)==EOF)
-    error(IO);
+	if(fscanf(fichero_configuracion, "Limite Evolucion: %lf\n", &evolim) == EOF ||
+	   fscanf(fichero_configuracion, "Alpha Retropropagacion: %lf\n", &alpharet) == EOF)
+		error(IO);
 
-  if(fclose(fichero_configuracion)==EOF)
-    error(IO);
-  if(fclose(fichero_entrenamiento)==EOF)
-    error(IO);
+	if(fclose(fichero_configuracion) == EOF || fclose(fichero_entrenamiento) == EOF)
+		error(IO);
 
-  srandom(time(NULL));
-  if(random()%2==0)
-    net_transf=(func)&HyperbolicTangent;
-  else
-    net_transf=(func)&Logistic;
+	srandom(time(NULL));
+	if(random() % 2 == 0)
+		net_transf=(func)&HyperbolicTangent;
+	else
+		net_transf = (func)&Logistic;
 
-  /*El número máximo de redes es como mínimo el número de nódulos por
-  subpoblación*/
-  if(max_redes<num_nodulos)
-    max_redes=num_nodulos;
-  if(nodsel>num_nodulos)
-    nodsel=num_nodulos;
+	/* The max number of networks is as the max number of nodules per subpopulation. */
+	if(max_redes < num_nodulos)
+		max_redes = num_nodulos;
+
+	if(nodsel > num_nodulos)
+		nodsel = num_nodulos;
 }
 
-/*******************************************************************************
-* Fichero: ficheros.c							       *
-*									       *
-* Funcion: leerGeneralizacion()						       *
-*									       *
-* Autor: Pablo Alvarez de Sotomayor Posadillo				       *
-*									       *
-* Finalidad de la funcion: Lee los datos de entrada para medir la	       *
-*			   generalizacion.				       *
-*									       *
-* Parametros de Entrada:						       *
-* 	generalizacion: Cadena de caracteres. Nombre del fichero de	       *
-*			generalizacion.					       *
-*									       *
-* Parametros Internos:							       *
-* 	i: Entero. Contador.						       *
-* 	j: Entero. Contador.						       *
-* 	fichero_generalizacion: Puntero a fichero. Fichero que contiene los    *
-*				datos de entrada.			       *
-*									       *
-* Parametros de Salida:	NINGUNO						       *
-*									       *
-* Funciones a las que llama la funcion:					       *
-*	error()->Muestra un mensaje de error segun el error producido.	       *
-*									       *
+/******************************************************************************
+ File: ficheros.c
+ Function: leerGeneralizacion()
+ Author: Pablo Alvarez de Sotomayor Posadillo
+ Description: Read the input data to measure the generalization.
+ Input Parameters:
+ 	generalizacion: String. Name of the generalization file.
+ Local Variables:
+ 	i: Integer. Counter.
+ 	j: Integer. Counter.
+ 	fichero_generalizacion: Pointer to file. File that contains the input data.
+ Return Value: None
+ Calling Functions:
+   error(): Function to print an error message.
 *******************************************************************************/
 
 void leerGeneralizacion(char *generalizacion)
 {
-  int i,j;
-  FILE *fichero_generalizacion;
+	int i, j;
+	FILE *fichero_generalizacion;
 
-  /*Se abre el fichero de generalización*/
-  if((fichero_generalizacion=fopen(generalizacion,"r"))==NULL)
-    error(IO);
+	/* We open the generalization file. */
+	if((fichero_generalizacion = fopen(generalizacion,"r")) == NULL)
+		error(IO);
 
-  /*Se cargan los datos del fichero de generalización*/
-  if(fscanf(fichero_generalizacion,"$ %d\n",&n_generalizacion)==EOF)
-    error(IO);
-  if(fscanf(fichero_generalizacion,"$ %d\n",&predes.n_nodos_entrada)==EOF)
-    error(IO);
-  if(fscanf(fichero_generalizacion,"$ %d\n",&predes.n_nodos_salida)==EOF)
-    error(IO);
+	/* We load the generalization data. */
+	if(fscanf(fichero_generalizacion, "$ %d\n", &n_generalizacion) == EOF ||
+	   fscanf(fichero_generalizacion, "$ %d\n", &predes.n_nodos_entrada) == EOF ||
+	   fscanf(fichero_generalizacion, "$ %d\n", &predes.n_nodos_salida) == EOF)
+		error(IO);
 
-  for(i=0;i<n_entrenamiento;i++)
-  {
-    free(entrada[i]);
-    free(salida[i]);
-  }
-  free(entrada);
-  free(salida);
-  if((entrada=(double **)malloc(n_generalizacion*sizeof(double)))==NULL)
-    error(RES_MEM);
-  if((salida=(double **)malloc(n_generalizacion*sizeof(double)))==NULL)
-    error(RES_MEM);
+	for(i = 0; i < n_entrenamiento; i++) {
+		free(entrada[i]);
+		free(salida[i]);
+	}
+	free(entrada);
+	free(salida);
 
-  for(i=0;i<n_generalizacion;i++)
-  {
-    if((entrada[i]=(double *)malloc(predes.n_nodos_entrada*sizeof(double)))==NULL)
-      error(RES_MEM);
-    if((salida[i]=(double *)malloc(predes.n_nodos_salida*sizeof(double)))==NULL)
-      error(RES_MEM);
-    for(j=0;j<predes.n_nodos_entrada;j++)
-      if(fscanf(fichero_generalizacion,"%lf",&entrada[i][j])==EOF)
-        error(IO);
-    for(j=0;j<predes.n_nodos_salida;j++)
-      if(fscanf(fichero_generalizacion,"%lf",&salida[i][j])==EOF)
-        error(IO);
-  }
+	entrada = (double **)malloc(n_generalizacion * sizeof(double));
+	salida = (double **)malloc(n_generalizacion * sizeof(double));
+	if(entrada == NULL || salida == NULL)
+		error(RES_MEM);
 
-  /*Se cierra el fichero de generalización*/
-  if(fclose(fichero_generalizacion)==EOF)
-    error(IO);
+	for(i = 0; i < n_generalizacion; i++) {
+		entrada[i] = (double *)malloc(predes.n_nodos_entrada * sizeof(double));
+		salida[i] = (double *)malloc(predes.n_nodos_salida * sizeof(double));
+		if(entrada[i] == NULL || salida[i] == NULL)
+			error(RES_MEM);
+
+		for(j = 0; j < predes.n_nodos_entrada; j++)
+			if(fscanf(fichero_generalizacion, "%lf", &entrada[i][j]) == EOF)
+				error(IO);
+
+		for(j = 0; j < predes.n_nodos_salida; j++)
+			if(fscanf(fichero_generalizacion, "%lf", &salida[i][j]) == EOF)
+				error(IO);
+	}
+
+	/* We close the file. */
+	if(fclose(fichero_generalizacion) == EOF)
+		error(IO);
 }
 
 /*******************************************************************************
