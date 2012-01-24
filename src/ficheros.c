@@ -41,7 +41,7 @@ void cargarFichero(char *config, char *entrenamiento)
 {
 	int i, j;
 	FILE *fichero_configuracion, *fichero_entrenamiento;
-  
+
 	pnodulos.n_subpobl = 0;
 
 	/* We open the configuration and training files. */
@@ -49,7 +49,7 @@ void cargarFichero(char *config, char *entrenamiento)
 	fichero_entrenamiento = fopen(entrenamiento,"r");
 	if(fichero_configuracion == NULL || fichero_entrenamiento == NULL)
 		error(IO);
-  
+
 	if(fscanf(fichero_entrenamiento, "$ %d\n", &n_entrenamiento) == EOF ||
 	   fscanf(fichero_entrenamiento, "$ %d\n", &predes.n_nodos_entrada) == EOF ||
 	   fscanf(fichero_entrenamiento,"$ %d\n",&predes.n_nodos_salida) == EOF)
@@ -70,12 +70,12 @@ void cargarFichero(char *config, char *entrenamiento)
 		for(j = 0; j < predes.n_nodos_entrada; j++)
 			if(fscanf(fichero_entrenamiento, "%lf", &entrada[i][j]) == EOF)
 				error(IO);
-		
+
 		for(j = 0; j < predes.n_nodos_salida; j++)
 			if(fscanf(fichero_entrenamiento, "%lf", &salida[i][j]) == EOF)
 				error(IO);
 	}
-  
+
 	if(fscanf(fichero_configuracion, "Redes: %d\n", &max_redes) == EOF ||
 	   fscanf(fichero_configuracion, "Nodos: %d\n", &max_nodos) == EOF ||
 	   fscanf(fichero_configuracion, "Nodulos: %d\n", &num_nodulos) == EOF)
@@ -135,15 +135,15 @@ void cargarFichero(char *config, char *entrenamiento)
  Author: Pablo Alvarez de Sotomayor Posadillo
  Description: Read the input data to measure the generalization.
  Input Parameters:
- 	generalizacion: String. Name of the generalization file.
+   generalizacion: String. Name of the generalization file.
  Local Variables:
- 	i: Integer. Counter.
- 	j: Integer. Counter.
- 	fichero_generalizacion: Pointer to file. File that contains the input data.
+   i: Integer. Counter.
+   j: Integer. Counter.
+   fichero_generalizacion: Pointer to file. File that contains the input data.
  Return Value: None
  Calling Functions:
    error(): Function to print an error message.
-*******************************************************************************/
+******************************************************************************/
 
 void leerGeneralizacion(char *generalizacion)
 {
@@ -192,196 +192,188 @@ void leerGeneralizacion(char *generalizacion)
 		error(IO);
 }
 
-/*******************************************************************************
-* Fichero: ficheros.c							       *
-*									       *
-* Funcion: exportarMejorRed()						       *
-*									       *
-* Autor: Pablo Alvarez de Sotomayor Posadillo				       *
-*									       *
-* Finalidad de la funcion: Exporta la red que mejor se ha adaptado al problema *
-*			   a un fichero de salida.			       *
-*									       *
-* Parametros de Entrada: 						       *
-* 	ficheroSalida: Cadena de caracteres. Nombre del fichero de salida.     *
-*									       *
-* Parametros Internos:							       *
-* 	i: Entero. Contador.						       *
-* 	j: Entero. Contador.						       *
-* 	k: Entero. Contador.						       *
-* 	l: Entero. Contador.						       *
-* 	nodos: Entero. Almacena el numero de nodos que tiene la red.	       *
-* 	max: Real. Generalizacion maxima.				       *
-* 	idmax: Numero de red con generalizacion maxima.			       *
-* 	conexiones: Numero de conexiones de la red.			       *
-* 	aptitud: Real. Guarda la aptitud para medir la generalizacion	       *
-* 	out: Puntero a fichero. Fichero de salida.			       *
-*									       *
-* Parametros de Salida:	NINGUNO						       *
-*									       *
-* Funciones a las que llama la funcion:					       *
-*	generarSalidaRed()->Genera la salida de la red a partir de la salida de*
-*			    los nodulos.				       *
-*	generarSalidaNodulo()->Genera la salida de un nodulo a partir de un    *
-*			       par‡metro de entrada.			       *
-*	medirAptitudRed()->Mide la aptitud de la red a partir de las salidas   *
-*			   generadas.					       *
-*	error()->funcion que muestra un mensaje de error por pantalla.	       *
-*									       *
-*******************************************************************************/
+/******************************************************************************
+ File: ficheros.c
+ Function: exportarMejorRed()
+ Author: Pablo Alvarez de Sotomayor Posadillo
+ Description: Export the network who fits best to the problem to an output
+              file.
+ Input Parameters:
+   ficheroSalida: String. Name of the output file.
+ Local Variables:
+   i: Integer. Counter
+   j: Integer. Counter.
+   k: Integer. Counter
+   l: Integer. Counter.
+   nodes: Integer. Store the number of nodes at the network.
+   max: Float. Maximum generalization.
+   idmax: Integer. Network id with maximum generalization.
+   connections: Integer. Number of connections of the network.
+   aptitud: Float. Store the aptitude to measure the generalization.
+   out: Pointer to file. Output file
+ Return Value: None
+ Calling Functions:
+   generarSalidaRed(): Generate the network output from the nodules output.
+   generarSalidaNodulo(): Generate the nodule output from an input parameter.
+   medirAptitudRed(): Measure the net aptitude from the generated outputs.
+   error(): Function to print an error message.
+******************************************************************************/
 
 void exportarMejorRed(char *ficheroSalida)
 {
-  int i,j,k,l,nodos,idmax,conexiones;
-  double *aptitud,max;
-  FILE *out;
+	int i, j, k, l, nodes, idmax, connections;
+	double *aptitud, max;
+	FILE *out;
 
-  if((aptitud=(double *)malloc(5*sizeof(double)))==NULL)
-    error(RES_MEM);
+	if((aptitud = (double *)malloc(5 * sizeof(double))) == NULL)
+		error(RES_MEM);
 
-  for(i=0;i<pnodulos.n_nodulos;i++)
-  {
-    for(j=0;j<n_entrenamiento;j++)
-      free(pnodulos.nodulos[i]->salidas_parciales[j]);
-    free(pnodulos.nodulos[i]->salidas_parciales);
-    if((pnodulos.nodulos[i]->salidas_parciales=(double **)malloc(n_generalizacion*sizeof(double)))==NULL)
-      error(RES_MEM);
-    for(j=0;j<n_generalizacion;j++){
-      if((pnodulos.nodulos[i]->salidas_parciales[j]=(double *)malloc(predes.n_nodos_salida*sizeof(double)))==NULL)
-        error(RES_MEM);
-      for(k=0;k<predes.n_nodos_salida;k++)
-	pnodulos.nodulos[i]->salidas_parciales[j][k]=0.0;
-    }
-  }
+	for(i = 0; i < pnodulos.n_nodulos; i++) {
+		for(j = 0; j < n_entrenamiento; j++)
+			free(pnodulos.nodulos[i]->salidas_parciales[j]);
+		free(pnodulos.nodulos[i]->salidas_parciales);
 
-  /*Se abre el fichero de salida*/
-  if((out=fopen(ficheroSalida,"w"))==NULL)
-    error(IO);
+		pnodulos.nodulos[i]->salidas_parciales = (double **)malloc(n_generalizacion * sizeof(double));
+		if(pnodulos.nodulos[i]->salidas_parciales == NULL)
+			error(RES_MEM);
 
-  /*Se guardan las aptitudes de las redes seleccionadas*/
-  for(i=0;i<5;i++)
-  {
-    aptitud[i]=predes.redes[i]->aptitud;
-    predes.redes[i]->aptitud=0.0;
-  }
+		for(j = 0; j < n_generalizacion; j++){
+			pnodulos.nodulos[i]->salidas_parciales[j] = (double *)malloc(predes.n_nodos_salida * sizeof(double));
+			if(pnodulos.nodulos[i]->salidas_parciales[j] == NULL)
+				error(RES_MEM);
 
-  /*Se calcula la generalización de las redes*/
-  for(i=0;i<n_generalizacion;i++)
-  {
-    /*Se generan las salidas parciales de los nódulos a partir de los datos de generalización*/
-    for(j=0;j<pnodulos.n_nodulos;j++)
-      generarSalidaNodulo(entrada[i],j,i,NULL);
-    for(j=0;j<5;j++)
-    {
-      /*Se generan las salidas de las redes a partir de las salidas parciales de los nódulos*/
-      generarSalidaRed(j,i);
-      /*Se mide la aptitud de las redes según las salidas generadas*/
-      medirAptitudRed(salida[i],j);
-    }
-  }
-  /*Se normaliza la aptitud de generalización en función de los datos de entrada del fichero de generalización*/
-  for(i=0;i<5;i++)
-    predes.redes[i]->aptitud/=n_generalizacion;
-
-  /*Se selecciona la red con mejor generalización de las 5 de mejor aptitud. Otros parámetros de selección es el número de nodos de la red,
-  la aptitud de las redes y el número de conexiones de las redes*/
-  max=0.0;
-  idmax=0;
-  for(i=0;i<5;i++)
-  {
-    if(predes.redes[i]->aptitud>max)
-    {
-      max=predes.redes[i]->aptitud;
-      idmax=i;
-    }
-    else if(predes.redes[i]->aptitud==max)
-    {
-      if(aptitud[idmax]<aptitud[i])
-      {
-        max=predes.redes[i]->aptitud;
-        idmax=i;
-      }
-      else if(aptitud[idmax]==aptitud[i])
-      {
-        nodos=0;
-        for(j=0;j<pnodulos.n_subpobl;j++)
-          nodos+=(predes.redes[idmax]->nodulos[j]->n_nodos-predes.redes[i]->nodulos[j]->n_nodos);
-        if(nodos>0)
-        {
-          max=predes.redes[i]->aptitud;
-          idmax=i;
-        }
-	else if(nodos==0)
-	{
-          conexiones=0;
-          for(l=0;l<pnodulos.n_subpobl;l++)
-          {
-            for(j=0;j<predes.n_nodos_entrada;j++)
-              for(k=0;k<predes.redes[idmax]->nodulos[l]->n_nodos;k++)
-                if(predes.redes[idmax]->nodulos[l]->conexiones_entrada[j][k]==1)
-	          conexiones++;
-            for(j=0;j<predes.redes[idmax]->nodulos[l]->n_nodos;j++)
-              for(k=0;k<predes.n_nodos_salida;k++)
-                if(predes.redes[idmax]->nodulos[l]->conexiones_salida[j][k]==1)
-	          conexiones++;
-            for(j=0;j<predes.n_nodos_entrada;j++)
-              for(k=0;k<predes.redes[i]->nodulos[l]->n_nodos;k++)
-                if(predes.redes[i]->nodulos[l]->conexiones_entrada[j][k]==1)
-	          conexiones--;
-            for(j=0;j<predes.redes[i]->nodulos[l]->n_nodos;j++)
-              for(k=0;k<predes.n_nodos_salida;k++)
-                if(predes.redes[i]->nodulos[l]->conexiones_salida[j][k]==1)
-	          conexiones--;
-          }
-	  if(conexiones>0)
-          {
-            max=predes.redes[i]->aptitud;
-            idmax=i;
-          }
+			for(k = 0; k < predes.n_nodos_salida; k++)
+				pnodulos.nodulos[i]->salidas_parciales[j][k] = 0.0;
+		}
 	}
-      }
-    }
-  }
-  /*Escribe en un fichero de salida la aptitud, la generalización y el número de nodos de entrada, de salida y ocultos de la mejor red, así
-  como su número de conexiones de entrada y de salida*/
-  if(fprintf(out,"Aptitud: %lf\n",aptitud[idmax])==EOF)
-    error(IO);
-  if(fprintf(out,"Generalizacion: %lf\n",predes.redes[idmax]->aptitud)==EOF)
-    error(IO);
-  if(fprintf(out,"Número de Nódulos: %d\n",pnodulos.n_subpobl)==EOF)
-    error(IO);
-  if(fprintf(out,"Número de Nodos de Entrada: %d\n",predes.n_nodos_entrada)==EOF)
-    error(IO);
-  nodos=0;
-  for(i=0;i<pnodulos.n_subpobl;i++)
-    nodos+=predes.redes[idmax]->nodulos[i]->n_nodos;
-  if(fprintf(out,"Número de Nodos Ocultos: %d\n",nodos)==EOF)
-    error(IO);
-  if(fprintf(out,"Número de Nodos de Salida: %d\n",predes.n_nodos_salida)==EOF)
-    error(IO);
-  conexiones=0;
-  for(i=0;i<pnodulos.n_subpobl;i++)
-  {
-    for(j=0;j<predes.n_nodos_entrada;j++)
-      for(k=0;k<predes.redes[idmax]->nodulos[i]->n_nodos;k++)
-        if(predes.redes[idmax]->nodulos[i]->conexiones_entrada[j][k]==1)
-	  conexiones++;
-  }
-  if(fprintf(out,"Número de Conexiones de Entrada: %d\n",conexiones)==EOF)
-    error(IO);
-  conexiones=0;
-  for(i=0;i<pnodulos.n_subpobl;i++)
-  {
-    for(j=0;j<predes.redes[idmax]->nodulos[i]->n_nodos;j++)
-      for(k=0;k<predes.n_nodos_salida;k++)
-        if(predes.redes[idmax]->nodulos[i]->conexiones_salida[j][k]==1)
-	  conexiones++;
-  }
-  if(fprintf(out,"Número de Conexiones de Salida: %d\n",conexiones)==EOF)
-    error(IO);
-  
-  /*Se cierra el fichero de salida*/
-  if(fclose(out)==EOF)
-    error(IO);
-  free(aptitud);
+
+	/* We opent the output file. */
+	if((out = fopen(ficheroSalida,"w")) == NULL)
+		error(IO);
+
+	/* We store the aptitude of the selected networks. */
+	for(i = 0; i < 5; i++){
+		aptitud[i] = predes.redes[i]->aptitud;
+		predes.redes[i]->aptitud = 0.0;
+	}
+
+	/* We calculate the network generalization. */
+	for(i = 0; i < n_generalizacion; i++) {
+		/*
+		  We generate the nodule partial outputs from the generaliation data.
+		*/
+		for(j = 0; j < pnodulos.n_nodulos; j++)
+			generarSalidaNodulo(entrada[i], j, i, NULL);
+
+		for(j = 0; j < 5; j++) {
+			/* We generate the network outputs from the nodules outputs. */
+			generarSalidaRed(j, i);
+
+			/* We measure the network aptitude from the generated outputs. */
+			medirAptitudRed(salida[i], j);
+		}
+	}
+
+	/* We normalize the generalization aptitude. */
+	for(i = 0; i < 5; i++)
+		predes.redes[i]->aptitud /= n_generalizacion;
+
+	/*
+	  We pick the network with best generalization from the 5 best by
+	  aptitude. Other selection parameter is the number of nodes in the
+	  network, the aptitude of the network and the number of connections of the
+	  network.
+	*/
+	max = 0.0;
+	idmax = 0;
+	for(i = 0; i < 5; i++) {
+		if(predes.redes[i]->aptitud > max) {
+			max = predes.redes[i]->aptitud;
+			idmax = i;
+		} else if(predes.redes[i]->aptitud == max) {
+			if(aptitud[idmax] < aptitud[i]) {
+				max = predes.redes[i]->aptitud;
+				idmax = i;
+			} else if(aptitud[idmax] == aptitud[i]) {
+				nodes = 0;
+				for(j = 0; j < pnodulos.n_subpobl; j++)
+					nodes += (predes.redes[idmax]->nodulos[j]->n_nodos -
+							  predes.redes[i]->nodulos[j]->n_nodos);
+
+				if(nodes > 0) {
+					max = predes.redes[i]->aptitud;
+					idmax = i;
+				} else if(nodes == 0) {
+					connections = 0;
+					for(l = 0; l < pnodulos.n_subpobl; l++) {
+						for(j = 0; j < predes.n_nodos_entrada; j++)
+							for(k = 0; k < predes.redes[idmax]->nodulos[l]->n_nodos; k++)
+								if(predes.redes[idmax]->nodulos[l]->conexiones_entrada[j][k] == 1)
+									connections++;
+						for(j = 0; j < predes.redes[idmax]->nodulos[l]->n_nodos; j++)
+							for(k = 0; k < predes.n_nodos_salida; k++)
+								if(predes.redes[idmax]->nodulos[l]->conexiones_salida[j][k] == 1)
+									connections++;
+						for(j = 0; j < predes.n_nodos_entrada; j++)
+							for(k = 0; k < predes.redes[i]->nodulos[l]->n_nodos; k++)
+								if(predes.redes[i]->nodulos[l]->conexiones_entrada[j][k] == 1)
+									connections--;
+						for(j = 0; j < predes.redes[i]->nodulos[l]->n_nodos; j++)
+							for(k = 0; k < predes.n_nodos_salida; k++)
+								if(predes.redes[i]->nodulos[l]->conexiones_salida[j][k] == 1)
+									connections--;
+					}
+
+					if(connections > 0) {
+						max = predes.redes[i]->aptitud;
+						idmax = i;
+					}
+				}
+			}
+		}
+	}
+
+	/*
+	  Write in an output file the aptitude, generalization and number of
+	  input, hidden and output nodes of the best network and its number of
+	  input and output connections.
+	*/
+	if(fprintf(out, "Aptitude: %lf\n", aptitud[idmax]) == EOF ||
+	   fprintf(out, "Generalization: %lf\n", predes.redes[idmax]->aptitud) == EOF ||
+	   fprintf(out, "Number of Nodules: %d\n", pnodulos.n_subpobl) == EOF ||
+	   fprintf(out, "Number of Input Nodes: %d\n", predes.n_nodos_entrada) == EOF)
+		error(IO);
+
+	nodes = 0;
+	for(i = 0; i < pnodulos.n_subpobl; i++)
+		nodes += predes.redes[idmax]->nodulos[i]->n_nodos;
+
+	if(fprintf(out, "Number of Hidden Nodes: %d\n", nodes) == EOF ||
+	   fprintf(out, "Number of Output Nodes: %d\n", predes.n_nodos_salida) == EOF)
+		error(IO);
+
+	connections = 0;
+	for(i = 0; i < pnodulos.n_subpobl; i++)
+		for(j = 0; j < predes.n_nodos_entrada; j++)
+			for(k = 0; k < predes.redes[idmax]->nodulos[i]->n_nodos; k++)
+				if(predes.redes[idmax]->nodulos[i]->conexiones_entrada[j][k] == 1)
+					connections++;
+
+	if(fprintf(out, "Number of Input Connections: %d\n", connections) == EOF)
+		error(IO);
+
+	connections = 0;
+	for(i = 0; i < pnodulos.n_subpobl; i++)
+		for(j = 0; j < predes.redes[idmax]->nodulos[i]->n_nodos; j++)
+			for(k = 0; k < predes.n_nodos_salida; k++)
+				if(predes.redes[idmax]->nodulos[i]->conexiones_salida[j][k] == 1)
+					connections++;
+
+	if(fprintf(out, "Number of Output Connections: %d\n", connections) == EOF)
+		error(IO);
+
+	/* We close the output file. */
+	if(fclose(out) == EOF)
+		error(IO);
+	free(aptitud);
 }
