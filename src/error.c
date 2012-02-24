@@ -1,5 +1,5 @@
 /******************************************************************************
- Copyright (c) 2004-2011 coconet project (see AUTHORS)
+ Copyright (c) 2004-2012 coconet project (see AUTHORS)
 
  This file is part of Coconet.
 

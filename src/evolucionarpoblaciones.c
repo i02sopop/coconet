@@ -1,5 +1,5 @@
 /******************************************************************************
- Copyright (c) 2004-2011 coconet project (see AUTHORS)
+ Copyright (c) 2004-2012 coconet project (see AUTHORS)
 
  This file is part of Coconet.
 
@@ -221,8 +221,7 @@ void retropropagacion(int numNodulo,int n_patrones,int iteraciones)
 					pnodulos.nodulos[numNodulo]->pesos_salida[j][i];
 
 		/* Obtain the weight change. */
-		cambioPesos(einicial, pesos, out, F_W, pnodulos.nodulos[numNodulo]->n_nodos,
-					transf);
+		cambioPesos(einicial, pesos, out, F_W, pnodulos.nodulos[numNodulo]->n_nodos, transf);
 
 		/* We update the weigths. */
 		for(i = 0; i < pnodulos.nodulos[numNodulo]->n_nodos; i++)
