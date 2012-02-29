@@ -30,99 +30,100 @@
  Local Variables:
  	i: Integer. Counter.
  	j: Integer. Counter.
- 	salida: Pointer to file. Output file.
-	numEntrada: Integer. Counter of the input patterns to generate its output.
+ 	fOutput: Pointer to file. Output file.
  Return Value: None
  Calling Functions: None
 ******************************************************************************/
 
-void imprimirNodulo(nodulo *imp,int iter)
+void imprimirNodulo(nodulo *imp, int iter)
 {
-	int i, j, numEntrada;
-	FILE *salida;
+	int i, j;
+	FILE *fOutput;
 
-	/* We open the output file and print the nodule information. */
-	salida = fopen("nodulos.txt", "a");
-	fprintf(salida, "id %d\nn_nodos %d\naptitud %lf\n\nMatriz de conexiones de entrada", imp->id, imp->n_nodos, imp->aptitud);
+	/*
+	  We open the output file and print the nodule information.
+	  TODO: Get the output filename from configuration.
+	*/
+	fOutput = fopen("nodules.txt", "a");
+	fprintf(fOutput, "id: %d\nNumber of nodes: %d\naptitude: %lf\n\nInput connections matrix:", imp->id, imp->n_nodos, imp->aptitud);
 	for(i = 0; i < predes.n_nodos_entrada; i++) {
-		fprintf(salida, "\n");
+		fprintf(fOutput, "\n");
 		for(j = 0; j < imp->n_nodos; j++)
-			fprintf(salida, "%d ", imp->conexiones_entrada[i][j]);
+			fprintf(fOutput, "%d ", imp->conexiones_entrada[i][j]);
 	}
 
-	fprintf(salida, "\nMatriz de conexiones de salida");
+	fprintf(fOutput, "\nOutput connections matrix:");
 	for(i=0;i<imp->n_nodos;i++) {
-		fprintf(salida, "\n");
+		fprintf(fOutput, "\n");
 		for(j = 0; j < predes.n_nodos_salida; j++)
-			fprintf(salida, "%d ", imp->conexiones_salida[i][j]);
+			fprintf(fOutput, "%d ", imp->conexiones_salida[i][j]);
 	}
 
-	fprintf(salida, "\nMatriz de pesos de entrada");
+	fprintf(fOutput, "\nInput weights matrix:");
 	for(i = 0; i < predes.n_nodos_entrada; i++) {
-		fprintf(salida, "\n");
+		fprintf(fOutput, "\n");
 		for(j = 0; j < imp->n_nodos; j++)
-			fprintf(salida, "%lf ", imp->pesos_entrada[i][j]);
+			fprintf(fOutput, "%lf ", imp->pesos_entrada[i][j]);
 	}
 
-	fprintf(salida, "\nMatriz de pesos de salida");
+	fprintf(fOutput, "\nOutput weights matrix:");
 	for(i = 0; i < imp->n_nodos; i++) {
-		fprintf(salida, "\n");
+		fprintf(fOutput, "\n");
 		for(j = 0; j < predes.n_nodos_salida; j++)
-			fprintf(salida, "%lf ", imp->pesos_salida[i][j]);
+			fprintf(fOutput, "%lf ", imp->pesos_salida[i][j]);
 	}
 
-	fprintf(salida, "\nSalidas parciales\n");
-	for(numEntrada = 0; numEntrada < iter; numEntrada++)
-		for(i = 0; i < predes.n_nodos_salida; i++)
-			fprintf(salida, "%lf ", imp->salidas_parciales[numEntrada][i]);
-	fprintf(salida, "\n\n");
+	fprintf(fOutput, "\nPartial outputs\n");
+	for(i = 0; i < iter; i++)
+		for(j = 0; j < predes.n_nodos_salida; j++)
+			fprintf(fOutput, "%lf ", imp->salidas_parciales[i][j]);
+	fprintf(fOutput, "\n\n");
 
 	/* We close the putput file. */
-	fclose(salida);
+	fclose(fOutput);
 }
 
-/*******************************************************************************
-* Fichero: imprimir.c							       *
-*									       *
-* Funcion: imprimirRed()						       *
-*									       *
-* Autor: Pablo Alvarez de Sotomayor Posadillo				       *
-*									       *
-* Finalidad de la funcion: Imprime datos sobre la red en un fichero de salida. *
-*									       *
-* Parametros de Entrada:						       *
-* 	imp: Red. Red que se va a imprimir.				       *
-*									       *
-* Parametros Internos:							       *
-* 	i: Entero. Contador.						       *
-* 	salida: Puntero a fichero. Fichero de salida.			       *
-*									       *
-* Parametros de Salida:	NINGUNO						       *
-*									       *
-* Funciones a las que llama la funcion:	NINGUNA				       *
-*									       *
-*******************************************************************************/
+/******************************************************************************
+ File: imprimir.c
+ Function: imprimirRed()
+ Author: Pablo Alvarez de Sotomayor Posadillo
+ Description: Print the network data into an output file.
+ Input Parameters:
+   network: Red. Network to print.
+ Local Variables:
+   i: Integer. Counter.
+   fOutput: Pointer to file. Output file.
+ Return Value: None
+ Calling Functions: None
+******************************************************************************/
 
-void imprimirRed(red *imp)
+void imprimirRed(red *network)
 {
-  int i;
-  FILE *salida;
-  
-  /*Se abre el fichero donde se va a escribir la red a imprimir*/
-  salida=fopen("red.txt","a");
-  /*Se imprimen los datos de la red*/
-  fprintf(salida,"nodulos ");
-  for(i=0;i<pnodulos.n_subpobl;i++)
-    fprintf(salida,"%d ",imp->nodulos[i]->id);
-  fprintf(salida,"\naptitud %lf\n",imp->aptitud);
-  fprintf(salida,"Valores salida\n");
-  for(i=0;i<predes.n_nodos_salida;i++)
-    fprintf(salida,"%lf ",imp->valores_salida[i]);
-  fprintf(salida,"\n");
-  if(net_transf==(func)&Logistic)
-    fprintf(salida,"Logistic\n");
-  else
-    fprintf(salida,"HyperbolicTangent\n");
-  /*Se cierra el fichero de salida*/
-  fclose(salida);
+	int i;
+	FILE *fOutput;
+
+	/*
+	  We open the output file.
+	  TODO: Get the output file from somewhere in the config.
+	*/
+	fOutput = fopen("network.txt","a");
+
+	/* We print the network data. */
+	fprintf(fOutput,"nodules: ");
+	for(i = 0; i < pnodulos.n_subpobl; i++)
+		fprintf(fOutput, "%d ", network->nodulos[i]->id);
+
+	fprintf(fOutput, "\naptitude: %lf\n", network->aptitud);
+	fprintf(fOutput, "Output values:\n");
+	for(i = 0; i < predes.n_nodos_salida; i++)
+		fprintf(fOutput, "%lf ", network->valores_salida[i]);
+	fprintf(fOutput, "\n");
+
+	if(net_transf == (func)&Logistic)
+		fprintf(fOutput, "Logistic\n");
+	else
+		fprintf(fOutput, "HyperbolicTangent\n");
+
+	/* We close the output file. */
+	fclose(fOutput);
 }

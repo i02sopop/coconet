@@ -137,14 +137,14 @@ void evolucionarPoblaciones()
  Author: Pablo Álvarez de Sotomayor Posadillo
  Description: Run the backpropagation algorithm to a given nodule.
  Input Parameters:
-   numNodulo: Integer. Number of the nodule to work with.
+   nodule: Integer. Number of the nodule to work with.
    n_patrones: Integer. Number of input patterns.
    iteraciones: Integer. Number of iterations of the algorithm.
  Local Variables:
    i: Integer. Counter.
    j: Integer. Counter.
-   iter: Integer. Counter.
-   patron: Integer. Pattern number selected to run the backpropagation.
+   k: Integer. Counter.
+   pattern: Integer. Pattern number selected to run the backpropagation.
    numNodos: Integer. Number of nodes of the nodule.
    einicial: Float array. Store the initial error of each nodule.
    F_W: Float array. Store the change to apply over the nodule weights.
@@ -161,17 +161,17 @@ void evolucionarPoblaciones()
    error(): Function to print an error message.
 ******************************************************************************/
 
-void retropropagacion(int numNodulo,int n_patrones,int iteraciones)
+void retropropagacion(int nodule, int n_patrones, int iteraciones)
 {
-	int i, j, iter, patron, numNodos;
+	int i, j, k, pattern, numNodos;
 	double *einicial, **F_W, *out,* *pesos;
 	func *transf;
 
 	/* We initializate the local variables. */
-	numNodos = pnodulos.nodulos[numNodulo]->n_nodos + predes.n_nodos_entrada +
+	numNodos = pnodulos.nodulos[nodule]->n_nodos + predes.n_nodos_entrada +
 		predes.n_nodos_salida;
 
-	transf = (func *)malloc((predes.n_nodos_salida + pnodulos.nodulos[numNodulo]->n_nodos) * sizeof(func));
+	transf = (func *)malloc((predes.n_nodos_salida + pnodulos.nodulos[nodule]->n_nodos) * sizeof(func));
 	out = (double *)malloc(numNodos * sizeof(double));
 	F_W = (double **)malloc(numNodos * sizeof(double));
 	pesos = (double **)malloc(numNodos * sizeof(double));
@@ -193,46 +193,46 @@ void retropropagacion(int numNodulo,int n_patrones,int iteraciones)
 		}
 	}
 
-	for(i = 0; i < pnodulos.nodulos[numNodulo]->n_nodos; i++)
-		transf[i] = pnodulos.nodulos[numNodulo]->transf[i];
+	for(i = 0; i < pnodulos.nodulos[nodule]->n_nodos; i++)
+		transf[i] = pnodulos.nodulos[nodule]->transf[i];
 
-	for(;i < pnodulos.nodulos[numNodulo]->n_nodos + predes.n_nodos_salida; i++)
+	for(;i < pnodulos.nodulos[nodule]->n_nodos + predes.n_nodos_salida; i++)
 		transf[i] = net_transf;
 
 	/* Backpropagation. */
-	for(iter = 0; iter < iteraciones; iter++) {
+	for(k = 0; k < iteraciones; k++) {
 		/* We pick a pattern. */
-		patron = random() % n_patrones;
-		generarSalidaNodulo(entrada[patron], numNodulo, patron, out);
+		pattern = random() % n_patrones;
+		generarSalidaNodulo(entrada[pattern], nodule, pattern, out);
 
 		/* We assign the weight to the weights matrix*/
 		for(j = 0; j < predes.n_nodos_salida; j++)
-			einicial[j] = out[j + predes.n_nodos_entrada + pnodulos.nodulos[numNodulo]->n_nodos] -
-				salida[patron][j];
+			einicial[j] = out[j + predes.n_nodos_entrada + pnodulos.nodulos[nodule]->n_nodos] -
+				salida[pattern][j];
 
-		for(i = 0; i < pnodulos.nodulos[numNodulo]->n_nodos; i++)
+		for(i = 0; i < pnodulos.nodulos[nodule]->n_nodos; i++)
 			for(j = 0; j < predes.n_nodos_entrada; j++)
 				pesos[i + predes.n_nodos_entrada][j] =
-					pnodulos.nodulos[numNodulo]->pesos_entrada[j][i];
+					pnodulos.nodulos[nodule]->pesos_entrada[j][i];
 
 		for(i = 0; i < predes.n_nodos_salida; i++)
-			for(j = 0; j < pnodulos.nodulos[numNodulo]->n_nodos; j++)
-				pesos[i + predes.n_nodos_entrada + pnodulos.nodulos[numNodulo]->n_nodos][j + predes.n_nodos_entrada] =
-					pnodulos.nodulos[numNodulo]->pesos_salida[j][i];
+			for(j = 0; j < pnodulos.nodulos[nodule]->n_nodos; j++)
+				pesos[i + predes.n_nodos_entrada + pnodulos.nodulos[nodule]->n_nodos][j + predes.n_nodos_entrada] =
+					pnodulos.nodulos[nodule]->pesos_salida[j][i];
 
 		/* Obtain the weight change. */
-		cambioPesos(einicial, pesos, out, F_W, pnodulos.nodulos[numNodulo]->n_nodos, transf);
+		cambioPesos(einicial, pesos, out, F_W, pnodulos.nodulos[nodule]->n_nodos, transf);
 
 		/* We update the weigths. */
-		for(i = 0; i < pnodulos.nodulos[numNodulo]->n_nodos; i++)
+		for(i = 0; i < pnodulos.nodulos[nodule]->n_nodos; i++)
 			for(j = 0; j < predes.n_nodos_entrada; j++)
-				pnodulos.nodulos[numNodulo]->pesos_entrada[j][i] -= alpharet *
+				pnodulos.nodulos[nodule]->pesos_entrada[j][i] -= alpharet *
 					F_W[i + predes.n_nodos_entrada][j];
 
 		for(i = 0; i < predes.n_nodos_salida; i++)
-			for(j = 0; j < pnodulos.nodulos[numNodulo]->n_nodos; j++)
-				pnodulos.nodulos[numNodulo]->pesos_salida[j][i] -= alpharet *
-					F_W[i + predes.n_nodos_entrada + pnodulos.nodulos[numNodulo]->n_nodos][j + predes.n_nodos_entrada];
+			for(j = 0; j < pnodulos.nodulos[nodule]->n_nodos; j++)
+				pnodulos.nodulos[nodule]->pesos_salida[j][i] -= alpharet *
+					F_W[i + predes.n_nodos_entrada + pnodulos.nodulos[nodule]->n_nodos][j + predes.n_nodos_entrada];
 	}
 
 	/* Free memory. */
@@ -347,26 +347,22 @@ void enfriamientoSimulado(int nodNumber)
 		k = 0;
 
 		/* Input weights. */
-		for(i = 0; i < predes.n_nodos_entrada; i++) {
-			for(j = 0; j < pnodulos.nodulos[nodNumber]->n_nodos; j++) {
+		for(i = 0; i < predes.n_nodos_entrada; i++)
+			for(j = 0; j < pnodulos.nodulos[nodNumber]->n_nodos; j++)
 				if(pnodulos.nodulos[nodNumber]->conexiones_entrada[i][j]) {
 					weigths = (double *)realloc(weigths, (k + 1) * sizeof(double));
 					weigths[k] = pnodulos.nodulos[nodNumber]->pesos_entrada[i][j];
 					k++;
 				}
-			}
-		}
 
 		/* Output weights. */
-		for(i = 0; i < pnodulos.nodulos[nodNumber]->n_nodos; i++) {
-			for(j = 0; j < predes.n_nodos_salida; j++) {
+		for(i = 0; i < pnodulos.nodulos[nodNumber]->n_nodos; i++)
+			for(j = 0; j < predes.n_nodos_salida; j++)
 				if(pnodulos.nodulos[nodNumber]->conexiones_salida[i][j]) {
 					weigths = (double *)realloc(weigths, (k + 1) * sizeof(double));
 					weigths[k] = pnodulos.nodulos[nodNumber]->pesos_salida[i][j];
 					k++;
 				}
-			}
-		}
 
 		/* We make a randon step. */
 		pasoAleatorio(nodNumber);
@@ -381,24 +377,20 @@ void enfriamientoSimulado(int nodNumber)
 			k = 0;
 
 			/* Input weights. */
-			for(i = 0; i < predes.n_nodos_entrada; i++) {
-				for(j = 0; j < pnodulos.nodulos[nodNumber]->n_nodos; j++) {
+			for(i = 0; i < predes.n_nodos_entrada; i++)
+				for(j = 0; j < pnodulos.nodulos[nodNumber]->n_nodos; j++)
 					if(pnodulos.nodulos[nodNumber]->conexiones_entrada[i][j]) {
 						pnodulos.nodulos[nodNumber]->pesos_entrada[i][j] = weigths[k];
 						k++;
 					}
-				}
-			}
 
 			/* Output weights. */
-			for(i = 0; i < pnodulos.nodulos[nodNumber]->n_nodos; i++) {
-				for(j = 0; j < predes.n_nodos_salida; j++) {
+			for(i = 0; i < pnodulos.nodulos[nodNumber]->n_nodos; i++)
+				for(j = 0; j < predes.n_nodos_salida; j++)
 					if(pnodulos.nodulos[nodNumber]->conexiones_salida[i][j]) {
 						pnodulos.nodulos[nodNumber]->pesos_salida[i][j] = weigths[k];
 						k++;
 					}
-				}
-			}
 
 			/* We recalculate the aptitude of the nodule. */
 			medirCambioNodulo(nodNumber);
