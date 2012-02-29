@@ -316,100 +316,100 @@ void cambioPesos(double *einicial, double **pesos, double *out, double **F_W,
  Author: Pablo Álvarez de Sotomayor Posadillo
  Description: Run the simulated annealing over a given nodule.
  Input Parameters:
-	numNodulo: Integer. Number of nodule to run over.
+	nodNumber: Integer. Number of nodule to run over.
  Local Variables:
 	i: Integer. Counter.
 	j: Integer. Counter.
 	k: Integer. Counter.
-	pasos: Integer. Number of iterations of the annealing.
+	steps: Integer. Number of iterations of the annealing.
 	T: Float. Temperature of the simulated annealing.
-	pesos: Array of floats. Old weights.
-	apt_antigua: Float. Old nodule aptitude.
+	weights: Array of floats. Old weights.
+	oldAptitude: Float. Old nodule aptitude.
  Return Value: None
  Calling functions:
 	pasoAleatorio(): Make a random step in the connection weights.
 	medirCambioNodulo(): Measure the aptitude change at the nodule.
 ******************************************************************************/
 
-void enfriamientoSimulado(int numNodulo)
+void enfriamientoSimulado(int nodNumber)
 {
-	int i, j, k, pasos;
-	double T, *pesos, apt_antigua;
+	int i, j, k, steps;
+	double T, *weights, oldAptitude;
 
 	/* Variable initialization. */
 	T = ToSA;
-	pesos = NULL;
-	apt_antigua = pnodulos.nodulos[numNodulo]->aptitud;
+	weights = NULL;
+	oldAptitude = pnodulos.nodulos[nodNumber]->aptitud;
 
 	/* Simulated annealing. */
-	for(pasos = 0; pasos < iteraciones_sa; pasos++) {
+	for(steps = 0; steps < iteraciones_sa; steps++) {
 		/* We keep the old weights. */
 		k = 0;
 
 		/* Input weights. */
 		for(i = 0; i < predes.n_nodos_entrada; i++) {
-			for(j = 0; j < pnodulos.nodulos[numNodulo]->n_nodos; j++) {
-				if(pnodulos.nodulos[numNodulo]->conexiones_entrada[i][j]) {
-					pesos = (double *)realloc(pesos, (k + 1) * sizeof(double));
-					pesos[k] = pnodulos.nodulos[numNodulo]->pesos_entrada[i][j];
+			for(j = 0; j < pnodulos.nodulos[nodNumber]->n_nodos; j++) {
+				if(pnodulos.nodulos[nodNumber]->conexiones_entrada[i][j]) {
+					weigths = (double *)realloc(weigths, (k + 1) * sizeof(double));
+					weigths[k] = pnodulos.nodulos[nodNumber]->pesos_entrada[i][j];
 					k++;
 				}
 			}
 		}
 
 		/* Output weights. */
-		for(i = 0; i < pnodulos.nodulos[numNodulo]->n_nodos; i++) {
+		for(i = 0; i < pnodulos.nodulos[nodNumber]->n_nodos; i++) {
 			for(j = 0; j < predes.n_nodos_salida; j++) {
-				if(pnodulos.nodulos[numNodulo]->conexiones_salida[i][j]) {
-					pesos = (double *)realloc(pesos, (k + 1) * sizeof(double));
-					pesos[k] = pnodulos.nodulos[numNodulo]->pesos_salida[i][j];
+				if(pnodulos.nodulos[nodNumber]->conexiones_salida[i][j]) {
+					weigths = (double *)realloc(weigths, (k + 1) * sizeof(double));
+					weigths[k] = pnodulos.nodulos[nodNumber]->pesos_salida[i][j];
 					k++;
 				}
 			}
 		}
 
 		/* We make a randon step. */
-		pasoAleatorio(numNodulo);
+		pasoAleatorio(nodNumber);
 
 		/* We calculate the aptitude of the new nodule. */
-		medirCambioNodulo(numNodulo);
+		medirCambioNodulo(nodNumber);
 
 		/* If the aptitude is worst we reject the change. */
-		if((apt_antigua > pnodulos.nodulos[numNodulo]->aptitud) &&
-		   aleatorio() < (apt_antigua - pnodulos.nodulos[numNodulo]->aptitud) * T) {
+		if((oldAptitude > pnodulos.nodulos[nodNumber]->aptitud) &&
+		   aleatorio() < (oldAptitude - pnodulos.nodulos[nodNumber]->aptitud) * T) {
 			/* We restore the old weights. */
 			k = 0;
 
 			/* Input weights. */
 			for(i = 0; i < predes.n_nodos_entrada; i++) {
-				for(j = 0; j < pnodulos.nodulos[numNodulo]->n_nodos; j++) {
-					if(pnodulos.nodulos[numNodulo]->conexiones_entrada[i][j]) {
-						pnodulos.nodulos[numNodulo]->pesos_entrada[i][j] = pesos[k];
+				for(j = 0; j < pnodulos.nodulos[nodNumber]->n_nodos; j++) {
+					if(pnodulos.nodulos[nodNumber]->conexiones_entrada[i][j]) {
+						pnodulos.nodulos[nodNumber]->pesos_entrada[i][j] = weigths[k];
 						k++;
 					}
 				}
 			}
 
 			/* Output weights. */
-			for(i = 0; i < pnodulos.nodulos[numNodulo]->n_nodos; i++) {
+			for(i = 0; i < pnodulos.nodulos[nodNumber]->n_nodos; i++) {
 				for(j = 0; j < predes.n_nodos_salida; j++) {
-					if(pnodulos.nodulos[numNodulo]->conexiones_salida[i][j]) {
-						pnodulos.nodulos[numNodulo]->pesos_salida[i][j] = pesos[k];
+					if(pnodulos.nodulos[nodNumber]->conexiones_salida[i][j]) {
+						pnodulos.nodulos[nodNumber]->pesos_salida[i][j] = weigths[k];
 						k++;
 					}
 				}
 			}
 
 			/* We recalculate the aptitude of the nodule. */
-			medirCambioNodulo(numNodulo);
+			medirCambioNodulo(nodNumber);
 		} else
-			apt_antigua = pnodulos.nodulos[numNodulo]->aptitud;
+			oldAptitude = pnodulos.nodulos[nodNumber]->aptitud;
 
 		/* We update the aptitude temperature. */
 		T = alphasa * T;
 	}
 
-	free(pesos);
+	free(weigths);
 }
 
 /******************************************************************************
@@ -418,7 +418,7 @@ void enfriamientoSimulado(int numNodulo)
  Author: Pablo Álvarez de Sotomayor Posadillo
  Description: Make a randon step in each nodule weight.
  Input Parameters:
-	numNodulo: Integer. Number of the nodule to work with.
+	nodNumber: Integer. Number of the nodule to work with.
  Local Variables:
 	i: Integer. Counter.
 	j: Integer. Counter.
@@ -427,21 +427,21 @@ void enfriamientoSimulado(int numNodulo)
 	Normal(): Generate a randon value following a normal distribution.
 ******************************************************************************/
 
-void pasoAleatorio(int numNodulo)
+void pasoAleatorio(int nodNumber)
 {
 	int i, j;
 
 	/* Randon step in input connection weights. */
 	for(i = 0; i < predes.n_nodos_entrada; i++)
-		for(j = 0; j < pnodulos.nodulos[numNodulo]->n_nodos; j++)
-			if(pnodulos.nodulos[numNodulo]->conexiones_entrada[i][j])
-				pnodulos.nodulos[numNodulo]->pesos_entrada[i][j] +=
+		for(j = 0; j < pnodulos.nodulos[nodNumber]->n_nodos; j++)
+			if(pnodulos.nodulos[nodNumber]->conexiones_entrada[i][j])
+				pnodulos.nodulos[nodNumber]->pesos_entrada[i][j] +=
 					Normal(0.0, 1.0);
 
 	/* Random step in output connection weights.  */
-	for(i = 0; i < pnodulos.nodulos[numNodulo]->n_nodos; i++)
+	for(i = 0; i < pnodulos.nodulos[nodNumber]->n_nodos; i++)
 		for(j = 0; j < predes.n_nodos_salida; j++)
-			if(pnodulos.nodulos[numNodulo]->conexiones_salida[i][j] == 1)
-				pnodulos.nodulos[numNodulo]->pesos_salida[i][j] +=
+			if(pnodulos.nodulos[nodNumber]->conexiones_salida[i][j] == 1)
+				pnodulos.nodulos[nodNumber]->pesos_salida[i][j] +=
 					Normal(0.0, 1.0);
 }

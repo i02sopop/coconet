@@ -18,80 +18,67 @@
 
 #include <definiciones.h>
 
-/*******************************************************************************
-* Fichero: imprimir.c		       					       *
-*									       *
-* Funcion: imprimirNodulo()						       *
-*									       *
-* Autor: Pablo Alvarez de Sotomayor Posadillo				       *
-*									       *
-* Finalidad de la funcion: Imprime informacion de un nodulo en un fichero de   *
-*			   salida.				       	       *
-*									       *
-* Parametros de Entrada:						       *
-* 	imp: Nodulo. Nodulo a imprimir.				               *
-* 	iter: Entero. Numero de patrones de entrada, los cuales generan una    *
-*	      salida.							       *
-*									       *
-* Parametros Internos:						               *
-* 	i: Entero. Contador.						       *
-* 	j: Entero. Contador.						       *
-* 	salida: Puntero a fichero. Fichero de salida.			       *
-*	numEntrada: Entero. Contador de los patrones de entrada para mostrar su*
-*	salida.								       *
-*									       *
-* Parametros de Salida: NINGUNO					               *
-*									       *
-* Funciones a las que llama la funcion:	NINGUNA			               *
-*									       *
-*******************************************************************************/
+/******************************************************************************
+ File: imprimir.c
+ Function: imprimirNodulo()
+ Author: Pablo Alvarez de Sotomayor Posadillo
+ Description: Print the information related with a given nodule to an output
+              file.
+ Input Parameters:
+ 	imp: Nodule. Nodule to print.
+ 	iter: Integer. Number of input patterns.
+ Local Variables:
+ 	i: Integer. Counter.
+ 	j: Integer. Counter.
+ 	salida: Pointer to file. Output file.
+	numEntrada: Integer. Counter of the input patterns to generate its output.
+ Return Value: None
+ Calling Functions: None
+******************************************************************************/
 
 void imprimirNodulo(nodulo *imp,int iter)
 {
-  int i,j,numEntrada;
-  FILE *salida;
+	int i, j, numEntrada;
+	FILE *salida;
 
-  /*Se abre el fichero donde se va a escribir la información del nódulo*/
-  salida=fopen("nodulos.txt","a");
-  /*Se imprime la información del nódulo*/
-  fprintf(salida,"id %d\n",imp->id);
-  fprintf(salida,"n_nodos %d\n",imp->n_nodos);
-  fprintf(salida,"aptitud %lf\n",imp->aptitud);
-  fprintf(salida,"\nMatriz de conexiones de entrada");
-  for(i=0;i<predes.n_nodos_entrada;i++)
-  {
-    fprintf(salida,"\n");
-    for(j=0;j<imp->n_nodos;j++)
-      fprintf(salida,"%d ",imp->conexiones_entrada[i][j]);
-  }
-  fprintf(salida,"\nMatriz de conexiones de salida");
-  for(i=0;i<imp->n_nodos;i++)
-  {
-    fprintf(salida,"\n");
-    for(j=0;j<predes.n_nodos_salida;j++)
-      fprintf(salida,"%d ",imp->conexiones_salida[i][j]);
-  }
-  fprintf(salida,"\nMatriz de pesos de entrada");
-  for(i=0;i<predes.n_nodos_entrada;i++)
-  {
-    fprintf(salida,"\n");
-    for(j=0;j<imp->n_nodos;j++)
-      fprintf(salida,"%lf ",imp->pesos_entrada[i][j]);
-  }
-  fprintf(salida,"\nMatriz de pesos de salida");
-  for(i=0;i<imp->n_nodos;i++)
-  {
-    fprintf(salida,"\n");
-    for(j=0;j<predes.n_nodos_salida;j++)
-      fprintf(salida,"%lf ",imp->pesos_salida[i][j]);
-  }
-  fprintf(salida,"\nSalidas parciales\n");
-  for(numEntrada=0;numEntrada<iter;numEntrada++)
-    for(i=0;i<predes.n_nodos_salida;i++)
-      fprintf(salida,"%lf ",imp->salidas_parciales[numEntrada][i]);
-  fprintf(salida,"\n\n");
-  /*Se cierra el fichero dee salida*/
-  fclose(salida);
+	/* We open the output file and print the nodule information. */
+	salida = fopen("nodulos.txt", "a");
+	fprintf(salida, "id %d\nn_nodos %d\naptitud %lf\n\nMatriz de conexiones de entrada", imp->id, imp->n_nodos, imp->aptitud);
+	for(i = 0; i < predes.n_nodos_entrada; i++) {
+		fprintf(salida, "\n");
+		for(j = 0; j < imp->n_nodos; j++)
+			fprintf(salida, "%d ", imp->conexiones_entrada[i][j]);
+	}
+
+	fprintf(salida, "\nMatriz de conexiones de salida");
+	for(i=0;i<imp->n_nodos;i++) {
+		fprintf(salida, "\n");
+		for(j = 0; j < predes.n_nodos_salida; j++)
+			fprintf(salida, "%d ", imp->conexiones_salida[i][j]);
+	}
+
+	fprintf(salida, "\nMatriz de pesos de entrada");
+	for(i = 0; i < predes.n_nodos_entrada; i++) {
+		fprintf(salida, "\n");
+		for(j = 0; j < imp->n_nodos; j++)
+			fprintf(salida, "%lf ", imp->pesos_entrada[i][j]);
+	}
+
+	fprintf(salida, "\nMatriz de pesos de salida");
+	for(i = 0; i < imp->n_nodos; i++) {
+		fprintf(salida, "\n");
+		for(j = 0; j < predes.n_nodos_salida; j++)
+			fprintf(salida, "%lf ", imp->pesos_salida[i][j]);
+	}
+
+	fprintf(salida, "\nSalidas parciales\n");
+	for(numEntrada = 0; numEntrada < iter; numEntrada++)
+		for(i = 0; i < predes.n_nodos_salida; i++)
+			fprintf(salida, "%lf ", imp->salidas_parciales[numEntrada][i]);
+	fprintf(salida, "\n\n");
+
+	/* We close the putput file. */
+	fclose(salida);
 }
 
 /*******************************************************************************
