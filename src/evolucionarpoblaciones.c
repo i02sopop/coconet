@@ -138,18 +138,18 @@ void evolucionarPoblaciones()
  Description: Run the backpropagation algorithm to a given nodule.
  Input Parameters:
    nodule: Integer. Number of the nodule to work with.
-   n_patrones: Integer. Number of input patterns.
-   iteraciones: Integer. Number of iterations of the algorithm.
+   numPatterns: Integer. Number of input patterns.
+   iter: Integer. Number of iterations of the algorithm.
  Local Variables:
    i: Integer. Counter.
    j: Integer. Counter.
    k: Integer. Counter.
    pattern: Integer. Pattern number selected to run the backpropagation.
-   numNodos: Integer. Number of nodes of the nodule.
-   einicial: Float array. Store the initial error of each nodule.
+   numNodes: Integer. Number of nodes of the nodule.
+   initialError: Float array. Store the initial error of each nodule.
    F_W: Float array. Store the change to apply over the nodule weights.
    out: Float array. Store the output of each node of the nodule.
-   pesos: Float array. Store the connection weights of the nodule.
+   weights: Float array. Store the connection weights of the nodule.
    transf: Functions array. Store the transfer functions of each node of the
            nodule.
  Return Value: None
@@ -161,35 +161,35 @@ void evolucionarPoblaciones()
    error(): Function to print an error message.
 ******************************************************************************/
 
-void retropropagacion(int nodule, int n_patrones, int iteraciones)
+void retropropagacion(int nodule, int numPatterns, int iter)
 {
-	int i, j, k, pattern, numNodos;
-	double *einicial, **F_W, *out,* *pesos;
+	int i, j, k, pattern, numNodes;
+	double *initialError, **F_W, *out,* *weights;
 	func *transf;
 
 	/* We initializate the local variables. */
-	numNodos = pnodulos.nodulos[nodule]->n_nodos + predes.n_nodos_entrada +
+	numNodes = pnodulos.nodulos[nodule]->n_nodos + predes.n_nodos_entrada +
 		predes.n_nodos_salida;
 
 	transf = (func *)malloc((predes.n_nodos_salida + pnodulos.nodulos[nodule]->n_nodos) * sizeof(func));
-	out = (double *)malloc(numNodos * sizeof(double));
-	F_W = (double **)malloc(numNodos * sizeof(double));
-	pesos = (double **)malloc(numNodos * sizeof(double));
-	einicial = (double *)malloc(predes.n_nodos_salida * sizeof(double));
+	out = (double *)malloc(numNodes * sizeof(double));
+	F_W = (double **)malloc(numNodes * sizeof(double));
+	weights = (double **)malloc(numNodes * sizeof(double));
+	initialError = (double *)malloc(predes.n_nodos_salida * sizeof(double));
 
-	if(transf == NULL || out == NULL || F_W == NULL || pesos == NULL ||
-	   einicial == NULL)
+	if(transf == NULL || out == NULL || F_W == NULL || weights == NULL ||
+	   initialError == NULL)
 		error(RES_MEM);
 
-	for(i = 0; i < numNodos; i++) {
-		F_W[i] = (double *)malloc(numNodos * sizeof(double));
-		pesos[i] = (double *)malloc(numNodos * sizeof(double))
-		if(F_W[i] == NULL || pesos[i] == NULL)
+	for(i = 0; i < numNodes; i++) {
+		F_W[i] = (double *)malloc(numNodes * sizeof(double));
+		weights[i] = (double *)malloc(numNodes * sizeof(double))
+		if(F_W[i] == NULL || weights[i] == NULL)
 			error(RES_MEM);
 
-		for(j = 0; j < numNodos; j++) {
+		for(j = 0; j < numNodes; j++) {
 			F_W[i][j] = 0.0;
-			pesos[i][j] = 0.0;
+			weights[i][j] = 0.0;
 		}
 	}
 
@@ -200,28 +200,28 @@ void retropropagacion(int nodule, int n_patrones, int iteraciones)
 		transf[i] = net_transf;
 
 	/* Backpropagation. */
-	for(k = 0; k < iteraciones; k++) {
+	for(k = 0; k < iter; k++) {
 		/* We pick a pattern. */
-		pattern = random() % n_patrones;
+		pattern = random() % numPatterns;
 		generarSalidaNodulo(entrada[pattern], nodule, pattern, out);
 
 		/* We assign the weight to the weights matrix*/
 		for(j = 0; j < predes.n_nodos_salida; j++)
-			einicial[j] = out[j + predes.n_nodos_entrada + pnodulos.nodulos[nodule]->n_nodos] -
+			initialError[j] = out[j + predes.n_nodos_entrada + pnodulos.nodulos[nodule]->n_nodos] -
 				salida[pattern][j];
 
 		for(i = 0; i < pnodulos.nodulos[nodule]->n_nodos; i++)
 			for(j = 0; j < predes.n_nodos_entrada; j++)
-				pesos[i + predes.n_nodos_entrada][j] =
+				weights[i + predes.n_nodos_entrada][j] =
 					pnodulos.nodulos[nodule]->pesos_entrada[j][i];
 
 		for(i = 0; i < predes.n_nodos_salida; i++)
 			for(j = 0; j < pnodulos.nodulos[nodule]->n_nodos; j++)
-				pesos[i + predes.n_nodos_entrada + pnodulos.nodulos[nodule]->n_nodos][j + predes.n_nodos_entrada] =
+				weights[i + predes.n_nodos_entrada + pnodulos.nodulos[nodule]->n_nodos][j + predes.n_nodos_entrada] =
 					pnodulos.nodulos[nodule]->pesos_salida[j][i];
 
 		/* Obtain the weight change. */
-		cambioPesos(einicial, pesos, out, F_W, pnodulos.nodulos[nodule]->n_nodos, transf);
+		cambioPesos(initialError, weight, out, F_W, pnodulos.nodulos[nodule]->n_nodos, transf);
 
 		/* We update the weigths. */
 		for(i = 0; i < pnodulos.nodulos[nodule]->n_nodos; i++)
@@ -236,14 +236,14 @@ void retropropagacion(int nodule, int n_patrones, int iteraciones)
 	}
 
 	/* Free memory. */
-	for(i = 0; i < numNodos; i++) {
-		free(pesos[i]);
+	for(i = 0; i < numNodes; i++) {
+		free(weights[i]);
 		free(F_W[i]);
 	}
 
-	free(pesos);
+	free(weights);
 	free(F_W);
-	free(einicial);
+	free(initialError);
 	free(out);
 	free(transf);
 }
@@ -255,58 +255,58 @@ void retropropagacion(int nodule, int n_patrones, int iteraciones)
  Description: Calculate the differential value to apply to each weight to
               reduce the error of a nodule.
  Input Parameters:
-   nodos: Integer. Number of nodes at the nodule.
-   einicial: Array of floats. Store the initial error of the nodule.
+   nodes: Integer. Number of nodes at the nodule.
+   initialError: Array of floats. Store the initial error of the nodule.
    F_W: Matrix of floats. Store the change to apply in each nodule weight.
    out: Array of floats. Store the output of each node of the nodule.
-   pesos: Matrix of floats. Store all the connection weights of the nodule.
+   weights: Matrix of floats. Store all the connection weights of the nodule.
    transf: Array of functions. Store the transfer functions of each node of the
            nodule.
  Local Variables:
    i: Integer. Counter.
    j: Integer. Counter.
-   N: Integer. Number of input and hidden nodes of the nodule.
-   enodo: Array of floats. Output error of a nodule.
-   ered: Array of floats. Network error in a given node.
+   k: Integer. Number of input and hidden nodes of the nodule.
+   nodeError: Array of floats. Output error of a nodule.
+   netError: Array of floats. Network error in a given node.
  Return Value: None
  Calling functions:
    error(): Function to print an error message.
 ******************************************************************************/
 
-void cambioPesos(double *einicial, double **pesos, double *out, double **F_W,
-				 int nodos, func *transf)
+void cambioPesos(double *initialError, double **weights, double *out, double **F_W,
+				 int nodes, func *transf)
 {
-	int i, j, N;
-	double *enodo, *ered;
+	int i, j, numNodes;
+	double *nodeError, *netError;
 
 	/* Variable initialization. */
-	N = predes.n_nodos_entrada + nodos;
-	enodo = (double *)malloc((N + predes.n_nodos_salida) * sizeof(double));
-	ered = (double *)malloc((N + predes.n_nodos_salida) * sizeof(double));
-	if(enodo == NULL || ered == NULL)
+	numNodes = predes.n_nodos_entrada + nodes;
+	nodeError = (double *)malloc((numNodes + predes.n_nodos_salida) * sizeof(double));
+	netError = (double *)malloc((numNodes + predes.n_nodos_salida) * sizeof(double));
+	if(nodeError == NULL || netError == NULL)
 		error(RES_MEM);
 
-	for(i = 0; i < N; i++)
-		enodo[i] = 0.0;
+	for(i = 0; i < numNodes; i++)
+		nodeError[i] = 0.0;
 
 	for(i = 0; i < predes.n_nodos_salida; i++)
-		enodo[N + i] = einicial[i];
+		nodeError[numNodes + i] = initialError[i];
 
 	/* We get the updates. */
-	for(i = N + predes.n_nodos_salida - 1; i >= predes.n_nodos_entrada; i--) {
-		for(j = i + 1; j < N + predes.n_nodos_salida; j++)
-			enodo[i] += pesos[j][i] * ered[j];
+	for(i = numNodes + predes.n_nodos_salida - 1; i >= predes.n_nodos_entrada; i--) {
+		for(j = i + 1; j < numNodes + predes.n_nodos_salida; j++)
+			nodeError[i] += weights[j][i] * netError[j];
 
 		if(transf[i - predes.n_nodos_entrada] == (func)&Logistic)
-			ered[i] = enodo[i] * ptransferencia.logistic_b * out[i] *
+			netError[i] = nodeError[i] * ptransferencia.logistic_b * out[i] *
 				(1.0 - out[i] / ptransferencia.logistic_a);
 		else if(transf[i - predes.n_nodos_entrada] == (func)&HyperbolicTangent)
-			ered[i] = enodo[i] * (ptransferencia.htan_b / ptransferencia.htan_a) *
+			netError[i] = nodeError[i] * (ptransferencia.htan_b / ptransferencia.htan_a) *
 				(ptransferencia.htan_a - out[i]) *
 				(ptransferencia.htan_a + out[i]);
 
 		for(j = 0; j < i; j++)
-			F_W[i][j] = ered[i] *out[j];
+			F_W[i][j] = netError[i] *out[j];
 	}
 }
 
@@ -316,19 +316,19 @@ void cambioPesos(double *einicial, double **pesos, double *out, double **F_W,
  Author: Pablo Álvarez de Sotomayor Posadillo
  Description: Run the simulated annealing over a given nodule.
  Input Parameters:
-	nodNumber: Integer. Number of nodule to run over.
+   nodNumber: Integer. Number of nodule to run over.
  Local Variables:
-	i: Integer. Counter.
-	j: Integer. Counter.
-	k: Integer. Counter.
-	steps: Integer. Number of iterations of the annealing.
-	T: Float. Temperature of the simulated annealing.
-	weights: Array of floats. Old weights.
-	oldAptitude: Float. Old nodule aptitude.
+   i: Integer. Counter.
+   j: Integer. Counter.
+   k: Integer. Counter.
+   steps: Integer. Number of iterations of the annealing.
+   T: Float. Temperature of the simulated annealing.
+   weights: Array of floats. Old weights.
+   oldAptitude: Float. Old nodule aptitude.
  Return Value: None
  Calling functions:
-	pasoAleatorio(): Make a random step in the connection weights.
-	medirCambioNodulo(): Measure the aptitude change at the nodule.
+   pasoAleatorio(): Make a random step in the connection weights.
+   medirCambioNodulo(): Measure the aptitude change at the nodule.
 ******************************************************************************/
 
 void enfriamientoSimulado(int nodNumber)
@@ -410,13 +410,13 @@ void enfriamientoSimulado(int nodNumber)
  Author: Pablo Álvarez de Sotomayor Posadillo
  Description: Make a randon step in each nodule weight.
  Input Parameters:
-	nodNumber: Integer. Number of the nodule to work with.
+   nodNumber: Integer. Number of the nodule to work with.
  Local Variables:
-	i: Integer. Counter.
-	j: Integer. Counter.
+   i: Integer. Counter.
+   j: Integer. Counter.
  Return Value: None
  Calling Functions:
-	Normal(): Generate a randon value following a normal distribution.
+   Normal(): Generate a randon value following a normal distribution.
 ******************************************************************************/
 
 void pasoAleatorio(int nodNumber)

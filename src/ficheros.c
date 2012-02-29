@@ -26,33 +26,33 @@
  Description: Load the input data from training and configuration files.
  Input Parameters:
    config: String. Name of the configuration file.
-   entrenamiento: String. Name of the training file.
+   training: String. Name of the training file.
  Local Variables:
    i: Integer. Counter.
    j: Integer. Counter.
-   fichero_configuracion:	Pointer to the configuration file.
-   fichero_entrenamiento:	Pointer to the training file.
+   configFile: Pointer to the configuration file.
+   trainingFile: Pointer to the training file.
  Return Value: None
  Calling Functions:
    error(): Function to print an error message.
 ******************************************************************************/
 
-void cargarFichero(char *config, char *entrenamiento)
+void cargarFichero(char *config, char *training)
 {
 	int i, j;
-	FILE *fichero_configuracion, *fichero_entrenamiento;
+	FILE *configFile, *trainingFile;
 
 	pnodulos.n_subpobl = 0;
 
 	/* We open the configuration and training files. */
-	fichero_configuracion = fopen(config,"r");
-	fichero_entrenamiento = fopen(entrenamiento,"r");
-	if(fichero_configuracion == NULL || fichero_entrenamiento == NULL)
+	configFile = fopen(config, "r");
+	trainingFile = fopen(training, "r");
+	if(configFile == NULL || trainingFile == NULL)
 		error(IO);
 
-	if(fscanf(fichero_entrenamiento, "$ %d\n", &n_entrenamiento) == EOF ||
-	   fscanf(fichero_entrenamiento, "$ %d\n", &predes.n_nodos_entrada) == EOF ||
-	   fscanf(fichero_entrenamiento,"$ %d\n",&predes.n_nodos_salida) == EOF)
+	if(fscanf(trainingFile, "$ %d\n", &n_entrenamiento) == EOF ||
+	   fscanf(trainingFile, "$ %d\n", &predes.n_nodos_entrada) == EOF ||
+	   fscanf(trainingFile,"$ %d\n",&predes.n_nodos_salida) == EOF)
 		error(IO);
 
 	/* Loading the training data. */
@@ -68,51 +68,51 @@ void cargarFichero(char *config, char *entrenamiento)
 			error(RES_MEM);
 
 		for(j = 0; j < predes.n_nodos_entrada; j++)
-			if(fscanf(fichero_entrenamiento, "%lf", &entrada[i][j]) == EOF)
+			if(fscanf(trainingFile, "%lf", &entrada[i][j]) == EOF)
 				error(IO);
 
 		for(j = 0; j < predes.n_nodos_salida; j++)
-			if(fscanf(fichero_entrenamiento, "%lf", &salida[i][j]) == EOF)
+			if(fscanf(trainingFile, "%lf", &salida[i][j]) == EOF)
 				error(IO);
 	}
 
-	if(fscanf(fichero_configuracion, "Redes: %d\n", &max_redes) == EOF ||
-	   fscanf(fichero_configuracion, "Nodos: %d\n", &max_nodos) == EOF ||
-	   fscanf(fichero_configuracion, "Nodulos: %d\n", &num_nodulos) == EOF)
+	if(fscanf(configFile, "Redes: %d\n", &max_redes) == EOF ||
+	   fscanf(configFile, "Nodos: %d\n", &max_nodos) == EOF ||
+	   fscanf(configFile, "Nodulos: %d\n", &num_nodulos) == EOF)
 		error(IO);
 
 	/* Parameters of the transfer functions. */
-	if(fscanf(fichero_configuracion, "Htan a: %lf\n", &ptransferencia.htan_a) == EOF ||
-	   fscanf(fichero_configuracion, "Htan b: %lf\n", &ptransferencia.htan_b) == EOF ||
-	   fscanf(fichero_configuracion, "Logistic a: %lf\n", &ptransferencia.logistic_a) == EOF ||
-	   fscanf(fichero_configuracion, "Logistic b: %lf\n", &ptransferencia.logistic_b) == EOF ||
-	   fscanf(fichero_configuracion, "Epsilon: %lf\n", &ptransferencia.epsilon) == EOF)
+	if(fscanf(configFile, "Htan a: %lf\n", &ptransferencia.htan_a) == EOF ||
+	   fscanf(configFile, "Htan b: %lf\n", &ptransferencia.htan_b) == EOF ||
+	   fscanf(configFile, "Logistic a: %lf\n", &ptransferencia.logistic_a) == EOF ||
+	   fscanf(configFile, "Logistic b: %lf\n", &ptransferencia.logistic_b) == EOF ||
+	   fscanf(configFile, "Epsilon: %lf\n", &ptransferencia.epsilon) == EOF)
 		error(IO);
 
 	/* Ponderation for nodule aptitude. */
-	if(fscanf(fichero_configuracion, "Sustitucion: %lf\n", &pond.sust) == EOF ||
-	   fscanf(fichero_configuracion, "Diferencia: %lf\n", &pond.dif) == EOF ||
-	   fscanf(fichero_configuracion, "Mejores: %lf\n", &pond.best) == EOF)
+	if(fscanf(configFile, "Sustitucion: %lf\n", &pond.sust) == EOF ||
+	   fscanf(configFile, "Diferencia: %lf\n", &pond.dif) == EOF ||
+	   fscanf(configFile, "Mejores: %lf\n", &pond.best) == EOF)
 		error(IO);
 
-	if(fscanf(fichero_configuracion, "Redes Seleccionadas: %d\n", &redsel) == EOF ||
-	   fscanf(fichero_configuracion, "Nodulos Seleccionados: %d\n", &nodsel) == EOF)
+	if(fscanf(configFile, "Redes Seleccionadas: %d\n", &redsel) == EOF ||
+	   fscanf(configFile, "Nodulos Seleccionados: %d\n", &nodsel) == EOF)
 		error(IO);
 
-	if(fscanf(fichero_configuracion, "Iteraciones SA: %d\n", &iteraciones_sa) == EOF ||
-	   fscanf(fichero_configuracion, "To SA: %lf\n", &ToSA) == EOF ||
-	   fscanf(fichero_configuracion, "alpha SA: %lf\n", &alphasa) == EOF)
+	if(fscanf(configFile, "Iteraciones SA: %d\n", &iteraciones_sa) == EOF ||
+	   fscanf(configFile, "To SA: %lf\n", &ToSA) == EOF ||
+	   fscanf(configFile, "alpha SA: %lf\n", &alphasa) == EOF)
 		error(IO);
 
-	if(fscanf(fichero_configuracion, "Delta Minimo: %d\n", &delta_min) == EOF ||
-	   fscanf(fichero_configuracion, "Delta Maximo: %d\n", &delta_max) == EOF)
+	if(fscanf(configFile, "Delta Minimo: %d\n", &delta_min) == EOF ||
+	   fscanf(configFile, "Delta Maximo: %d\n", &delta_max) == EOF)
 		error(IO);
 
-	if(fscanf(fichero_configuracion, "Limite Evolucion: %lf\n", &evolim) == EOF ||
-	   fscanf(fichero_configuracion, "Alpha Retropropagacion: %lf\n", &alpharet) == EOF)
+	if(fscanf(configFile, "Limite Evolucion: %lf\n", &evolim) == EOF ||
+	   fscanf(configFile, "Alpha Retropropagacion: %lf\n", &alpharet) == EOF)
 		error(IO);
 
-	if(fclose(fichero_configuracion) == EOF || fclose(fichero_entrenamiento) == EOF)
+	if(fclose(configFile) == EOF || fclose(trainingFile) == EOF)
 		error(IO);
 
 	srandom(time(NULL));
