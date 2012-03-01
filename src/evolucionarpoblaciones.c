@@ -28,7 +28,7 @@
    i: Integer. Counter.
    j: Integer. Counter.
    k: Integer. Counter.
-   initialNumNodules: Integer. Initial number of nodules of the subpopulation.
+   initNumNodules: Integer. Initial number of nodules of the subpopulation.
    networkAptitude: Float. Store the average aptitude of the networks.
  Return Value: None
  Calling Functions:
@@ -51,7 +51,7 @@
 
 void evolucionarPoblaciones()
 {
-	int i, j, k, initialNumNodules;
+	int i, j, k, initNumNodules;
 	double networkAptitude;
 
 	/* Local variables initialization. */
@@ -62,14 +62,14 @@ void evolucionarPoblaciones()
 	/* We evolve the networks until its average aptitude doesn't get enhaced
 	   enough. */
 	for(i = 0; medirCambio(&networkAptitude, i) == false; i++) {
-		initialNumNodules = num_nodulos * (pnodulos.n_subpobl - 1);
+		initNumNodules = num_nodulos * (pnodulos.n_subpobl - 1);
 		if(i == 0) {
 			/* If the subpopulation is new we run the backpropagation to reduce
 			   its error. */
 			fprintf(stderr, "Doing the backpropagation to a new nodule "
 					"subpopulation. \n");
 			for(j = 0; j < num_nodulos; j++)
-				retropropagacion(initialNumNodules + j, n_entrenamiento, 5000);
+				retropropagacion(initNumNodules + j, n_entrenamiento, 5000);
 
 			/* We train by first time the networks to have an initial value of
 			   the nodules and networks aptitude. */
@@ -102,7 +102,7 @@ void evolucionarPoblaciones()
 
 		/* We train the networks by simulate annealing. */
 		fprintf(stderr,"Training the networks by simulate annealing.\n");
-		for(j = initialNumNodules; j < pnodulos.n_nodulos; j++)
+		for(j = initNumNodules; j < pnodulos.n_nodulos; j++)
 			enfriamientoSimulado(j);
 
 		/* We normalize the nodules aptitude. */
@@ -119,7 +119,7 @@ void evolucionarPoblaciones()
 
 		/* We make the structural mutation of the nodules. */
 		fprintf(stderr,"Nodules mutation.\n");
-		for(j = initialNumNodules; j < pnodulos.n_nodulos; j++)
+		for(j = initNumNodules; j < pnodulos.n_nodulos; j++)
 			mutarNodulos(j);
 
 		/* We substitude the worst nodules by the best ones in the descendant

@@ -135,29 +135,29 @@ void cargarFichero(char *config, char *training)
  Author: Pablo Alvarez de Sotomayor Posadillo
  Description: Read the input data to measure the generalization.
  Input Parameters:
-   generalizacion: String. Name of the generalization file.
+   filename: String. Name of the generalization file.
  Local Variables:
    i: Integer. Counter.
    j: Integer. Counter.
-   fichero_generalizacion: Pointer to file. File that contains the input data.
+   file: Pointer to file. File that contains the input data.
  Return Value: None
  Calling Functions:
    error(): Function to print an error message.
 ******************************************************************************/
 
-void leerGeneralizacion(char *generalizacion)
+void leerGeneralizacion(char *filename)
 {
 	int i, j;
-	FILE *fichero_generalizacion;
+	FILE *file;
 
 	/* We open the generalization file. */
-	if((fichero_generalizacion = fopen(generalizacion,"r")) == NULL)
+	if((file = fopen(filename, "r")) == NULL)
 		error(IO);
 
 	/* We load the generalization data. */
-	if(fscanf(fichero_generalizacion, "$ %d\n", &n_generalizacion) == EOF ||
-	   fscanf(fichero_generalizacion, "$ %d\n", &predes.n_nodos_entrada) == EOF ||
-	   fscanf(fichero_generalizacion, "$ %d\n", &predes.n_nodos_salida) == EOF)
+	if(fscanf(file, "$ %d\n", &n_generalizacion) == EOF ||
+	   fscanf(file, "$ %d\n", &predes.n_nodos_entrada) == EOF ||
+	   fscanf(file, "$ %d\n", &predes.n_nodos_salida) == EOF)
 		error(IO);
 
 	for(i = 0; i < n_entrenamiento; i++) {
@@ -179,16 +179,16 @@ void leerGeneralizacion(char *generalizacion)
 			error(RES_MEM);
 
 		for(j = 0; j < predes.n_nodos_entrada; j++)
-			if(fscanf(fichero_generalizacion, "%lf", &entrada[i][j]) == EOF)
+			if(fscanf(file, "%lf", &entrada[i][j]) == EOF)
 				error(IO);
 
 		for(j = 0; j < predes.n_nodos_salida; j++)
-			if(fscanf(fichero_generalizacion, "%lf", &salida[i][j]) == EOF)
+			if(fscanf(file, "%lf", &salida[i][j]) == EOF)
 				error(IO);
 	}
 
 	/* We close the file. */
-	if(fclose(fichero_generalizacion) == EOF)
+	if(fclose(file) == EOF)
 		error(IO);
 }
 
@@ -199,7 +199,7 @@ void leerGeneralizacion(char *generalizacion)
  Description: Export the network who fits best to the problem to an output
               file.
  Input Parameters:
-   ficheroSalida: String. Name of the output file.
+   filename: String. Name of the output file.
  Local Variables:
    i: Integer. Counter
    j: Integer. Counter.
@@ -219,7 +219,7 @@ void leerGeneralizacion(char *generalizacion)
    error(): Function to print an error message.
 ******************************************************************************/
 
-void exportarMejorRed(char *ficheroSalida)
+void exportarMejorRed(char *filename)
 {
 	int i, j, k, l, nodes, idmax, connections;
 	double *aptitud, max;
@@ -248,7 +248,7 @@ void exportarMejorRed(char *ficheroSalida)
 	}
 
 	/* We open the output file. */
-	if((out = fopen(ficheroSalida,"w")) == NULL)
+	if((out = fopen(filename,"w")) == NULL)
 		error(IO);
 
 	/* We store the aptitude of the selected networks. */
@@ -259,9 +259,7 @@ void exportarMejorRed(char *ficheroSalida)
 
 	/* We calculate the network generalization. */
 	for(i = 0; i < n_generalizacion; i++) {
-		/*
-		  We generate the nodule partial outputs from the generaliation data.
-		*/
+		/* We generate the nodule partial outputs from the generaliation data. */
 		for(j = 0; j < pnodulos.n_nodulos; j++)
 			generarSalidaNodulo(entrada[i], j, i, NULL);
 

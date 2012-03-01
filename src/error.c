@@ -26,18 +26,18 @@
  Author: Pablo Alvarez de Sotomayor Posadillo
  Description: Shows an error message depending on an error number.
  Input parameters:
-	errorId: Integer. Numbe of error produced.
+	id: Integer. Numbe of error produced.
  Local Variables: None
  Return Value: None
  Calling Functions: None
 ******************************************************************************/
 
-void error(int errorId)
+void error(int id)
 {
 	system("clear");
 
 	/* Switch the number of error we show one message or other. */
-	switch(errorId) {
+	switch(id) {
 	case RES_MEM:
 		fprintf(stderr, "Error reserving memory. %s\n", strerror(errno));
 		break;
@@ -50,7 +50,7 @@ void error(int errorId)
 				"\n");
 		break;
 	case COMANDO:
-		fprintf(stderr,"Error in the calling command. the format is:\n\t"
+		fprintf(stderr, "Error in the calling command. the format is:\n\t"
 				"coconet conf_file training_file generalization_file "
 				"[-o output_file]\n where conf_file is the configuration "
 				"file of the problem, training_file is the file that contains"
@@ -60,9 +60,9 @@ void error(int errorId)
 				" is optional\n");
 		break;
 	default:
-		fprintf(stderr,"Unknown error. %s\n", strerror(errno));
+		fprintf(stderr, "Unknown error. %s\n", strerror(errno));
 		break;
 	}
 
-	exit(1);
+	exit(-1);
 }

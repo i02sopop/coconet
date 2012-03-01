@@ -106,10 +106,10 @@ void imprimirRed(red *network)
 	  We open the output file.
 	  TODO: Get the output file from somewhere in the config.
 	*/
-	fOutput = fopen("network.txt","a");
+	fOutput = fopen("network.txt", "a");
 
 	/* We print the network data. */
-	fprintf(fOutput,"nodules: ");
+	fprintf(fOutput, "nodules: ");
 	for(i = 0; i < pnodulos.n_subpobl; i++)
 		fprintf(fOutput, "%d ", network->nodulos[i]->id);
 

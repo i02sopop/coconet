@@ -30,7 +30,7 @@
  Local Variables:
    i: Integer. Counter.
    j: Integer. Counter.
-   aptitudRedes: Float. Store the average flair of the networks.
+   netAptitude: Float. Store the average flair of the networks.
  Return Value: 0 with no errors and -1 otherwise.
  Calling Functions:
    error(): Function to show an error message depending on an error number.
@@ -52,10 +52,10 @@
 int main(int argc, char **argv)
 {
 	int i;
-	double aptitudRedes;
+	double netAptitude;
 
 	/* Checking the number of arguments. */
-	if(argc < 4 || (argc > 4 && (argc != 6 || strcmp(argv[4],"-o") != 0)))
+	if(argc < 4 || (argc > 4 && (argc != 6 || strcmp(argv[4], "-o") != 0)))
 		error(COMANDO);
 
 	/* We load the config and training files. */
@@ -64,7 +64,7 @@ int main(int argc, char **argv)
 		nodsel = num_nodulos;
 
 	/* Initialization of the average flair of the networks. */
-	aptitudRedes=0.0;
+	netAptitude = 0.0;
 
 	/* Scaling of input and output data from the training file. */
 	fprintf(stderr, "Scaling the input data.\n");
@@ -78,17 +78,19 @@ int main(int argc, char **argv)
 	else
 		escalarDatosSalida(salida,
 						   n_entrenamiento,
-						   -ptransferencia.htan_a + ptransferencia.epsilon,
+						   ptransferencia.epsilon - ptransferencia.htan_a,
 						   ptransferencia.htan_a - ptransferencia.epsilon);
 
 	/* We evolve the networks and nodes ppulations. */
-	for(i = 0; medirCambio(&aptitudRedes,i) == false; i++) {
+	for(i = 0; medirCambio(&netAptitude, i) == false; i++) {
 		/* We create a new population of nodes. */
 		fprintf(stderr, "Especie %d\n",i+1);
 		crearPoblacionNodulos();
 
-		/* We add the new population of nodes to the previous population of
-		   networks. */
+		/*
+		  We add the new population of nodes to the previous population of
+		  networks.
+		*/
 		fprintf(stderr,"Add nodes to networks.\n");
 		anadirNodulosRedes();
 
@@ -113,7 +115,7 @@ int main(int argc, char **argv)
 	fprintf(stderr, "Scaling input data.\n");
 	escalarDatosEntrada(n_generalizacion);
 	fprintf(stderr,"Scaling output data.\n");
-	if(net_transf==(func)&Logistic)
+	if(net_transf == (func)&Logistic)
 		escalarDatosSalida(salida,
 						   n_generalizacion,
 						   0.0 + ptransferencia.epsilon,

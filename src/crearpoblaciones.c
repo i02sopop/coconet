@@ -58,7 +58,7 @@ void anadirNodulosRedes()
  Local Variables:
    i: Integer. Counter.
    j: Integer. Counter.
-   redsel: Integer. Selection of a network of the present network.
+   netsel: Integer. Selection of a network of the present network.
    nodsel: Integer. Selection of a nodule from the new subpopulation.
    dnet: Array of networks. New descendant network population.
  Return Value: None
@@ -69,7 +69,7 @@ void anadirNodulosRedes()
 
 void crearDescendencia()
 {
-	int i, j, redsel, nodsel;
+	int i, j, netsel, nodsel;
 	red **dnet; /* New network population. Descend of the actual population. */
 
 	/* Creation of the new network. */
@@ -88,14 +88,14 @@ void crearDescendencia()
 			error(RES_MEM);
 
 		/* Select a new network randomly. */
-		redsel = random() % predes.n_redes;
+		netsel = random() % predes.n_redes;
 
 		/* Random selection of the node to add. */
 		nodsel = random() % num_nodulos;
 
 		/* Creation of the new network. */
 		for(j = 0; j < pnodulos.n_subpobl - 1; j++)
-			dnet[i]->nodulos[j] = predes.redes[redsel]->nodulos[j];
+			dnet[i]->nodulos[j] = predes.redes[netsel]->nodulos[j];
 
 		dnet[i]->nodulos[pnodulos.n_subpobl - 1] = pnodulos.nodulos[(pnodulos.n_subpobl - 1) * num_nodulos + nodsel];
 	}
