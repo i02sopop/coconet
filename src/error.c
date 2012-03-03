@@ -1,79 +1,68 @@
-/********************************************************************************
-* Copyright 2005 Pablo Alvarez de Sotomayor Posadillo			        *
-*									        *
-* This file is part of Coconet.						        *
-*									        *
-* Coconet is free software; you can redistribute it and/or modify	        *
-* it under the terms of the GNU General Public License as published by	        *
-* the Free Software Foundation; either version 2 of the License, or	        *
-* (at your option) any later version.					        *
-*									        *
-* Coconet is distributed in the hope that it will be useful,		        *
-* but WITHOUT ANY WARRANTY; without even the implied warranty of		*
-* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the		        *
-* GNU General Public License for more details.				        *
-*									        *
-* You should have received a copy of the GNU General Public License	        *
-* along with Coconet; if not, write to the Free Software		        *
-* Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA     *
-********************************************************************************/
+/******************************************************************************
+ Copyright (c) 2004-2012 coconet project (see AUTHORS)
+
+ This file is part of Coconet.
+
+ Coconet is free software: you can redistribute it and/or modify it under the
+ terms of the GNU General Public License as published by the Free Software
+ Foundation, either version 3 of the License, or (at your option) any later
+ version.
+
+ Coconet is distributed in the hope that it will be useful, but WITHOUT ANY
+ WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR
+ A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
+
+ You should have received a copy of the GNU General Public License along with
+ coconet. If not, see <http://www.gnu.org/licenses/>.
+******************************************************************************/
 
 #include <string.h>
 #include <errno.h>
 #include <definiciones.h>
 
-/*******************************************************************************
-* Fichero: error.c							       *
-*									       *
-* Funcion: error()							       *
-*									       *
-* Autor: Pablo Alvarez de Sotomayor Posadillo				       *
-*									       *
-* Finalidad de la funcion: Muestra un mensaje de error en funcion de un numero *
-*			   de error.					       *
-*									       *
-* Parametros de Entrada:						       *
-* 	num_error: Entero. Numero del error producido.			       *
-*									       *
-* Parametros Internos: NINGUNO						       *
-*									       *
-* Parametros de Salida:	NINGUNO						       *
-*									       *
-* Funciones a las que llama la funcion:	NINGUNA				       *
-*									       *
-*******************************************************************************/
+/******************************************************************************
+ File: error.c
+ Function: error()
+ Author: Pablo Alvarez de Sotomayor Posadillo
+ Description: Shows an error message depending on an error number.
+ Input parameters:
+	id: Integer. Numbe of error produced.
+ Local Variables: None
+ Return Value: None
+ Calling Functions: None
+******************************************************************************/
 
-void error(int num_error)
+void error(int id)
 {
-  system("clear");
-  /* Según el error que se de muestra un mensaje u otro. */
-  switch(num_error){
+	system("clear");
+
+	/* Switch the number of error we show one message or other. */
+	switch(id) {
 	case RES_MEM:
-		fprintf(stderr,"Error en la reserva de memoria. %s\n",strerror(errno));
+		fprintf(stderr, "Error reserving memory. %s\n", strerror(errno));
 		break;
 	case IO:
-		fprintf(stderr,"Error de entrada/salida. %s\n",strerror(errno));
+		fprintf(stderr, "Input/output error. %s\n", strerror(errno));
 		break;
 	case PARAMETROS:
-		fprintf(stderr,"Error al introducir los parámetros en una función. "
-			       "O formato de los parámetros incorrecto o está fuera "
-			       "del rango\n");
+		fprintf(stderr, "Error inserting the parameters into a function. "
+				"Either the parameters format is not rigth or is out of range."
+				"\n");
 		break;
-  	case COMANDO:
-		fprintf(stderr,"Error al introducir el comando de entrada. El formato "
-			       "es:\n\tcoconet fichero_conf fichero_entrenamiento "
-			       "fichero_generalizacion [-o fichero_salida]\n donde "
-			       "fichero_conf es el fichero de configuración del "
-			       "problema, fichero_entrenamiento es el fichero que "
-			       "contiene los datos de entrenamiento de las redes y "
-			       "fichero_generalización es el fichero que contiene los "
-			       "datos para medir la generalización de las redes. "
-			       "Fichero_salida es el nombre del fichero de salida, y "
-			       "es opcional\n");
+	case COMANDO:
+		fprintf(stderr, "Error in the calling command. the format is:\n\t"
+				"coconet conf_file training_file generalization_file "
+				"[-o output_file]\n where conf_file is the configuration "
+				"file of the problem, training_file is the file that contains"
+				"the training data for the networks and generalization_file is"
+				" the file that contains the generalization data to measure "
+				"the networks. Output_file is the name of the output file, and"
+				" is optional\n");
 		break;
-  	default:
-		fprintf(stderr,"Error desconocido. %s\n", strerror(errno));
+	default:
+		fprintf(stderr, "Unknown error. %s\n", strerror(errno));
 		break;
-  }
-  exit(1);
+	}
+
+	exit(-1);
 }
