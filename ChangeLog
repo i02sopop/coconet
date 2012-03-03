@@ -1,6 +1,17 @@
-coconet 1.0.0
+coconet 1.0.1
 
-2007-11-27 Pablo Alvarez de Sotomayor <palvarez@ritho.net>
+2012-03-03 Pablo Alvarez de Sotomayor Posadillo <palvarez@ritho.net>
+
+	* Release of Coconet 1.0.1.
+	* src: Translations of comments and vars, formatting enhacements and little optimizations.
+	* src: Updated the copyright statement and the license statement.
+	* Updated the license to GPLv3
+	* README: Updating info of the project.
+	* Added a bootstrap file for autoconf.
+	* Deleted the NEWS file and updated my email address.
+	* Created the basic info structure for the project.
+
+2007-11-27 Pablo Alvarez de Sotomayor Posadillo <palvarez@ritho.net>
 
 	* First release of coconet.
 
