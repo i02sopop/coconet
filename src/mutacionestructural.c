@@ -1,5 +1,5 @@
 /******************************************************************************
- Copyright (c) 2004-2011 coconet project (see AUTHORS)
+ Copyright (c) 2004-2012 coconet project (see AUTHORS)
 
  This file is part of Coconet.
 
@@ -65,8 +65,10 @@ void copiarDescendencia()
 			error(RES_MEM);
 
 		for(j = 0; j < max_nodos; j++) {
-			descendencia[i]->conexiones_salida[j] = (int *)malloc(predes.n_nodos_salida * sizeof(int));
-			descendencia[i]->pesos_salida[j] = (double *)malloc(predes.n_nodos_salida * sizeof(double));
+			descendencia[i]->conexiones_salida[j] =
+				(int *)malloc(predes.n_nodos_salida * sizeof(int));
+			descendencia[i]->pesos_salida[j] =
+				(double *)malloc(predes.n_nodos_salida * sizeof(double));
 			if(descendencia[i]->conexiones_salida[j] == NULL ||
 				descendencia[i]->pesos_salida[j] == NULL)
 				error(RES_MEM);
@@ -74,41 +76,52 @@ void copiarDescendencia()
 			descendencia[i]->transf[j] = pnodulos.nodulos[noduleOrig]->transf[j];
 
 			for(k = 0; k < predes.n_nodos_salida; k++) {
-				descendencia[i]->conexiones_salida[j][k] = pnodulos.nodulos[noduleOrig]->conexiones_salida[j][k];
-				descendencia[i]->pesos_salida[j][k] = pnodulos.nodulos[noduleOrig]->pesos_salida[j][k];
+				descendencia[i]->conexiones_salida[j][k] =
+					pnodulos.nodulos[noduleOrig]->conexiones_salida[j][k];
+				descendencia[i]->pesos_salida[j][k] =
+					pnodulos.nodulos[noduleOrig]->pesos_salida[j][k];
 			} /* end for */
 		} /* end for */
 
-		descendencia[i]->pesos_entrada = (double **)malloc(predes.n_nodos_entrada * sizeof(double));
-		descendencia[i]->conexiones_entrada = (int **)malloc(predes.n_nodos_entrada * sizeof(int));
+		descendencia[i]->pesos_entrada =
+			(double **)malloc(predes.n_nodos_entrada * sizeof(double));
+		descendencia[i]->conexiones_entrada =
+			(int **)malloc(predes.n_nodos_entrada * sizeof(int));
 		if(descendencia[i]->pesos_entrada == NULL ||
 			descendencia[i]->conexiones_entrada == NULL)
 			error(RES_MEM);
 
 		for(j = 0; j < predes.n_nodos_entrada; j++) {
-			descendencia[i]->conexiones_entrada[j] = (int *)malloc(max_nodos * sizeof(int));
-			descendencia[i]->pesos_entrada[j] = (double *)malloc(max_nodos * sizeof(double))
+			descendencia[i]->conexiones_entrada[j] =
+				(int *)malloc(max_nodos * sizeof(int));
+			descendencia[i]->pesos_entrada[j] =
+				(double *)malloc(max_nodos * sizeof(double))
 			if(descendencia[i]->conexiones_entrada[j] == NULL ||
 				descendencia[i]->pesos_entrada[j] == NULL)
 				error(RES_MEM);
 
 			for(k = 0; k < max_nodos; k++) {
-				descendencia[i]->conexiones_entrada[j][k] = pnodulos.nodulos[noduleOrig]->conexiones_entrada[j][k];
-				descendencia[i]->pesos_entrada[j][k] = pnodulos.nodulos[noduleOrig]->pesos_entrada[j][k];
+				descendencia[i]->conexiones_entrada[j][k] =
+					pnodulos.nodulos[noduleOrig]->conexiones_entrada[j][k];
+				descendencia[i]->pesos_entrada[j][k] =
+					pnodulos.nodulos[noduleOrig]->pesos_entrada[j][k];
 			} /* end for */
 		} /* end for */
 
-		descendencia[i]->salidas_parciales = (double **)malloc(n_entrenamiento * sizeof(double));
+		descendencia[i]->salidas_parciales =
+			(double **)malloc(n_entrenamiento * sizeof(double));
 		if(descendencia[i]->salidas_parciales == NULL)
 			error(RES_MEM);
 
 		for(j = 0; j < n_entrenamiento; j++) {
-			descendencia[i]->salidas_parciales[j] = (double *)malloc(predes.n_nodos_salida * sizeof(double));
+			descendencia[i]->salidas_parciales[j] =
+				(double *)malloc(predes.n_nodos_salida * sizeof(double));
 			if(descendencia[i]->salidas_parciales[j] == NULL)
 				error(RES_MEM);
 
 			for(k = 0; k < predes.n_nodos_salida; k++)
-				descendencia[i]->salidas_parciales[j][k] = pnodulos.nodulos[noduleOrig]->salidas_parciales[j][k];
+				descendencia[i]->salidas_parciales[j][k] =
+					pnodulos.nodulos[noduleOrig]->salidas_parciales[j][k];
 		} /* end for */
 	} /* end for */
 }
@@ -140,7 +153,8 @@ void mutarNodulos(int nodule)
 
 	/* We made the estructural mutation. */
 	/* Deletion of nodes. */
-	num = (int)(delta_min + aleatorio() * (1 - pnodulos.nodulos[nodule]->aptitud) * (delta_min - delta_max));
+	num = (int)(delta_min + aleatorio() * (1 - pnodulos.nodulos[nodule]->aptitud) *
+				(delta_min - delta_max));
 	if(num < 0)
 		num = 0;
 	else if(pnodulos.nodulos[numNodulo]->n_nodos < num)
@@ -149,7 +163,8 @@ void mutarNodulos(int nodule)
 		borrarNodo(nodule, num);
 
 	/* Add nodes. */
-	num = (int)(delta_min + aleatorio() * (1 - pnodulos.nodulos[nodule]->aptitud) * (delta_min - delta_max));
+	num = (int)(delta_min + aleatorio() * (1 - pnodulos.nodulos[nodule]->aptitud) *
+				(delta_min - delta_max));
 	if(num < 0)
 		num = 0;
 	else if((pnodulos.nodulos[numNodulo]->n_nodos + num) > max_nodos)
@@ -158,7 +173,8 @@ void mutarNodulos(int nodule)
 		anadirNodo(nodule, num); /* We add a new node,*/
 
 	/* Delete connections. */
-	num = (int)(delta_min + aleatorio() * (1 - pnodulos.nodulos[nodule]->aptitud) * (delta_min - delta_max));
+	num = (int)(delta_min + aleatorio() * (1 - pnodulos.nodulos[nodule]->aptitud) *
+				(delta_min - delta_max));
 	if(num < 0)
 		num = 0;
 
@@ -168,7 +184,8 @@ void mutarNodulos(int nodule)
 	}
 
 	/* Add connections. */
-	num = (int)(delta_min + aleatorio() * (1 - pnodulos.nodulos[nodule]->aptitud) * (delta_min - delta_max));
+	num = (int)(delta_min + aleatorio() * (1 - pnodulos.nodulos[nodule]->aptitud) *
+				(delta_min - delta_max));
 	if(num < 0)
 		num = 0;
 
@@ -186,15 +203,15 @@ void mutarNodulos(int nodule)
  File: mutacionEstructural.c
  Function: anadirConexion()
  Author: Pablo Álvarez de Sotomayor Posadillo
- Finalidad de la función: Añadir una conexión a un ódulo determinado.
+ Description: Add a connection to a given nodule.
  Input Parameters:
-   numNodulo: Integer. Number of nodule to modify.
+   nodule: Integer. Number of nodule to modify.
  Local Variables:
    i. Integer. Counter.
    j: Integer. Counter.
    sel: Integer. Type of connection to add (input, internal or outpunt).
-   origen: Integer vector. Posibles nodos de origen para la conexión.
-   destino: Integer vector. Posibles nodos de destino para la conexión.
+   origin: Vector if integers. Possible origin nodes for the connection.
+   destination: Vector of integers. Possible destination nodes for the connection.
    num: Integer. Counter.
    pos: Integer. Position to add the connection.
  Return Value: None
@@ -202,292 +219,273 @@ void mutarNodulos(int nodule)
    error(): Function to show an error message depending on an error number.
 ******************************************************************************/
 
-void anadirConexion(int numNodulo)
+void anadirConexion(int nodule)
 {
-  int i,j,sel,*origen,*destino,num,pos;
+	int i, j, sel, *origin, *destination, num, pos;
 
-  num=0;
-  sel=random()%2;
-  if((origen=(int *)malloc(sizeof(int)))==NULL)
-    error(RES_MEM);
+	num = 0;
+	sel = random() % 2;
+	origin = (int *)malloc(sizeof(int));
+	destination = (int *)malloc(sizeof(int));
+	if(origin == NULL || destination == NULL)
+		error(RES_MEM);
 
-  if((destino=(int *)malloc(sizeof(int)))==NULL)
-    error(RES_MEM);
+	if(sel == 0) {
+		/* We add an input connection. */
+		for(i = 0; i < predes.n_nodos_entrada; i++)
+			for(j = 0; j < pnodulos.nodulos[nodule]->n_nodos; j++)
+				if(pnodulos.nodulos[nodule]->conexiones_entrada[i][j] == 0) {
+					origin = (int *)realloc(origin, (num + 1) * sizeof(int));
+					destination = (int *)realloc(destination, (num + 1) * sizeof(int));
+					origin[num] = i;
+					destination[num] = j;
+					num++;
+				} /* end if */
 
-  /*Se añade una conexión de entrada*/
-  if(sel==0){
-    for(i=0;i<predes.n_nodos_entrada;i++)
-      for(j=0;j<pnodulos.nodulos[numNodulo]->n_nodos;j++)
-        if(pnodulos.nodulos[numNodulo]->conexiones_entrada[i][j]==0){
-          origen=(int *)realloc(origen,(num+1)*sizeof(int));
-          destino=(int *)realloc(destino,(num+1)*sizeof(int));
-          origen[num]=i;
-          destino[num]=j;
-          num++;
-        } /* end if */
+		if(num != 0){
+			pos = random() % num;
+			pnodulos.nodulos[nodule]->conexiones_entrada[origin[pos]][destination[pos]] = 1;
+			pnodulos.nodulos[nodule]->pesos_entrada[origin[pos]][destination[pos]] =
+				aleatorio() / 2;
+			free(origin);
+			free(destination);
+		} /* end if */
+	} /* end if */
 
-    if(num!=0){
-      pos=random()%num;
-      pnodulos.nodulos[numNodulo]->conexiones_entrada[origen[pos]][destino[pos]]=1;
-      pnodulos.nodulos[numNodulo]->pesos_entrada[origen[pos]][destino[pos]]=aleatorio()/2;
-      free(origen);
-      free(destino);
-    } /* end if */
-  } /* end if */
+	if((sel == 1 && num == 0) || num == 0) {
+		/* We add an output connection. */
+		for(i = 0; i < pnodulos.nodulos[nodule]->n_nodos; i++)
+			for(j = 0; j < predes.n_nodos_salida; j++)
+				if(pnodulos.nodulos[nodule]->conexiones_salida[i][j] == 0) {
+					origin = (int *)realloc(origin, (num + 1) * sizeof(int));
+					destination = (int *)realloc(destination, (num + 1) * sizeof(int));
+					origin[num] = i;
+					destination[num] = j;
+					num++;
+				} /* end if */
 
-  /*Se añade una conexión de salida*/
-  if((sel==1 && num==0) || num==0){
-    for(i=0;i<pnodulos.nodulos[numNodulo]->n_nodos;i++)
-      for(j=0;j<predes.n_nodos_salida;j++)
-        if(pnodulos.nodulos[numNodulo]->conexiones_salida[i][j]==0){
-          origen=(int *)realloc(origen,(num+1)*sizeof(int));
-          destino=(int *)realloc(destino,(num+1)*sizeof(int));
-          origen[num]=i;
-          destino[num]=j;
-          num++;
-        } /* end if */
+		if(num != 0) {
+			pos = random() % num;
+			pnodulos.nodulos[nodule]->conexiones_salida[origin[pos]][destination[pos]] = 1;
+			pnodulos.nodulos[nodule]->pesos_salida[origin[pos]][destination[pos]] =
+				aleatorio() / 2;
+			free(origin);
+			free(destination);
+		} /* end if */
+	} /* end if */
 
-    if(num!=0){
-      pos=random()%num;
-      pnodulos.nodulos[numNodulo]->conexiones_salida[origen[pos]][destino[pos]]=1;
-      pnodulos.nodulos[numNodulo]->pesos_salida[origen[pos]][destino[pos]]=aleatorio()/2;
-      free(origen);
-      free(destino);
-    } /* end if */
-  } /* end if */
-
-  if(num==0){
-    free(origen);
-    free(destino);
-  } /* end if */
+	if(num == 0) {
+		free(origin);
+		free(destination);
+	} /* end if */
 }
 
 /********************************************************************************
-* Fichero: mutacionEstructural.c					        *
-*									        *
-* Función: anadirNodo()							        *
-*									        *
-* Autor: Pablo Álvarez de Sotomayor Posadillo				        *
-*									        *
-* Finalidad de la función: Añadir un número determinado de nodos a un nódulo.   *
-*									        *
-* Parámetros de Entrada:						        *
-* 	numNodulo: Entero. Nümero del nódulo a tratar.			        *
-* 	numNodos: Entero. Número de nodos que se van a añadir.		        *
-* 									        *
-* Parámetros Internos:							        *
-* 	i: Entero. Contador.						        *
-* 									        *
-* Parámetros de Salida:	NINGUNO						        *
-* 									        *
-* Funciones a las que llama la función:	NINGUNA				        *
-*									        *
-********************************************************************************/
+ File: mutacionEstructural.c
+ Function: anadirNodo()
+ Author: Pablo Álvarez de Sotomayor Posadillo
+ Description: Add some nodes to a nodule.
+ Input Parameters:
+   nodule: Integer. Number of nodule to work with.
+   nodes: Integer. Number of nodes to add.
+ Local Variables:
+   i: Integer. Counter
+ Return Value: None
+ Calling Functions: None
+*******************************************************************************/
 
-void anadirNodo(int numNodulo,int numNodos)
+void anadirNodo(int nodule, int nodes)
 {
-  int i;
+	int i;
 
-  /*Se le asigna al nodo la función de transferencia*/
-  for(i=0;i<numNodos;i++){
-    if((random()%2)==0)
-      pnodulos.nodulos[numNodulo]->transf[pnodulos.nodulos[numNodulo]->n_nodos+i]=(func)&HyperbolicTangent;
-    else
-      pnodulos.nodulos[numNodulo]->transf[pnodulos.nodulos[numNodulo]->n_nodos+i]=(func)&Logistic;
-  }
+	for(i = 0; i < nodes; i++) {
+		/* We assign the transfer function to the node. */
+		if((random() % 2) == 0)
+			pnodulos.nodulos[nodule]->transf[pnodulos.nodulos[nodule]->n_nodos + i]
+				= (func)&HyperbolicTangent;
+		else
+			pnodulos.nodulos[nodule]->transf[pnodulos.nodulos[nodule]->n_nodos + i]
+				= (func)&Logistic;
+	}
 
-  /*Se actualiza el número de nodos*/
-  pnodulos.nodulos[numNodulo]->n_nodos+=numNodos;
+	/* We update the number of nodes. */
+	pnodulos.nodulos[nodule]->n_nodos += nodes;
+}
+
+/*******************************************************************************
+ File: mutacionEstructural.c
+ Function: borrarConexion()
+ Author: Pablo Álvarez de Sotomayor Posadillo
+ Description: Delete a connection of a given node.
+ Input Parameters:
+   nodule: Integer. Number of nodule to work with.
+   node: Integer. Node to delete the connection from.
+ Local Variables:
+   i: Integer. Counter
+   sel: Integer. Connection to delete.
+ Return Value: None
+ Calling Functions: None
+*******************************************************************************/
+
+void borrarConexion(int nodule, int node)
+{
+	int i, sel;
+
+	if(node < predes.n_nodos_entrada){
+		/* We delete an input connection. */
+		for(i = 0; i < pnodulos.nodulos[nodule]->n_nodos &&
+				pnodulos.nodulos[nodule]->conexiones_entrada[node][i] != 1; i++);
+		if(i < pnodulos.nodulos[nodule]->n_nodos){
+			sel = random() % pnodulos.nodulos[nodule]->n_nodos;
+			for(; pnodulos.nodulos[nodule]->conexiones_entrada[node][sel] != 1;
+				sel = random() % pnodulos.nodulos[nodule]->n_nodos);
+			pnodulos.nodulos[nodule]->conexiones_entrada[node][sel] = 0;
+			pnodulos.nodulos[nodule]->pesos_entrada[node][sel] = 0;
+		} /* end if */
+	} else {
+		/* We delete an output connection. */
+		node -= predes.n_nodos_entrada;
+		for(i = 0; i < pnodulos.nodulos[nodule]->n_nodos &&
+				pnodulos.nodulos[nodule]->conexiones_salida[i][node] != 1; i++);
+		if(i < pnodulos.nodulos[nodule]->n_nodos) {
+			sel = random() % pnodulos.nodulos[nodule]->n_nodos;
+			for(; pnodulos.nodulos[nodule]->conexiones_salida[sel][node] != 1;
+				sel = random() % pnodulos.nodulos[nodule]->n_nodos);
+			pnodulos.nodulos[nodule]->conexiones_salida[sel][node] = 0;
+			pnodulos.nodulos[nodule]->pesos_salida[sel][node] = 0;
+		} /* end if */
+	} /* end if */
 }
 
 /********************************************************************************
-* Fichero: mutacionEstructural.c					        *
-*									        *
-* Función: borrarConexion()						        *
-*									        *
-* Autor: Pablo Álvarez de Sotomayor Posadillo				        *
-*									        *
-* Finalidad de la función: Borra una conexión de un nódulo determinado.	        *
-*									        *
-* Parámetros de Entrada:						        *
-* 	numNodulo: Entero. Número del nódulo a tratar.			        *
-* 	nodo: Entero. Nodo del que se va a borrar una conexión		        *
-* 									        *
-* Parámetros Internos:							        *
-* 	i: Entero. Contador.						        *
-* 	sel: Entero. Conexión a borrar.					        *
-* 									        *
-* Parámetros de Salida:	NINGUNO						        *
-* 									        *
-* Funciones a las que llama la función:	NINGUNA				        *
-*									        *
-********************************************************************************/
+ File: mutacionEstructural.c
+ Function: borrarNodo()
+ Author: Pablo Álvarez de Sotomayor Posadillo
+ Description: Delete a given number of nodes from a nodule.
+ Input Parameters:
+   nodule: Integer. Number of nodule to work with.
+   nodes. Integer. Number of nodes to delete.
+ Local Variables:
+   i: Integer. Counter.
+   j: Integer. Counter.
+   k: Integer. Counter.
+   node: Integer. Node to delete.
+ Return Value: None
+ Calling Functions:
+   error(): Function to show an error message depending on an error number.
+*******************************************************************************/
 
-void borrarConexion(int numNodulo,int nodo)
+void borrarNodo(int nodule, int nodes)
 {
-  int i,sel;
-
-  /*Se borra una conexión de entrada*/
-  if(nodo<predes.n_nodos_entrada){
-    for(i=0;i<pnodulos.nodulos[numNodulo]->n_nodos && \
-	  pnodulos.nodulos[numNodulo]->conexiones_entrada[nodo][i]!=1;i++);
-    if(i<pnodulos.nodulos[numNodulo]->n_nodos){
-      sel=random()%pnodulos.nodulos[numNodulo]->n_nodos;
-      for(;pnodulos.nodulos[numNodulo]->conexiones_entrada[nodo][sel]!=1;sel=random()%pnodulos.nodulos[numNodulo]->n_nodos);
-      pnodulos.nodulos[numNodulo]->conexiones_entrada[nodo][sel]=0;
-      pnodulos.nodulos[numNodulo]->pesos_entrada[nodo][sel]=0;
-    } /* end if */
-  }else{
-    /*Se borra una conexión de salida*/
-    nodo-=predes.n_nodos_entrada;
-    for(i=0;i<pnodulos.nodulos[numNodulo]->n_nodos && \
-	  pnodulos.nodulos[numNodulo]->conexiones_salida[i][nodo]!=1;i++);
-    if(i<pnodulos.nodulos[numNodulo]->n_nodos){
-      sel=random()%pnodulos.nodulos[numNodulo]->n_nodos;
-      for(;pnodulos.nodulos[numNodulo]->conexiones_salida[sel][nodo]!=1;sel=random()%pnodulos.nodulos[numNodulo]->n_nodos);
-      pnodulos.nodulos[numNodulo]->conexiones_salida[sel][nodo]=0;
-      pnodulos.nodulos[numNodulo]->pesos_salida[sel][nodo]=0;
-    } /* end if */
-  } /* end if */
-}
-
-/********************************************************************************
-* Fichero: mutacionEstructural.c					        *
-*									        *
-* Función: borrarNodo()							        *
-*									        *
-* Autor: Pablo Álvarez de Sotomayor Posadillo				        *
-*									        *
-* Finalidad de la función: Borra un número determinado de nodos de un nódulo    *
-*			   dado.					        *
-*									        *
-* Parámetros de Entrada:						        *
-* 	numNodulo: Entero. Número de nódulo que se va a borrar.		        *
-* 	numNodos. Entero. Número de nodos a borrar.			        *
-* 									        *
-* Parámetros Internos:							        *
-* 	i: Entero. Contador.						        *
-* 	j: Entero. Contador.						        *
-* 	k: Entero. Contador.						        *
-* 	nodo: Entero. Nodo a borrar.					        *
-* 									        *
-* Parámetros de Salida:	NINGUNO						        *
-* 									        *
-* Funciones a las que llama la función:					        *
-*	error()->Muestra un mensaje de error por pantalla.		        *
-*									        *
-********************************************************************************/
-
-void borrarNodo(int numNodulo,int numNodos)
-{
-  int i,j,k,nodo;
+	int i, j, k, node;
   
-  for(k=0;k<numNodos;k++){
-    nodo=random()%pnodulos.nodulos[numNodulo]->n_nodos;
-    /*Todos los nodos posteriores al nodo a borrar se adelantan un puesto en las 
-      conexiones internas y de salida*/
-    for(i=nodo+1;i<pnodulos.nodulos[numNodulo]->n_nodos;i++){
-      pnodulos.nodulos[numNodulo]->transf[i-1]=pnodulos.nodulos[numNodulo]->transf[i];
-      for(j=0;j<predes.n_nodos_salida;j++){
-        pnodulos.nodulos[numNodulo]->conexiones_salida[i-1][j]=pnodulos.nodulos[numNodulo]->conexiones_salida[i][j];
-        pnodulos.nodulos[numNodulo]->pesos_salida[i-1][j]=pnodulos.nodulos[numNodulo]->pesos_salida[i][j];
-        pnodulos.nodulos[numNodulo]->conexiones_salida[i][j]=0;
-        pnodulos.nodulos[numNodulo]->pesos_salida[i][j]=0;
-      } /* end for */
-    } /* end for */
+	for(k = 0; k < nodes; k++) {
+		node = random() % pnodulos.nodulos[nodule]->n_nodos;
 
-    for(j=0;j<predes.n_nodos_salida;j++){
-      pnodulos.nodulos[numNodulo]->conexiones_salida[i-1][j]=0;
-      pnodulos.nodulos[numNodulo]->pesos_salida[i-1][j]=0;
-    } /* end for */
+		/* All the nodes after the node to delete have to go back a position. */
+		for(i = node + 1; i < pnodulos.nodulos[nodule]->n_nodos; i++) {
+			pnodulos.nodulos[nodule]->transf[i - 1] =
+				pnodulos.nodulos[nodule]->transf[i];
+			for(j = 0; j < predes.n_nodos_salida; j++) {
+				pnodulos.nodulos[nodule]->conexiones_salida[i - 1][j] =
+					pnodulos.nodulos[nodule]->conexiones_salida[i][j];
+				pnodulos.nodulos[nodule]->pesos_salida[i - 1][j] =
+					pnodulos.nodulos[nodule]->pesos_salida[i][j];
+				pnodulos.nodulos[nodule]->conexiones_salida[i][j] = 0;
+				pnodulos.nodulos[nodule]->pesos_salida[i][j] = 0;
+			} /* end for */
+		} /* end for */
 
-    /*Todos los nodos posteriores al nodo a borrar se adelantan un puesto en las conexiones de entrada*/
-    for(i=0;i<predes.n_nodos_entrada;i++){
-      for(j=nodo+1;j<pnodulos.nodulos[numNodulo]->n_nodos;j++){
-        pnodulos.nodulos[numNodulo]->conexiones_entrada[i][j-1]=pnodulos.nodulos[numNodulo]->conexiones_entrada[i][j];
-        pnodulos.nodulos[numNodulo]->pesos_entrada[i][j-1]=pnodulos.nodulos[numNodulo]->pesos_entrada[i][j];
-        pnodulos.nodulos[numNodulo]->conexiones_entrada[i][j]=0;
-        pnodulos.nodulos[numNodulo]->pesos_entrada[i][j]=0;
-      } /* end for */
-      pnodulos.nodulos[numNodulo]->conexiones_entrada[i][j-1]=0;
-      pnodulos.nodulos[numNodulo]->pesos_entrada[i][j-1]=0;
-    } /* end for */
+		for(j = 0; j < predes.n_nodos_salida; j++) {
+			pnodulos.nodulos[nodule]->conexiones_salida[i - 1][j] = 0;
+			pnodulos.nodulos[nodule]->pesos_salida[i - 1][j] = 0;
+		} /* end for */
+
+		for(i = 0; i < predes.n_nodos_entrada; i++) {
+			for(j = node + 1; j < pnodulos.nodulos[nodule]->n_nodos; j++) {
+				pnodulos.nodulos[nodule]->conexiones_entrada[i][j - 1] =
+					pnodulos.nodulos[nodule]->conexiones_entrada[i][j];
+				pnodulos.nodulos[nodule]->pesos_entrada[i][j - 1] =
+					pnodulos.nodulos[nodule]->pesos_entrada[i][j];
+				pnodulos.nodulos[nodule]->conexiones_entrada[i][j] = 0;
+				pnodulos.nodulos[nodule]->pesos_entrada[i][j] = 0;
+			} /* end for */
+
+			pnodulos.nodulos[nodule]->conexiones_entrada[i][j-1] = 0;
+			pnodulos.nodulos[nodule]->pesos_entrada[i][j-1] = 0;
+		} /* end for */
   
-    pnodulos.nodulos[numNodulo]->n_nodos--;
-  } /* end for */
+		pnodulos.nodulos[nodule]->n_nodos--;
+	} /* end for */
 }
 
 /********************************************************************************
-* Fichero: mutacionEstructural.c						*
-*									        *
-* Función: sustituirNodulos()						        *
-*									        *
-* Autor: Pablo Álvarez de Sotomayor Posadillo				        *
-*									        *
-* Finalidad de la función: Sustituye los peores nódulos de una población por    *
-*			   los mejores de la población descendente.	        *
-*									        *
-* Parámetros de Entrada: NINGUNO					        *
-* 									        *
-* Parámetros Internos:							        *
-* 	i: Entero. Contador.						        *
-* 	j: Entero. Contador.						        *
-* 	id: Vector de enteros. Almacena los id de los nódulos para ordenarlos   *
-*	    por aptitud.						        *
-* 	orden: Vector de reales. Almacena la aptitud de los nódulos para        *
-*	       ordenarlos.						        *
-* 									        *
-* Parámetros de Salida:	NINGUNO						        *
-* 									        *
-* Funciones a las que llama la función:	NINGUNA				        *
-*	liberarNodulo()->Libera la memoria ocupada por un nodulo determinado.   *
-*	ordenarNodulos()->Se ordenan los nodulos de la poblacion.	        *
-*	error()->Muestra un mensaje de error.				        *
-*									        *
-********************************************************************************/
+ File: mutacionEstructural.c
+ Function: sustituirNodulos()
+ Author: Pablo Álvarez de Sotomayor Posadillo
+ Description: Substitude the worst nodules of a population with the bset nodules
+              of its descendant population.
+ Input Parameters: None
+ Local Variables:
+   i: Integer. Counter.
+   j: Integer. Counter.
+   id: Vector of Integers. Store the nodules id in order to sort them by
+       aptitude.
+   order: Vector of floats. Store the nodules aptitude in order to sort them.
+ Return Value: None
+ Calling Functions
+   liberarNodulo(): Free the memory ocuppied by a given nodule.
+   ordenarNodulos(): Sort the nodules of the population.
+   error(): Function to show an error message depending on an error number.
+*******************************************************************************/
 
 void sustituirNodulos()
 {
-  int i,j,*id;
-  double *orden;
+	int i, j, *id;
+	double *order;
 
-  /*Se ordenan los nódulos por aptitud*/
-  if((id=(int *)malloc(num_nodulos*sizeof(int)))==NULL)
-    error(RES_MEM);
+	/* We order the nodules by aptitude. */
+	id = (int *)malloc(num_nodulos * sizeof(int));
+	order = (double *)malloc(num_nodulos * sizeof(double));
+	if(id == NULL || order == NULL)
+		error(RES_MEM);
 
-  if((orden=(double *)malloc(num_nodulos*sizeof(double)))==NULL)
-    error(RES_MEM);
+	for(i = 0; i < num_nodulos; i++) {
+		id[i] = ((pnodulos.n_subpobl - 1) * num_nodulos) + i;
+		order[i] =
+			pnodulos.nodulos[(pnodulos.n_subpobl - 1) * num_nodulos + i]->aptitud;
+	}
 
-  for(i=0;i<num_nodulos;i++){
-    id[i]=((pnodulos.n_subpobl-1)*num_nodulos)+i;
-    orden[i]=pnodulos.nodulos[(pnodulos.n_subpobl-1)*num_nodulos+i]->aptitud;
-  }
+	for(i = 0; i < num_nodulos; i++)
+		for(j = i; j < num_nodulos; j++)
+			if(order[i] < order[j]) {
+				id[i] = ((pnodulos.n_subpobl - 1) * num_nodulos) + j;
+				id[j] = ((pnodulos.n_subpobl-1) * num_nodulos) + i;
+				order[i] = pnodulos.nodulos[((pnodulos.n_subpobl - 1) * num_nodulos) + j]->aptitud;
+				order[j] = pnodulos.nodulos[((pnodulos.n_subpobl - 1) * num_nodulos) + i]->aptitud;
+			}
 
-  for(i=0;i<num_nodulos;i++)
-    for(j=i;j<num_nodulos;j++)
-      if(orden[i]<orden[j]){
-        id[i]=((pnodulos.n_subpobl-1)*num_nodulos)+j;
-        id[j]=((pnodulos.n_subpobl-1)*num_nodulos)+i;
-        orden[i]=pnodulos.nodulos[((pnodulos.n_subpobl-1)*num_nodulos)+j]->aptitud;
-	orden[j]=pnodulos.nodulos[((pnodulos.n_subpobl-1)*num_nodulos)+i]->aptitud;
-      }
+	/*
+	  We substitude the best nodules of the descendant subpopulation by the worst
+	  nodules of the original subpopulation. 
+	*/
+	for(i = num_nodulos; i > nodsel; i--){
+		for(j = 0; j < predes.n_redes; j++)
+			if(predes.redes[j]->nodulos[pnodulos.n_subpobl - 1] ==
+			   pnodulos.nodulos[id[i - 1]])
+				predes.redes[j]->nodulos[pnodulos.n_subpobl - 1] =
+					descendencia[i - nodsel - 1];
+		liberarNodulo(pnodulos.nodulos[id[i - 1]]);
+		free(pnodulos.nodulos[id[i - 1]]);
+		pnodulos.nodulos[id[i - 1]] = descendencia[i - nodsel - 1];
+		descendencia[i - nodsel - 1] = NULL;
+	}
 
-/*Se sustituyen los mejores nódulos de la subpoblación hija por los peores nódulos de la subpoblación padre*/
-  for(i=num_nodulos;i>nodsel;i--){
-    for(j=0;j<predes.n_redes;j++)
-      if(predes.redes[j]->nodulos[pnodulos.n_subpobl-1]==pnodulos.nodulos[id[i-1]])
-        predes.redes[j]->nodulos[pnodulos.n_subpobl-1]=descendencia[i-1-nodsel];
-    liberarNodulo(pnodulos.nodulos[id[i-1]]);
-    free(pnodulos.nodulos[id[i-1]]);
-    pnodulos.nodulos[id[i-1]]=descendencia[i-1-nodsel];
-    descendencia[i-1-nodsel]=NULL;
-  }
-
-  for(i=num_nodulos-nodsel;i<num_nodulos;i++)
-    liberarNodulo(descendencia[i]);
-  free(descendencia);
-  descendencia=NULL;
-  ordenarNodulos();
-  free(id);
-  free(orden);
+	for(i = num_nodulos-nodsel; i < num_nodulos; i++)
+		liberarNodulo(descendencia[i]);
+	free(descendencia);
+	descendencia = NULL;
+	orderarNodulos();
+	free(id);
+	free(order);
 }

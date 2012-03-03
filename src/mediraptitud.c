@@ -1,425 +1,366 @@
-/********************************************************************************
-* Copyright (c) 2004-2011 coconet project (see AUTHORS)			        *
-*									        *
-* This file is part of Coconet.						        *
-*									        *
-* Coconet is free software: you can redistribute it and/or modify it under the  *
-* terms of the GNU General Public License as published by the Free Software     *
-* Foundation, either version 3 of the License, or (at your option) any later    *
-* version.                                                                      *
-*									        *
-* Coconet is distributed in the hope that it will be useful, but WITHOUT ANY    *
-* WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR *
-* A PARTICULAR PURPOSE.  See the GNU General Public License for more details.   *
-*									        *
-* You should have received a copy of the GNU General Public License along with  *
-* coconet. If not, see <http://www.gnu.org/licenses/>.                          *
-********************************************************************************/
+/******************************************************************************
+ Copyright (c) 2004-2012 coconet project (see AUTHORS)
+
+ This file is part of Coconet.
+
+ Coconet is free software: you can redistribute it and/or modify it under the
+ terms of the GNU General Public License as published by the Free Software
+ Foundation, either version 3 of the License, or (at your option) any later
+ version.
+
+ Coconet is distributed in the hope that it will be useful, but WITHOUT ANY
+ WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR
+ A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
+
+ You should have received a copy of the GNU General Public License along with
+ coconet. If not, see <http://www.gnu.org/licenses/>.
+******************************************************************************/
 
 #include <definiciones.h>
 
-/*******************************************************************************
-* Fichero: medirAptitud.c						       *
-*									       *
-* Función: medirAptitudRed()						       *
-*									       *
-* Autor: Pablo Álvarez de Sotomayor Posadillo				       *
-*									       *
-* Finalidad de la función: Mide la aptitud de la red en función de sus salidas.*
-*									       *
-* Parámetros de Entrada:						       *
-* 	salida: Vector de reales. Salida que debe de tener la red.	       *
-* 	numRed: Entero. Número de la red a tratar.			       *
-* 									       *
-* Parámetros Internos:							       *
-* 	i: Entero. Contador.						       *
-* 	max_output: Vector de reales. Salida seleccionada por la red y su valor*
-*		    correspondiente.					       *
-* 	max_file: Vector de reales. Salida válida según los datos de entrada   *
-*		    y su valor correspondiente.				       *
-* 									       *
-* Parámetros de Salida:	NINGUNO						       *
-* 									       *
-* Funciones a las que llama la función:	NINGUNA				       *
-*									       *
-*******************************************************************************/
+/******************************************************************************
+ File: medirAptitud.c
+ Function: medirAptitudRed()
+ Author: Pablo Álvarez de Sotomayor Posadillo
+ Description: Measure the network aptitude from its outputs.
+ Input Parameters:
+   output: Float vector. Output of the network.
+   netNumber: Integer. Network number to work with.
+ Local Variables:
+   i: Integer. Counter.
+   max_output: Float vector. Output selected by the network and its
+               corresponding value.
+   max_file: Float vector. Valid output according to the input data and its
+             corresponding value.
+ Return Value: None
+ Calling Functions: None
+******************************************************************************/
 
-void medirAptitudRed(double *salida,int numRed)
+void medirAptitudRed(double *output, int netNumber)
 {
-  int i;
-  double max_output[2],max_file[2];
+	int i;
+	double max_output[2], max_file[2];
+
+	/* Variable initialization. */
+	max_output[0] = predes.redes[netNumber]->valores_salida[0];
+	max_file[0] = output[0];
+	max_output[1] = max_file[1] = 0;
+
+	/* We calculate the output selected. */
+	for(i = 0; i < predes.n_nodos_salida; i++) {
+		if(max_file[0] < output[i]) {
+			max_file[0] = output[i];
+			max_file[1] = i;
+		} if(max_output[0] < predes.redes[netNumber]->valores_salida[i]) {
+			max_output[0] = predes.redes[netNumber]->valores_salida[i];
+			max_output[1] = i;
+		}
+	}
+
+	/* We check if the selected output is the correct one. */
+	if(max_file[1] == max_output[1])
+		predes.redes[netNumber]->aptitud++;
+}
+
+/******************************************************************************
+ File: medirAptitud.c
+ Function: medirAptitudNodulos()
+ Author: Pablo Álvarez de Sotomayor Posadillo
+ Description: Measure the nodule aptitude from several parameters.
+ Input Parameters:
+   nodule: Integer. Nodule number to measure.
+ Local Variables:
+   i: Integer. Counter.
+   sust: Float. Partial aptitude by substitution.
+   dif: Float. Partial aptitude by difference.
+   best: Float. Partial aptitude by the best networks in which the nodule takes
+         part.
+   population: Vector of networks. Copy of the network population.
+ Return Value: None
+ Calling Functions:
+   error(): Function to show an error message depending on an error number.
+   copiarRed(): Make a copy of the network population.
+   liberarRed(): Free the memory of a network.
+   sustitucion(): Measure the aptitude by substitution.
+   diferencia(): Measure the aptitude by difference.
+   mejores(): Measure the aptitude by the best networks in which the nodule
+              takes part.
+******************************************************************************/
+
+void medirAptitudNodulos(int nodule)
+{
+	int i;
+	double sust, dif, best;
+	red **population;
   
-  /*Se inicializaan las variables. */
-  max_output[0]=predes.redes[numRed]->valores_salida[0];
-  max_file[0]=salida[0];
-  max_output[1]=max_file[1]=0;
-  /*Se calcula la salida seleccionada. */
-  for(i=0;i<predes.n_nodos_salida;i++)
-  {
-    if(max_file[0]<salida[i])
-    {
-      max_file[0]=salida[i];
-      max_file[1]=i;
-    }
-    if(max_output[0]<predes.redes[numRed]->valores_salida[i])
-    {
-      max_output[0]=predes.redes[numRed]->valores_salida[i];
-      max_output[1]=i;
-    }
-  }
-  /*Se comprueba si la salida seleccionada es la correcta. */
-  if(max_file[1]==max_output[1])
-    predes.redes[numRed]->aptitud++;
+	population = NULL;
+	if((population = (red **)malloc(predes.n_redes * sizeof(red))) == NULL)
+		error(RES_MEM);
+
+	/* We make a copy of the network population. */
+	populationrRed(predes.redes,population);
+
+	/* We measure the partial aptitude of the nodule by substitution. */
+	sust = sustitucion(nodule, population);
+	for(i = 0; i < predes.n_redes; i++)
+		liberarRed(predes.redes[i]);
+
+	free(predes.redes);
+	if((predes.redes = (red **)malloc(predes.n_redes * sizeof(red))) == NULL)
+		error(RES_MEM);
+
+	/* We restore the network population. */
+	populationrRed(population, predes.redes);
+
+	/* We measure the nodule partial aptitude by difference. */
+	dif = diferencia(nodule, population);
+
+	/* We restore the network population. */
+	for(i = 0; i < predes.n_redes; i++)
+		liberarRed(predes.redes[i]);
+
+	free(predes.redes);
+	predes.redes = population;
+	population = NULL;
+	best = mejores(nodule);
+
+	/* We measure the partial aptitude of the nodule. */
+	/* We calculate the final aptitude by ponderating the aptitudes calculated
+	   previously. */
+	pnodulos.nodulos[nodule]->aptitud = pond.sust * sust + pond.dif * dif +
+		pond.best * best;
+}
+
+/******************************************************************************
+ File: medirAptitud.c
+ Function: copiarRed()
+ Author: Pablo Álvarez de Sotomayor Posadillo
+ Description: Make a copy of the network population.
+ Input Parameters:
+   origin: Vector of networks. Population of origin.
+   destination: Vector of networks. Population of destination.
+ Local Variables:
+   i: Integer. Counter.
+   j: Integer. Counter.
+ Return Value: None
+ Calling Functions:
+   error(): Function to show an error message depending on an error number.
+******************************************************************************/
+
+void copiarRed(red **origin, red **destination)
+{
+	int i, j;
+
+	/* We make a copy of the network population. */
+	for(i = 0; i < predes.n_redes; i++) {
+		destination[i] = (red *)malloc(sizeof(red));
+		if(destination[i] == NULL)
+			error(RES_MEM);
+
+		destination[i]->nodulos = (nodulo **)malloc(pnodulos.n_subpobl * sizeof(nodulo));
+		destination[i]->valores_salida = (double *)malloc(predes.n_nodos_salida * sizeof(double));
+		if(destination[i]->nodulos == NULL || destination[i]->valores_salida == NULL)
+			error(RES_MEM);
+
+		destination[i]->aptitud = origin[i]->aptitud;
+		for(j = 0; j < pnodulos.n_subpobl; j++)
+			destination[i]->nodulos[j] = origin[i]->nodulos[j];
+		for(j = 0; j < predes.n_nodos_salida; j++)
+			destination[i]->valores_salida[j] = origin[i]->valores_salida[j];
+	}
 }
 
 /*******************************************************************************
-* Fichero: medirAptitud.c						       *
-*									       *
-* Función: medirAptitudNodulos()					       *
-*									       *
-* Autor: Pablo Álvarez de Sotomayor Posadillo				       *
-*									       *
-* Finalidad de la función: Mide la aptitud de los nódulos en función de varios *
-*			   parámetros.					       *
-*									       *
-* Parámetros de Entrada:						       *
-* 	numNodulo: Entero.Número del nódulo al que se le va a medir la aptitud.*
-* 									       *
-* Parámetros Internos:							       *
-* 	i: Entero. Contador.						       *
-* 	sust: Real. Aptitud parcial por sustitución.			       *
-* 	dif: Real. Aptitud parcial por diferencia.			       *
-* 	best: Real. Aptitud parcial según las mejores redes en las que         *
-*	      participa el nódulo.					       *
-* 	copia: Vector de redes. Copia de la población de redes.		       *
-* 									       *
-* Parámetros de Salida: NINGUNO						       *
-* 									       *
-* Funciones a las que llama la función:					       *
-*	error()->Muestra un mensaje de error en función de un número de error. *
-*	copiarRed()->Hace una copia de la población de redes.		       *
-*	liberarRed()->Libera la memoria de una red.			       *
-*	sustitucion()->Mide la aptitud por sustitución.			       *
-*	diferencia()->Mide la aptitud por diferencia.			       *
-*	mejores()->Mide la aptitud mediante las mejores redes en las que       *
-*		   participa el nódulo.					       *
-*									       *
-*******************************************************************************/
+ File: medirAptitud.c
+ Function: diferencia()
+ Author: Pablo Álvarez de Sotomayor Posadillo
+ Description: Measure the partial output of a nodule by difference.
+ Input Parameters:
+ 	nodule: Integer. Number of nodule to work with.
+ 	population: Vector of networks. Copy of the network population.
+ Local Variables:
+ 	i: Integer. Counter.
+ 	j: Integer. Counter.
+ 	k: Integer. Counter.
+ 	l: Integer. Counter.
+ 	netNumber: Integer. Number of network in which the nodule takes part.
+ 	netIds: Vector of integers. Network ids in which the nodule takes part.
+ Return Value: Float. Partial output of the nodule.
+ Calling Functions:
+   medirAptitudRed(): Function to measure the aptitude of a network.
+   error(): Function to show an error message depending on an error number.
+******************************************************************************/
 
-void medirAptitudNodulos(int numNodulo)
+double diferencia(int nodule, red **population)
 {
-  int i;
-  double sust,dif,best;
-  red **copia;
+	int i, j, k, l, netNumber, *netIds;
+	double sum;
   
-  copia=NULL;
-  if((copia=(red **)malloc(predes.n_redes*sizeof(red)))==NULL)
-    error(RES_MEM);
-  /*Se hace una copia de la población de redes*/
-  copiarRed(predes.redes,copia);
-  /*Se mide la aptitud parcial del nódulo por sustitución*/
-  sust=sustitucion(numNodulo,copia);
+	netNumber = 0;
+	sum = 0.0;
+	if((netIds = (int *)malloc(max_netIds * sizeof(int))) == NULL)
+		error(RES_MEM);
 
-  for(i=0;i<predes.n_redes;i++)
-    liberarRed(predes.redes[i]);
-  free(predes.redes);
-  if((predes.redes=(red **)malloc(predes.n_redes*sizeof(red)))==NULL)
-    error(RES_MEM);
-  /*Se restituye la población de redes*/
-  copiarRed(copia,predes.redes);
-  /*Se mide la aptitud parcial del nódulo por diferecia*/
-  dif=diferencia(numNodulo,copia);
+	/* We store the networks in which the nodule takes part. */
+	for(i = 0; i < pnetIds.n_netIds; i++)
+		if(pnetIds.netIds[i]->nodulos[pnodulos.n_subpobl - 1] == pnodulos.nodulos[nodule]) {
+			pnetIds.netIds[i]->aptitud = 0;
+			netIds[netNumber] = i;
+			netNumber++;
+		}
 
-  /*Se restituye la población de redes*/
-  for(i=0;i<predes.n_redes;i++)
-    liberarRed(predes.redes[i]);
-  free(predes.redes);
-  predes.redes=copia;
-  copia=NULL;
-  best=mejores(numNodulo);
+	for(i = 0; i < netNumber; i++) {
+		for(j = 0; j < n_entrenamiento; j++) {
+			/* We generate the network outputs without the partial outputs of the nodule that we are measuring. */
+			for(k = 0; k < pnetIds.n_nodos_salida; k++) {
+				pnetIds.netIds[netIds[i]]->valores_salida[k] = 0.0;
+				for(l = 0; l < pnodulos.n_subpobl - 1; l++)
+					pnetIds.netIds[netIds[i]]->valores_salida[k] += (*(net_transf))(pnetIds.netIds[netIds[i]]->nodulos[l]->salidas_parciales[j][k]);
+			}
 
-  /*Se mide la aptitud parcial del nódulo*/
-  /*Se calcula la aptitud total mediante la ponderación de las aptitudes calculadas anteriormente*/
-  pnodulos.nodulos[numNodulo]->aptitud=pond.sust*sust+pond.dif*dif+pond.best*best;
+			/* We measure the networks aptitude. */
+			if(pnodulos.n_subpobl > 1)
+				medirAptitudRed(salida[j], netIds[i]);
+			else
+				pnetIds.netIds[netIds[i]]->aptitud = 0.0;
+		}
+
+		pnetIds.netIds[netIds[i]]->aptitud /= n_entrenamiento;
+
+		/* We add the difference between the network aptitude with and without the nodule. */
+		sum += pnetIds.netIds[netIds[i]]->aptitud - population[netIds[i]]->aptitud;
+	}
+
+	/* We make the average of the aptitudes calculated previously. */
+	if(netNumber > 0)
+		sum /= netNumber;
+	free(netIds);
+
+	return sum;
 }
 
-/*******************************************************************************
-* Fichero: medirAptitud.c						       *
-*									       *
-* Función: copiarRed()							       *
-*									       *
-* Autor: Pablo Álvarez de Sotomayor Posadillo				       *
-*									       *
-* Finalidad de la función: Hace una copia de la población de redes.	       *
-*									       *
-* Parámetros de Entrada:						       *
-* 	Origen: Vector de redes. Población de origen.			       *
-* 	Nueva: Vector de redes. Población de destino.			       *
-* 									       *
-* Parámetros Internos:							       *
-* 	i: Entero. Contador.						       *
-* 	j: Entero. Contador.						       *
-* 									       *
-* Parámetros de Salida: NINGUNO						       *
-* 									       *
-* Funciones a las que llama la función:					       *
-*	error()->Funcion que muestra un mensaje de error por pantalla.	       *
-*									       *
-*******************************************************************************/
+/******************************************************************************
+ File: medirAptitud.c
+ Function: mejores()
+ Author: Pablo Álvarez de Sotomayor Posadillo
+ Description: Measure the aptitude of a given nodule by the best networks it
+              takes part of.
+ Input Parameters:
+ 	noduleNumber: Integer. Nodule number to measure the aptitude.
+ Local Variables:
+ 	i: Integer. Counter.
+ 	netNumber: Integer. Number of networks the nodule take part of.
+ Return Value: Float. Partial aptitude of the node.
+ Calling Functions: None
+******************************************************************************/
 
-void copiarRed(red **origen,red **nueva)
+double mejores(int noduleNumber)
 {
-  int i,j;
+	int i, netNumber;
+	double sum;
+
+	sum = 0;
+	netNumber = 0;
   
-  /*Se hace una copia de las poblaciones de redes*/
-  for(i=0;i<predes.n_redes;i++)
-  {
-    if((nueva[i]=(red *)malloc(sizeof(red)))==NULL)
-      error(RES_MEM);
-    nueva[i]->aptitud=origen[i]->aptitud;
-    if((nueva[i]->nodulos=(nodulo **)malloc(pnodulos.n_subpobl*sizeof(nodulo)))==NULL)
-      error(RES_MEM);
-    for(j=0;j<pnodulos.n_subpobl;j++)
-      nueva[i]->nodulos[j]=origen[i]->nodulos[j];
-    if((nueva[i]->valores_salida=(double *)malloc(predes.n_nodos_salida*sizeof(double)))==NULL)
-      error(RES_MEM);
-    for(j=0;j<predes.n_nodos_salida;j++)
-      nueva[i]->valores_salida[j]=origen[i]->valores_salida[j];
-  }
+	for(i = 0; i < predes.n_redes && netNumber < redsel; i++) {
+		if(predes.redes[i]->nodulos[pnodulos.n_subpobl - 1] == pnodulos.nodulos[noduleNumber]) {
+			netNumber++;
+			sum += predes.redes[i]->aptitud;
+		}
+	}
+
+	/* We make the average of the best networks in which the nodule takes part of. */
+	if(sum > 0)
+		sum /= netNumber;
+
+	return sum;
 }
 
-/*******************************************************************************
-* Fichero: medirAptitud.c							       *
-*									       *
-* Función: diferencia()							       *
-*									       *
-* Autor: Pablo Álvarez de Sotomayor Posadillo				       *
-*									       *
-* Finalidad de la función: Mide la aptitud parcial del nódulo por diferencia.  *
-*									       *
-* Parámetros de Entrada:						       *
-* 	numNodulo: Entero. Número de nódulo al que se le mide la aptitud       *
-*		   parcial.						       *
-* 	copia: Vector deredes. Copia de la población de redes.		       *
-* 									       *
-* Parámetros Internos:							       *
-* 	i: Entero. Contador.						       *
-* 	j: Entero. Contador.						       *
-* 	k: Entero. Contador.						       *
-* 	l: Entero. Contador.						       *
-* 	numredes: Entero. Número de redes en las que participa el nódulo.      *
-* 	redes: Vector de enteros. Identificador de las redes en las que        *
-*	       participa el nódulo.					       *
-* 									       *
-* Parámetros de Salida:							       *
-* 	suma: Real. Aptitud parcial del nódulo.				       *
-* 									       *
-* Funciones a las que llama la función:					       *
-*	medirAptitudRed()->Función que mide la aptitud de una red.	       *
-*	error()->Funcion que muestra por pantalla un mensaje de error.	       *
-* 									       *
-*******************************************************************************/
+/******************************************************************************
+ File: medirAptitud.c
+ Function: sustitucion()
+ Author: Pablo Álvarez de Sotomayor Posadillo
+ Description: Mide la aptitud parcial del nódulo por sustitción.
+ Input Parameters:
+   nodule: Integer. Number of nodule to work with.
+   population: Vector of networks. Copy of the network population.
+ Local Variables:
+   i: Integer. Counter
+   j: Integer. Counter.
+   netNumber: Integer. Number of networks the nodule takes part of.
+   selected: Integer. Number of networks selected.
+ Return Value: Float. Partial aptitude of the nodule.
+ Calling Functions:
+   generarSalidaRed(): Generate the network output from an input pattern.
+   meditAptitudRed(): Measure the network aptitude from the generated output.
+******************************************************************************/
 
-double diferencia(int numNodulo,red **copia)
+double sustitucion(int nodule, red **population)
 {
-  int i,j,k,l,numredes,*redes;
-  double suma;
+	int i, j, netNumber, selected;
+	double sum;
   
-  numredes=0;
-  suma=0.0;
+	netNumber = 0;
+	sum = 0;
+	selected = redsel;
+  
+	for(i = 0; i < selected && i < predes.n_redes; i++) {
+		if(predes.redes[i]->nodulos[pnodulos.n_subpobl-1] != pnodulos.nodulos[nodule]) {
+			/* We change the nodules of its subpopulation by the nodule to measure. */
+			predes.redes[i]->nodulos[pnodulos.n_subpobl-1] = pnodulos.nodulos[nodule];
 
-  if((redes=(int *)malloc(max_redes*sizeof(int)))==NULL)
-    error(RES_MEM);
-  /*Se almacenan las redes en las que participa el nódulo*/
-  for(i=0;i<predes.n_redes;i++)
-    if(predes.redes[i]->nodulos[pnodulos.n_subpobl-1]==pnodulos.nodulos[numNodulo])
-    {
-      predes.redes[i]->aptitud=0;
-      redes[numredes]=i;
-      numredes++;
-    }
-  for(i=0;i<numredes;i++)
-  {
-    for(j=0;j<n_entrenamiento;j++)
-    {
-      /*Se generan las salidas de las redes sin tener en cuenta las salidas parciales del nódulo al que se está midiendo la aptitud*/
-      for(k=0;k<predes.n_nodos_salida;k++)
-      {
-        predes.redes[redes[i]]->valores_salida[k]=0.0;
-        for(l=0;l<pnodulos.n_subpobl-1;l++)
-          predes.redes[redes[i]]->valores_salida[k]+=(*(net_transf))(predes.redes[redes[i]]->nodulos[l]->salidas_parciales[j][k]);
-      }
-      /*Se miden las aptitudes de las redes*/
-      if(pnodulos.n_subpobl>1)
-        medirAptitudRed(salida[j],redes[i]);
-      else
-        predes.redes[redes[i]]->aptitud=0.0;
-    }
-    predes.redes[redes[i]]->aptitud/=n_entrenamiento;
-    /*Se añade la diferencia entre la aptitud que tiene la red con el nódulo y la que tiene sin el*/
-    suma+=predes.redes[redes[i]]->aptitud-copia[redes[i]]->aptitud;
-  }
-  /*Se hace la media de las diferencias de aptitudes calculadas anteriormente*/
-  if(numredes>0)
-    suma/=numredes;
-  free(redes);
+			/* We initializate the networks aptitude to make a new measure. */
+			predes.redes[i]->aptitud = 0;
 
-  return suma;
+			/* We train the modified networks. */
+			for(j = 0; j < n_entrenamiento; j++) {
+				generarSalidaRed(i, j);
+				medirAptitudRed(salida[j], i);
+			}
+
+			/* We normalize the networks aptitude depending on the number of entries of the training file. */
+			predes.redes[i]->aptitud /= n_entrenamiento;
+			sum += predes.redes[i]->aptitud - population[i]->aptitud;
+		} else {
+			/* We add the network number to the vector. */
+			netNumber++;
+			selected++;
+		}
+	}
+
+	/* We return the average difference of the networks aptitude that have been modified. */
+	sum /= (selected - netNumber);
+  
+	return sum;
 }
 
-/*******************************************************************************
-* Fichero: medirAptitud.c						       *
-*									       *
-* Función: mejores()							       *
-*									       *
-* Autor: Pablo Álvarez de Sotomayor Posadillo				       *
-*									       *
-* Finalidad de la función: Mide la aptitud parcial de los nódulos en función de*
-*			   las mejores redes en las que participa.	       *
-*									       *
-* Parámetros de Entrada:						       *
-* 	numNodulo: Entero. Número de nódulo al que se le va a hacer la medición*
-*		   de la aptitud.					       *
-* 									       *
-* Parámetros Internos:							       *
-* 	i: Entero. Contador.						       *
-* 	num: Entero. Número de redes en las que participa el nódulo y que se   *
-*	     utilizan para medir la aptitud parcial.			       *
-* 									       *
-* Parámetros de Salida:							       *
-* 	suma: Real. Aptitud parcial del nódulo.				       *
-* 									       *
-* Funciones a las que llama la función:	NINGUNA				       *
-*									       *
-*******************************************************************************/
-
-double mejores(int numNodulo)
-{
-  int i,num;
-  double suma;
-
-  suma=0;
-  num=0;
-  
-  for(i=0;i<predes.n_redes && num<redsel;i++)
-  {
-    if(predes.redes[i]->nodulos[pnodulos.n_subpobl-1]==pnodulos.nodulos[numNodulo])
-    {
-      num++;
-      suma+=predes.redes[i]->aptitud;
-    }
-  }
-  /*Se hace la media de las mejores redes encontradas en las que participe el nódulo a tratar*/
-  if(suma>0)
-    suma/=num;
-
-  return suma;
-}
-
-/*******************************************************************************
-* Fichero: medirAptitud.c						       *
-*									       *
-* Función: sustitucion()						       *
-*									       *
-* Autor: Pablo Álvarez de Sotomayor Posadillo				       *
-*									       *
-* Finalidad de la función: Mide la aptitud parcial del nódulo por sustitción.  *
-*									       *
-* Parámetros de Entrada:						       *
-* 	numNodulo: Entero. Número del nódulo a tratar.			       *
-* 	copia: Vector de redes. Copia de lapoblación de redes.		       *
-* 									       *
-* Parámetros Internos:							       *
-* 	i: Entero. Contador.						       *
-* 	j: Entero. Contador.						       *
-* 	numRedes: Entero. Número de redes en las que participa el nódulo.      *
-* 	seleccionadas: Entero. Número de redes seleccionadas.		       *
-* 									       *
-* Parámetros de Salida:							       *
-* 	suma: Real. Aptitud parcial del nódulo.				       *
-* 									       *
-* Funciones a las que llama la función:					       *
-*	generarSalidaRed()->Genera la salida de una red a partir de un patrón  *
-*			    de entrada.					       *
-*	meditAptitudRed()->Mide la aptitud de la red a partir de la salida     *
-*			   generada.					       *
-*									       *
-*******************************************************************************/
-
-double sustitucion(int numNodulo,red **copia)
-{
-  int i,j,numRedes,seleccionadas;
-  double suma;
-  
-  numRedes=0;  
-  suma=0;
-  seleccionadas=redsel;
-  
-  for(i=0;i<seleccionadas && i<predes.n_redes;i++)
-  {
-    if(predes.redes[i]->nodulos[pnodulos.n_subpobl-1]!=pnodulos.nodulos[numNodulo])
-    {
-      /*Se cambian los nódulos de su subpoblación por el nódulo a medir la aptitud*/
-      predes.redes[i]->nodulos[pnodulos.n_subpobl-1]=pnodulos.nodulos[numNodulo];
-      /*Se inicializan las aptitudes de las redes para realizar una nueva medición*/
-      predes.redes[i]->aptitud=0;
-      /*Se entrenan las redes modificadas*/
-      for(j=0;j<n_entrenamiento;j++)
-      {
-        generarSalidaRed(i,j);
-        medirAptitudRed(salida[j],i);
-      }
-      /*Se normaliza la aptitud de la red modificada según las entradas del fichero de entrenamiento*/
-      predes.redes[i]->aptitud/=n_entrenamiento;
-      suma+=predes.redes[i]->aptitud-copia[i]->aptitud;
-    }
-    /*Se añade el número de red al vector*/
-    else
-    {
-      numRedes++;
-      seleccionadas++;
-    }
-  }
-  /*Se devuelve la diferencia media de las aptitudes de las redes modificadas*/
-  suma/=(seleccionadas-numRedes);
-  
-  return suma;
-}
-
-/*******************************************************************************
-* Fichero: medirAptitud.c						       *
-*									       *
-* Función: normalizarAptitudNodulos()					       *
-*									       *
-* Autor: Pablo Álvarez de Sotomayor Posadillo				       *
-*									       *
-* Finalidad de la función: Normaliza la aptitud de los nódulos poniendo la     *
-*			   aptitud mínima a 0.				       *
-*									       *
-* Parámetros de Entrada: NINGUNO					       *
-* 									       *
-* Parámetros Internos:							       *
-* 	i: Entero. Contador.						       *
-* 	min: Real. Aptitud mínima.					       *
-* 									       *
-* Parámetros de Salida:	NINGUNO						       *
-* 									       *
-* Funciones a las que llama la función:	NINGUNA				       *
-*									       *
-*******************************************************************************/
+/******************************************************************************
+ File: medirAptitud.c
+ Function: normalizarAptitudNodulos()
+ Author: Pablo Álvarez de Sotomayor Posadillo
+ Description: Normalize the nodule aptitude by setting the minimal aptitude to
+              0.
+ Input Parameters: None
+ Local Variables:
+   i: Integer. Counter.
+   min: Float. Min aptitude.
+ Return Value: None
+ Calling Functions: None
+******************************************************************************/
 
 void normalizarAptitudNodulos()
 {
-  int i;
-  double min;
+	int i;
+	double min;
   
-  /*Se calcula el valor mínimo de la aptitud de los nódulos*/
-  min=0;
-  for(i=0;i<pnodulos.n_nodulos;i++)
-    if(min>pnodulos.nodulos[i]->aptitud)
-      min=pnodulos.nodulos[i]->aptitud;
-  /*Se pone el valor mínimo de la aptitud de los nódulos a 0*/
-  if(min<0)
-    for(i=0;i<pnodulos.n_nodulos;i++)
-      pnodulos.nodulos[i]->aptitud-=min;
+	/* We calculate the minimal value of the nodules aptitude. */
+	min = 0;
+	for(i = 0; i < pnodulos.n_nodulos; i++)
+		if(min > pnodulos.nodulos[i]->aptitud)
+			min = pnodulos.nodulos[i]->aptitud;
+
+	/* We set the minimal nodule aptitude to 0. */
+	if(min < 0)
+		for(i = 0; i < pnodulos.n_nodulos; i++)
+			pnodulos.nodulos[i]->aptitud -= min;
 }
