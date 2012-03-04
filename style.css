@@ -1,0 +1,85 @@
+/*
+  This file is part of Coconet
+
+Coconet is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as 
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+Coconet is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with Coconet. If not, see <http://www.gnu.org/licenses/>.
+*/
+
+body {
+    margin-top: 1.0em;
+	background-color: #DDE;
+    font-family: Helvetica, Arial, FreeSans, san-serif;
+    color: #000000;
+}
+
+#container {
+    margin: 0 auto;
+    width: 700px;
+}
+
+h1 {
+	font-size: 3.8em;
+	color: #73ba13;
+	margin-bottom: 3px;
+}
+
+h1 .small {
+	font-size: 0.4em;
+}
+
+h1 a {
+	text-decoration: none;
+}
+
+h2 {
+	font-size: 1.5em;
+	color: #73ba13;
+}
+
+h3 {
+	text-align: center;
+	color: #73ba13;
+}
+
+a {
+	color: #73ba13;
+}
+
+.description {
+	font-size: 1.2em;
+	margin-bottom: 30px;
+	margin-top: 30px;
+	font-style: italic;
+}
+
+.download {
+	float: right;
+}
+
+pre { 
+	background: #000; 
+	color: #fff; 
+	padding: 15px;
+}
+
+hr {
+	border: 0;
+	width: 80%;
+	border-bottom: 1px solid #aaa;
+}
+
+.footer {
+	text-align:center;
+	padding-top:30px;
+	font-style: italic;
+}
