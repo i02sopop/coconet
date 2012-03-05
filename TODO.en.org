@@ -1,0 +1,68 @@
+* DONE [#B] [i02sopop] Create the project info structure.
+CLOSED: [2012-03-05 lun 01:31]
+:PROPERTIES:
+:ORDERED: t
+:LOGGING: TODO(!) STARTED(!) WAITING(!) DELEGATED(!) APPT(!) DONE(!) DEFERRED(!) CANCELLED(!)
+:STYLE: habit
+:COOKIE_DATA: todo recursive
+:END:
+Create the project info structure (AUTHORS, TRANSLATORS, ...).
+* TODO Refactorize the source to optimize it and correct bugs.
+:PROPERTIES:
+:ORDERED: t
+:LOGGING: TODO(!) STARTED(!) WAITING(!) DELEGATED(!) APPT(!) DONE(!) DEFERRED(!) CANCELLED(!)
+:STYLE: habit
+:COOKIE_DATA: todo recursive
+:END:
+Refactorize the source code to optimize the timing of the program
+and to correct bugs.
+* TODO Translate code to english
+:PROPERTIES:
+:ORDERED: t
+:LOGGING: TODO(!) STARTED(!) WAITING(!) DELEGATED(!) APPT(!) DONE(!) DEFERRED(!) CANCELLED(!)
+:STYLE: habit
+:COOKIE_DATA: todo recursive
+:END:
+Traslate the code to english to facilitate the colaboration of others.
+* TODO Improve the documentation
+:PROPERTIES:
+:ORDERED: t
+:LOGGING: TODO(!) STARTED(!) WAITING(!) DELEGATED(!) APPT(!) DONE(!) DEFERRED(!) CANCELLED(!)
+:STYLE: habit
+:COOKIE_DATA: todo recursive
+:END:
+Improve the documentation to facilitate the colaboration of others.
+* TODO Create a graphical interface.
+:PROPERTIES:
+:ORDERED: t
+:LOGGING: TODO(!) STARTED(!) WAITING(!) DELEGATED(!) APPT(!) DONE(!) DEFERRED(!) CANCELLED(!)
+:STYLE: habit
+:COOKIE_DATA: todo recursive
+:END:
+Create a graphical interface to enhace the interacion with the
+program.
+* TODO Create the web of the project.
+:PROPERTIES:
+:ORDERED: t
+:LOGGING: TODO(!) STARTED(!) WAITING(!) DELEGATED(!) APPT(!) DONE(!) DEFERRED(!) CANCELLED(!)
+:STYLE: habit
+:COOKIE_DATA: todo recursive
+:END:
+Create the web of the project in github.
+* TODO Finish the INSTALL file.
+:PROPERTIES:
+:LOGGING: TODO(!) STARTED(!) WAITING(!) DELEGATED(!) APPT(!) DONE(!) DEFERRED(!) CANCELLED(!)
+:STYLE: habit
+:COOKIE_DATA: todo recursive
+:END:
+Finish the INSTALL file both in english and in spanish.
+
+
+
+* org-mode configuration
+#+STARTUP: content
+#+STARTUP: overview
+#+STARTUP: lognotestate
+#+SEQ_TODO: TODO STARTED WAITING DELEGATED APPT | DONE DEFERRED CANCELLED
+#+PROPERTY: Effort_ALL  0:10 0:20 0:30 1:00 2:00 4:00 6:00 8:00
+#+COLUMNS: %38ITEM(Details) %TAGS(Context) %7TODO(To Do) %5Effort(Time){:} %6CLOCKSUM{Total}

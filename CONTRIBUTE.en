@@ -34,17 +34,84 @@ contact with palvarez@ritho.net exposing your idea.
  Testers
 =========
 
+The tests are one of the most important part of any project, because
+is the way to check that the software is working as expected. If you
+want to collaborate with the project making tests you have three ways
+to do it:
+
+* Test the software by hand. It's important to test every corner case
+  you can imagine and report every error you find.
+* Create test case to test automatically the diferent functionality of
+  the software and some error cases. This test cases can be unitary
+  tests, black box tests, white box tests, ... Basically any type of
+  test you can tests :).
+* Execute the existant automatic tests, report the bugs when found
+  them or fix the tests if the source code has change and the test is
+  not valid anymore as is.
+
+The automatic tests are in the tests directory (what a surprise!), and
+to execute them you have to run "make tests" in any directory with a
+Makefile in it. When you run the tests you can see the results and
+errors generated both in the screen and in a file generated in the
+tests directory.
+
+To report a bug please visit the project page at github
+(https://github.com/i02sopop/coconet), click on the Issues section and
+add a new issue. Please, be as descriptive as possible with all the
+information you can and add an email address to contact with you if
+needed.
+
+Remember that the important thing of the tests are find errors, so
+it's important to test both the usual functionality and unusual
+situations that never have to happen, and don't feel bad about
+discover a bug, remember you are helping the project reporting it.
+
  Donations
 ===========
+
+Actually we don't have defined a donation method to the project, but
+if you want to donate some money or hardware (computers, keyboards,
+monitors, ...), please contact <palvarez@ritho.net> or
+<coconet-developers@lists.ritho.net>, make your proposal and we find
+the way to make the donation.
 
  Translators
 =============
 
+TODO
+
  Documenters
 =============
+
+TODO
 
  Administrators
 ================
 
+The project needs administrators to update the website, maintain the
+email lists, ... In the repository you can find a document with some
+tasks to do by the administrators sorted by difficulty and
+priority. If you want to do any of the tasks please keep in touch with
+the rest of administrators (ask at <coconet-developers@lists.ritho.net>
+for them) or write to <palvarez@ritho.net> in order to coordinate the
+tasks.
+
  Developers
 ============
+
+Coconet is handled in a git repository that you can find in the
+github's project page at https://github.com/i02sopop/coconet.
+There is a developer mailing list at coconet-developers@lists.ritho.net
+and a mailing list for the commits at coconet-commits@lists.ritho.net,
+and you can subscribe and access to them at https://lists.ritho.net.
+
+If you want to start collaborating with the project you can see the
+TODO file that is in the repository, which is an org file (see emacs
+org-mode) with tasks to do with its description, an estimation of its
+difficulty, the person to ask about more information about the task
+and, in the case, the person which has assigned this task. You can
+also check the issues category in the github page to see the bugs
+opened about the project.
+
+TODO: Include information about the directory structure at the
+repository.
