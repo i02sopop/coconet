@@ -1,61 +1,109 @@
-* DONE [#B] [i02sopop] Create the project info structure.
+* DONE [#B] Create the project info structure.
 CLOSED: [2012-03-05 lun 01:31]
 :PROPERTIES:
 :ORDERED: t
 :LOGGING: TODO(!) STARTED(!) WAITING(!) DELEGATED(!) APPT(!) DONE(!) DEFERRED(!) CANCELLED(!)
 :STYLE: habit
 :COOKIE_DATA: todo recursive
+:ASSIGNED: i02sopop
+:DIFICULTY: Easy
+:HOURS_ESTIMATED: 2
+:HOURS: 2
+:DESCRIPTION: Create the project info structure (AUTHORS, TRANSLATORS, ...). 
+:CREATED_BY: i02sopop
+:CREATION_DATE: [2012-03-05 lun]
+:NOTES: -
 :END:
-Create the project info structure (AUTHORS, TRANSLATORS, ...).
 * TODO Refactorize the source to optimize it and correct bugs.
 :PROPERTIES:
 :ORDERED: t
 :LOGGING: TODO(!) STARTED(!) WAITING(!) DELEGATED(!) APPT(!) DONE(!) DEFERRED(!) CANCELLED(!)
 :STYLE: habit
 :COOKIE_DATA: todo recursive
+:ASSIGNED: ?
+:DIFICULTY: Medium
+:HOURS_ESTIMATED: ?
+:HOURS: ?
+:DESCRIPTION: Refactorize the source code to optimize the timing of the program and to correct bugs. 
+:CREATED_BY: i02sopop
+:CREATION_DATE: [2012-03-09 vie]
+:NOTES: -
 :END:
-Refactorize the source code to optimize the timing of the program
-and to correct bugs.
 * TODO Translate code to english
 :PROPERTIES:
 :ORDERED: t
 :LOGGING: TODO(!) STARTED(!) WAITING(!) DELEGATED(!) APPT(!) DONE(!) DEFERRED(!) CANCELLED(!)
 :STYLE: habit
 :COOKIE_DATA: todo recursive
+:ASSIGNED: ?
+:DIFICULTY: Easy
+:HOURS_ESTIMATED: ?
+:HOURS: ?
+:DESCRIPTION: Traslate the code to english to facilitate the colaboration of others. 
+:CREATED_BY: i02sopop
+:CREATION_DATE: [2012-03-09 vie]
+:NOTES: -
 :END:
-Traslate the code to english to facilitate the colaboration of others.
 * TODO Improve the documentation
 :PROPERTIES:
 :ORDERED: t
 :LOGGING: TODO(!) STARTED(!) WAITING(!) DELEGATED(!) APPT(!) DONE(!) DEFERRED(!) CANCELLED(!)
 :STYLE: habit
 :COOKIE_DATA: todo recursive
+:ASSIGNED: ?
+:DIFICULTY: Medium
+:HOURS_ESTIMATED: ?
+:HOURS: ?
+:DESCRIPTION: Improve the documentation to facilitate the colaboration of others. 
+:CREATED_BY: i02sopop
+:CREATION_DATE: [2012-03-09 vie]
+:NOTES: -
 :END:
-Improve the documentation to facilitate the colaboration of others.
 * TODO Create a graphical interface.
 :PROPERTIES:
 :ORDERED: t
 :LOGGING: TODO(!) STARTED(!) WAITING(!) DELEGATED(!) APPT(!) DONE(!) DEFERRED(!) CANCELLED(!)
 :STYLE: habit
 :COOKIE_DATA: todo recursive
+:ASSIGNED: ?
+:DIFICULTY: Hard
+:HOURS_ESTIMATED: ?
+:HOURS: ?
+:DESCRIPTION: Create a graphical interface to enhace the interacion with the program.
+:CREATED_BY: i02sopop
+:CREATION_DATE: [2012-03-09 vie]
+:NOTES: -
 :END:
-Create a graphical interface to enhace the interacion with the
-program.
 * TODO Create the web of the project.
 :PROPERTIES:
 :ORDERED: t
 :LOGGING: TODO(!) STARTED(!) WAITING(!) DELEGATED(!) APPT(!) DONE(!) DEFERRED(!) CANCELLED(!)
 :STYLE: habit
 :COOKIE_DATA: todo recursive
-:END:
-Create the web of the project in github.
+:ASSIGNED: ?
+:DIFICULTY: Medium
+:HOURS_ESTIMATED: ?
+:HOURS: ?
+:DESCRIPTION: Design and develop the web of the project in github. 
+:CREATED_BY: i02sopop
+:CREATION_DATE: [2012-03-09 vie]
+:NOTES: -
+:END: 
 * TODO Finish the INSTALL file.
 :PROPERTIES:
+:ORDERED: t
 :LOGGING: TODO(!) STARTED(!) WAITING(!) DELEGATED(!) APPT(!) DONE(!) DEFERRED(!) CANCELLED(!)
 :STYLE: habit
 :COOKIE_DATA: todo recursive
+:ASSIGNED: ?
+:DIFICULTY: EASY
+:HOURS_ESTIMATED: ?
+:HOURS: ?
+:DESCRIPTION: Adapt and finish the description of the INSTALL file both in english and in spanish.
+:CREATED_BY: i02sopop
+:CREATION_DATE: [2012-03-09 vie]
+:END_DATE: -
 :END:
-Finish the INSTALL file both in english and in spanish.
 
 
 
