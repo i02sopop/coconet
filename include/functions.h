@@ -1,23 +1,23 @@
-/********************************************************************************
-* Copyright (c) 2004-2011 coconet project (see AUTHORS)			        *
-*									        *
-* This file is part of Coconet.						        *
-*									        *
-* Coconet is free software: you can redistribute it and/or modify it under the  *
-* terms of the GNU General Public License as published by the Free Software     *
-* Foundation, either version 3 of the License, or (at your option) any later    *
-* version.                                                                      *
-*									        *
-* Coconet is distributed in the hope that it will be useful, but WITHOUT ANY    *
-* WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR *
-* A PARTICULAR PURPOSE.  See the GNU General Public License for more details.   *
-*									        *
-* You should have received a copy of the GNU General Public License along with  *
-* coconet. If not, see <http://www.gnu.org/licenses/>.                          *
-********************************************************************************/
+/******************************************************************************
+ Copyright (c) 2004-2012 coconet project (see AUTHORS)
 
-#ifndef FUNCIONES_H
-#define FUNCIONES_H
+ This file is part of Coconet.
+
+ Coconet is free software: you can redistribute it and/or modify it under the
+ terms of the GNU General Public License as published by the Free Software
+ Foundation, either version 3 of the License, or (at your option) any later
+ version.
+
+ Coconet is distributed in the hope that it will be useful, but WITHOUT ANY
+ WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR
+ A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
+
+ You should have received a copy of the GNU General Public License along with
+ coconet. If not, see <http://www.gnu.org/licenses/>.
+******************************************************************************/
+
+#ifndef FUNCTIONS_H
+#define FUNCTIONS_H
 
 void cambioPesos(double *einicial,double **pesos,double *salida,double **F_W,int nodos,func *transf);
 void retropropagacion(int numNodulo,int n_patrones,int iteraciones);
@@ -65,4 +65,4 @@ void escalarDatosEntrada(int iteraciones);
 void escalarDatosSalida(double **datos,int iteraciones,double lbound,double ubound);
 void ajustarMatrices();
 
-#endif /*FUNCIONES_H*/
+#endif /* FUNCTIONS_H */

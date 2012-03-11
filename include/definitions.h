@@ -1,23 +1,23 @@
-/********************************************************************************
-* Copyright (c) 2004-2011 coconet project (see AUTHORS)			        *
-*									        *
-* This file is part of Coconet.						        *
-*									        *
-* Coconet is free software: you can redistribute it and/or modify it under the  *
-* terms of the GNU General Public License as published by the Free Software     *
-* Foundation, either version 3 of the License, or (at your option) any later    *
-* version.                                                                      *
-*									        *
-* Coconet is distributed in the hope that it will be useful, but WITHOUT ANY    *
-* WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR *
-* A PARTICULAR PURPOSE.  See the GNU General Public License for more details.   *
-*									        *
-* You should have received a copy of the GNU General Public License along with  *
-* coconet. If not, see <http://www.gnu.org/licenses/>.                          *
-********************************************************************************/
+/******************************************************************************
+ Copyright (c) 2004-2012 coconet project (see AUTHORS)
 
-#ifndef DEFINICIONES_H
-#define DEFINICIONES_H
+ This file is part of Coconet.
+
+ Coconet is free software: you can redistribute it and/or modify it under the
+ terms of the GNU General Public License as published by the Free Software
+ Foundation, either version 3 of the License, or (at your option) any later
+ version.
+
+ Coconet is distributed in the hope that it will be useful, but WITHOUT ANY
+ WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR
+ A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
+
+ You should have received a copy of the GNU General Public License along with
+ coconet. If not, see <http://www.gnu.org/licenses/>.
+******************************************************************************/
+
+#ifndef DEFINITIONS_H
+#define DEFINITIONS_H
 
 #include <macros.h>
 #include <stdio.h>
@@ -101,6 +101,6 @@ func net_transf;              /* Función de transferencia de las redes. */
 double alpharet;              /* Variable de ponderación en la modificación de pesos de
 				 la retropropagación. */
 
-#include <funciones.h>
+#include <functions.h>
 
-#endif /*DEFINICIONES_H*/
+#endif /* DEFINITIONS_H */
