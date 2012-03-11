@@ -18,7 +18,7 @@
 
 #include <string.h>
 #include <errno.h>
-#include <definiciones.h>
+#include <definitions.h>
 
 /******************************************************************************
  File: error.c

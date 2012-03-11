@@ -16,7 +16,7 @@
  coconet. If not, see <http://www.gnu.org/licenses/>.
 ******************************************************************************/
 
-#include <definiciones.h>
+#include <definitions.h>
 
 /******************************************************************************
  File: mutacionEstructural.c
