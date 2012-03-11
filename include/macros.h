@@ -20,8 +20,8 @@
 #define MACROS_H
 
 #define subabs(x,y) (x-y) > 0 ? (x - y) : (y - x)
-#define aleatorio() (double)((double)random() / (double)RAND_MAX)
-#define saleatorio() (random() % 2) == 1 ? aleatorio() : -aleatorio()
+#define doubleRandom() (double)((double)random() / (double)RAND_MAX)
+#define doubleRandomSigned() (random() % 2) == 1 ? doubleRandom() : -doubleRandom()
 
 /*macros de errores*/
 #define	RES_MEM	0

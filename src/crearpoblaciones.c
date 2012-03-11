@@ -148,6 +148,7 @@ void liberarRed(red *network)
  Return Value: None
  Calling Functions:
    error(): Function to show an error message depending on an error number.
+   doubleRandom(): Returns a random float of double precision.
  *****************************************************************************/
 
 void crearNodulos()
@@ -209,7 +210,7 @@ void crearNodulos()
 			for(k = 0; k < max_nodos; k++) {
 				if(random() % 2 == 1 && k < pnodulos.nodulos[i]->n_nodos) {
 					pnodulos.nodulos[i]->conexiones_entrada[j][k] = 1;
-					pnodulos.nodulos[i]->pesos_entrada[j][k] = aleatorio() / 2;
+					pnodulos.nodulos[i]->pesos_entrada[j][k] = doubleRandom() / 2;
 				} else {
 					pnodulos.nodulos[i]->conexiones_entrada[j][k] = 0;
 					pnodulos.nodulos[i]->pesos_entrada[j][k] = 0.0;
@@ -228,7 +229,7 @@ void crearNodulos()
 			for(k = 0; k < predes.n_nodos_salida; k++) {
 				if(random() % 2 == 1 && j < pnodulos.nodulos[i]->n_nodos) {
 					pnodulos.nodulos[i]->conexiones_salida[j][k] = 1;
-					pnodulos.nodulos[i]->pesos_salida[j][k] = aleatorio() / 2;
+					pnodulos.nodulos[i]->pesos_salida[j][k] = doubleRandom() / 2;
 				} else {
 					pnodulos.nodulos[i]->conexiones_salida[j][k] = 0;
 					pnodulos.nodulos[i]->pesos_salida[j][k] = 0.0;

@@ -72,7 +72,8 @@ double HyperbolicTangent(double x)
    v2: Float. Randon value to generate the output value.
    gasdev: Float. Random value generated.
  Return Value: Random value generated.
- Calling Functions: None
+ Calling Functions:
+   doubleRandom(): Returns a random float of double precision.
 *******************************************************************************/
 
 double Normal(double media, double sigma)
@@ -83,8 +84,8 @@ double Normal(double media, double sigma)
 
 	if(gliset == 0) {
 		do {
-			v1 = 2 * aleatorio() -1;
-			v2 = 2 * aleatorio() - 1;
+			v1 = 2 * doubleRandom() -1;
+			v2 = 2 * doubleRandom() - 1;
 			r = v 1 * v1 + v2 * v2;
 		} while(r >= 1);
 

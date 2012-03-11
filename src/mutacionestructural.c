@@ -145,6 +145,7 @@ void copiarDescendencia()
    borrarConexion(): Delete a connection from the nodule.
    medirCambioNodulo(): Calculate the nodules aptitude variation after the
                         mutation.
+   doubleRandom(): Returns a random float of double precision.
 ******************************************************************************/
 
 void mutarNodulos(int nodule)
@@ -153,8 +154,8 @@ void mutarNodulos(int nodule)
 
 	/* We made the estructural mutation. */
 	/* Deletion of nodes. */
-	num = (int)(delta_min + aleatorio() * (1 - pnodulos.nodulos[nodule]->aptitud) *
-				(delta_min - delta_max));
+	num = (int)(delta_min + doubleRandom() * (1 - pnodulos.nodulos[nodule]->aptitud)
+				* (delta_min - delta_max));
 	if(num < 0)
 		num = 0;
 	else if(pnodulos.nodulos[numNodulo]->n_nodos < num)
@@ -163,8 +164,8 @@ void mutarNodulos(int nodule)
 		borrarNodo(nodule, num);
 
 	/* Add nodes. */
-	num = (int)(delta_min + aleatorio() * (1 - pnodulos.nodulos[nodule]->aptitud) *
-				(delta_min - delta_max));
+	num = (int)(delta_min + doubleRandom() * (1 - pnodulos.nodulos[nodule]->aptitud)
+				* (delta_min - delta_max));
 	if(num < 0)
 		num = 0;
 	else if((pnodulos.nodulos[numNodulo]->n_nodos + num) > max_nodos)
@@ -173,8 +174,8 @@ void mutarNodulos(int nodule)
 		anadirNodo(nodule, num); /* We add a new node,*/
 
 	/* Delete connections. */
-	num = (int)(delta_min + aleatorio() * (1 - pnodulos.nodulos[nodule]->aptitud) *
-				(delta_min - delta_max));
+	num = (int)(delta_min + doubleRandom() * (1 - pnodulos.nodulos[nodule]->aptitud)
+				* (delta_min - delta_max));
 	if(num < 0)
 		num = 0;
 
@@ -184,8 +185,8 @@ void mutarNodulos(int nodule)
 	}
 
 	/* Add connections. */
-	num = (int)(delta_min + aleatorio() * (1 - pnodulos.nodulos[nodule]->aptitud) *
-				(delta_min - delta_max));
+	num = (int)(delta_min + doubleRandom() * (1 - pnodulos.nodulos[nodule]->aptitud)
+				* (delta_min - delta_max));
 	if(num < 0)
 		num = 0;
 
@@ -217,6 +218,7 @@ void mutarNodulos(int nodule)
  Return Value: None
  Calling Functions
    error(): Function to show an error message depending on an error number.
+   doubleRandom(): Returns a random float of double precision.
 ******************************************************************************/
 
 void anadirConexion(int nodule)
@@ -246,7 +248,7 @@ void anadirConexion(int nodule)
 			pos = random() % num;
 			pnodulos.nodulos[nodule]->conexiones_entrada[origin[pos]][destination[pos]] = 1;
 			pnodulos.nodulos[nodule]->pesos_entrada[origin[pos]][destination[pos]] =
-				aleatorio() / 2;
+				doubleRandom() / 2;
 			free(origin);
 			free(destination);
 		} /* end if */
@@ -268,7 +270,7 @@ void anadirConexion(int nodule)
 			pos = random() % num;
 			pnodulos.nodulos[nodule]->conexiones_salida[origin[pos]][destination[pos]] = 1;
 			pnodulos.nodulos[nodule]->pesos_salida[origin[pos]][destination[pos]] =
-				aleatorio() / 2;
+				doubleRandom() / 2;
 			free(origin);
 			free(destination);
 		} /* end if */

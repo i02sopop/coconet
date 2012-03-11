@@ -329,6 +329,7 @@ void cambioPesos(double *initialError, double **weights, double *out, double **F
  Calling functions:
    pasoAleatorio(): Make a random step in the connection weights.
    medirCambioNodulo(): Measure the aptitude change at the nodule.
+   doubleRandom(): Returns a random float of double precision.
 ******************************************************************************/
 
 void enfriamientoSimulado(int nodNumber)
@@ -372,7 +373,7 @@ void enfriamientoSimulado(int nodNumber)
 
 		/* If the aptitude is worst we reject the change. */
 		if((oldAptitude > pnodulos.nodulos[nodNumber]->aptitud) &&
-		   aleatorio() < (oldAptitude - pnodulos.nodulos[nodNumber]->aptitud) * T) {
+		   doubleRandom() < (oldAptitude - pnodulos.nodulos[nodNumber]->aptitud) * T) {
 			/* We restore the old weights. */
 			k = 0;
 
