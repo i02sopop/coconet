@@ -56,7 +56,7 @@ int main(int argc, char **argv)
 
 	/* Checking the number of arguments. */
 	if(argc < 4 || (argc > 4 && (argc != 6 || strcmp(argv[4], "-o") != 0)))
-		error(COMANDO);
+		error(COMMAND);
 
 	/* We load the config and training files. */
 	cargarFichero(argv + 1, argv + 2);

@@ -19,87 +19,79 @@
 #ifndef DEFINITIONS_H
 #define DEFINITIONS_H
 
-#include <macros.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <macros.h>
 
-/*Parámetros de las funciones de transferencia*/
-typedef struct{
+/* Parameters for the transfer function. */
+typedef struct {
     double logistic_a;
     double logistic_b;
     double htan_a;
     double htan_b;
     double epsilon;
-}transf_param;
+} transf_param;
 
-typedef struct{
-	int id; /*Identificador del nódulo*/
-	int n_nodos; /*número de nodos del nódulo*/
-	double aptitud; /*última aptitud del nódulo*/
-	int **conexiones_entrada; /*conexiones entre los nodos de entrada y los ocultos*/
-	int **conexiones_salida; /*Conexiones entre los nodos ocultos y los de salida*/
-	double **pesos_entrada;/*pesos de las conexiones de entrada*/
-	double **pesos_salida;/*pesos de las conexiones de salida*/
-	func *transf; /*función de transferencia de cada nodo*/
-	double **salidas_parciales; /*Salidas parciales del nodulo*/
-}nodulo;
+typedef struct {
+	int id; /* Id of the nodule. */
+	int n_nodos; /* Number of nodes of the nodule. */
+	double aptitud; /* Nodule aptitude. */
+	int **conexiones_entrada; /* Connections between input and hidden nodes. */
+	int **conexiones_salida; /* Connections between hidden and output nodes. */
+	double **pesos_entrada; /* Weights of the input connections. */
+	double **pesos_salida; /* Weights of the output connections. */
+	func *transf; /* Transfer function of each node. */
+	double **salidas_parciales; /* Partial outputs of the nodule. */
+} nodulo;
 
-typedef struct{
-	nodulo **nodulos; /*nódulos que tiene la red*/
-	double aptitud;/*aptitud de la red*/
-	double *valores_salida;/*valores de salida de los nodos de salida*/
-}red;
+typedef struct {
+	nodulo **nodulos; /* Nodules of the network. */
+	double aptitud; /* Network aptitude. */
+	double *valores_salida; /* Output values of the output nodes. */
+} red;
 
-typedef struct{
-	int n_redes;/*Número de redes de la población*/
-	int n_nodos_entrada; /*Número de nodos de entrada de cada red*/
-	int n_nodos_salida;/*Número de nodos de salida de cada red*/
-	red **redes;/*redes de la población*/
-}pobl_redes;
+typedef struct {
+	int n_redes; /* Number of tetworks at the population. */
+	int n_nodos_entrada; /* Number of input nodes of each network. */
+	int n_nodos_salida; /* Number of output networks of each network. */
+	red **redes; /* Networks of the population. */
+} pobl_redes;
 
-typedef struct{
-	int n_subpobl;/*número de subpoblaciones*/
-	int n_nodulos;/*número total de nódulos en la población*/
-	nodulo **nodulos;/*nódulos de la población de nódulos*/
+typedef struct {
+	int n_subpobl; /* Number of subpopulations. */
+	int n_nodulos; /* Total number of nodules at the population. */
+	nodulo **nodulos; /* Nodules of the population. */
 }pobl_nodulos;
 
-/*Ponderación para la aptitud de los nodulos*/
-typedef struct{
+/* Ponderation for the nodule population. */
+typedef struct {
 	double sust;
 	double dif;
 	double best;
-	}ponderacion;
+} ponderacion;
 
-pobl_redes predes;            /* Población de redes. */
-pobl_nodulos pnodulos;        /* Población de nódulos. */
-int max_nodos;	              /* Número máximo de nodos en un nódulo. */
-int num_nodulos;              /* Número de nódulos en cada subpoblación. */
-int max_redes;                /* Número máximo de redes en la pobación. */
-transf_param ptransferencia;  /* Parámetros de las funciones de transferencia. */
-int n_entrenamiento;          /* Número de entradas en el fichero de entrenamiento, */
-int n_generalizacion;         /* Número de entradas en el fichero de generalización. */
-double **entrada;             /* Datos de entrada. */
-double **salida;              /* Datos de salida. */
-ponderacion pond;             /* Valores de ponderación de los parámetros de la aptitud
-				 de los nódulos. */
-int redsel;                   /* Numero de redes seleccionadas para algunas 
-				 operaciones. */
-double ToSA;                  /* Temperatura inicial para el enfriamiento simulado. */
-double alphasa;               /* Factor de modificacion en la mutacion de pesos con el
-				 enfriamiento simulado. */
-int iteraciones_sa;           /* Número de iteraciones del algoritmo enfriamiento
-				 simulado. */
-int nodsel;                   /* Número de nodulos seleccionados para algunas
-				 operaciones. */
-int delta_min;                /* Valor minimo de la variable delta de la mutacion
-				 estructural*/
-int delta_max;                /* Valor maximo de la variable delta de la mutacion
-				 estructural. */
-nodulo **descendencia;        /* Descendencia de la ultima subpoblacion de nodulos. */
-double evolim;                /* Límite de modificación para los criterios de paro. */
-func net_transf;              /* Función de transferencia de las redes. */
-double alpharet;              /* Variable de ponderación en la modificación de pesos de
-				 la retropropagación. */
+pobl_redes predes;            /* Network population. */
+pobl_nodulos pnodulos;        /* Nodule population.. */
+int max_nodos;	              /* Max number of nodes in a nodule. */
+int num_nodulos;              /* Max number of nodules in a subpopulation. */
+int max_redes;                /* Max number of networks in the population. */
+transf_param ptransferencia;  /* Parameters of the transfer functions. */
+int n_entrenamiento;          /* Number of entries at the training file, */
+int n_generalizacion;         /* Number of entries at the generalization file. */
+double **entrada;             /* Input data. */
+double **salida;              /* Output data. */
+ponderacion pond;             /* Parameters ponderation values for the nodule aptitude. */
+int redsel;                   /* Number of networks selected to perform some operations. */
+double ToSA;                  /* Initial temperatire for the simulated annealing. */
+double alphasa;               /* Change factor in the weight mutation for the simulated annealing. */
+int iteraciones_sa;           /* Number of iterations of the simulated annealing. */
+int nodsel;                   /* Number of nodes selected to perform some operations. */
+int delta_min;                /* Min value of delta for the structural mutation. */
+int delta_max;                /* Max value of delta for the structural mutation. */
+nodulo **descendencia;        /* Descendant of the last nodules subpopulation. */
+double evolim;                /* Modification limit for the stop criteria. */
+func net_transf;              /* Transfer function for the networks. */
+double alpharet;              /* Ponderation in the changing of weights during the backpropagation. */
 
 #include <functions.h>
 

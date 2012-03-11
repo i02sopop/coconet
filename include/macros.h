@@ -19,15 +19,15 @@
 #ifndef MACROS_H
 #define MACROS_H
 
-#define subabs(x,y) (x-y)>0?x-y:y-x
-#define aleatorio() (double)((double)random()/(double)RAND_MAX)
-#define saleatorio() (random()%2)==1?aleatorio():-aleatorio()
+#define subabs(x,y) (x-y) > 0 ? (x - y) : (y - x)
+#define aleatorio() (double)((double)random() / (double)RAND_MAX)
+#define saleatorio() (random() % 2) == 1 ? aleatorio() : -aleatorio()
 
 /*macros de errores*/
 #define	RES_MEM	0
 #define	IO 1
-#define	PARAMETROS 2
-#define COMANDO 3
+#define	PARAMETERS 2
+#define COMMAND 3
 
 #define MAX_ESC 1
 #define MIN_ESC -1

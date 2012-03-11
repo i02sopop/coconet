@@ -44,12 +44,12 @@ void error(int id)
 	case IO:
 		fprintf(stderr, "Input/output error. %s\n", strerror(errno));
 		break;
-	case PARAMETROS:
+	case PARAMETERS:
 		fprintf(stderr, "Error inserting the parameters into a function. "
 				"Either the parameters format is not rigth or is out of range."
 				"\n");
 		break;
-	case COMANDO:
+	case COMMAND:
 		fprintf(stderr, "Error in the calling command. the format is:\n\t"
 				"coconet conf_file training_file generalization_file "
 				"[-o output_file]\n where conf_file is the configuration "
