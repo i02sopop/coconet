@@ -125,7 +125,7 @@ void escalarDatosEntrada(int iterations)
 	double max, min, a, b;
 
 	/* We scale the input data. */
-	for(i = 0; i < predes.n_nodos_entrada; i++) {
+	for(i = 0; i < netPopulation.n_nodos_entrada; i++) {
 		/* We obtain the max and min values of the column. */
 		min = max = entrada[0][i];
 		for(j = 0; j < iterations; j++) {
@@ -176,7 +176,7 @@ void escalarDataSalida(double **data, int iterations, double lbound, double ubou
 	double max, min, a, b;
 
 	/* We scale the output. */
-	for(i = 0; i < predes.n_nodos_salida; i++) {
+	for(i = 0; i < netPopulation.n_nodos_salida; i++) {
 		/* We calculate the min and max values of the column. */
 		min = max = data[0][i];
 		for(j = 0; j < iterations; j++) {

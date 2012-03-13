@@ -42,10 +42,10 @@ void liberarNodulo(nodulo *nodule)
   for(i = 0; i < max_nodos; i++) {
     free(nodule->conexiones_salida[i]);
     free(nodule->pesos_salida[i]);
-  } for(i = 0; i < predes.n_nodos_entrada; i++) {
+  } for(i = 0; i < netPopulation.n_nodos_entrada; i++) {
     free(nodule->conexiones_entrada[i]);
     free(nodule->pesos_entrada[i]);
-  } for(i = 0; i < predes.n_nodos_salida; i++)
+  } for(i = 0; i < netPopulation.n_nodos_salida; i++)
     nodule->transf = NULL;
   for(i = 0; i < n_entrenamiento; i++)
     free(nodule->salidas_parciales[i]);
@@ -77,7 +77,7 @@ void ajustarMatrices()
   
   /* We adjust the matriz size of the last nodule subpopulation. */
   for(i = num_nodulos * (pnodulos.n_subpobl - 1); i < pnodulos.n_nodulos; i++) {
-    for(j = 0; j < predes.n_nodos_entrada; j++) {
+    for(j = 0; j < netPopulation.n_nodos_entrada; j++) {
       pnodulos.nodulos[i]->conexiones_entrada[j] = (int *)realloc(pnodulos.nodulos[i]->conexiones_entrada[j], pnodulos.nodulos[i]->n_nodos * sizeof(int));
       pnodulos.nodulos[i]->pesos_entrada[j] = (double *)realloc(pnodulos.nodulos[i]->pesos_entrada[j], pnodulos.nodulos[i]->n_nodos * sizeof(double));
     }

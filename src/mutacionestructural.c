@@ -66,16 +66,16 @@ void copiarDescendencia()
 
 		for(j = 0; j < max_nodos; j++) {
 			descendencia[i]->conexiones_salida[j] =
-				(int *)malloc(predes.n_nodos_salida * sizeof(int));
+				(int *)malloc(netPopulation.n_nodos_salida * sizeof(int));
 			descendencia[i]->pesos_salida[j] =
-				(double *)malloc(predes.n_nodos_salida * sizeof(double));
+				(double *)malloc(netPopulation.n_nodos_salida * sizeof(double));
 			if(descendencia[i]->conexiones_salida[j] == NULL ||
 				descendencia[i]->pesos_salida[j] == NULL)
 				error(RES_MEM);
 
 			descendencia[i]->transf[j] = pnodulos.nodulos[noduleOrig]->transf[j];
 
-			for(k = 0; k < predes.n_nodos_salida; k++) {
+			for(k = 0; k < netPopulation.n_nodos_salida; k++) {
 				descendencia[i]->conexiones_salida[j][k] =
 					pnodulos.nodulos[noduleOrig]->conexiones_salida[j][k];
 				descendencia[i]->pesos_salida[j][k] =
@@ -84,14 +84,14 @@ void copiarDescendencia()
 		} /* end for */
 
 		descendencia[i]->pesos_entrada =
-			(double **)malloc(predes.n_nodos_entrada * sizeof(double));
+			(double **)malloc(netPopulation.n_nodos_entrada * sizeof(double));
 		descendencia[i]->conexiones_entrada =
-			(int **)malloc(predes.n_nodos_entrada * sizeof(int));
+			(int **)malloc(netPopulation.n_nodos_entrada * sizeof(int));
 		if(descendencia[i]->pesos_entrada == NULL ||
 			descendencia[i]->conexiones_entrada == NULL)
 			error(RES_MEM);
 
-		for(j = 0; j < predes.n_nodos_entrada; j++) {
+		for(j = 0; j < netPopulation.n_nodos_entrada; j++) {
 			descendencia[i]->conexiones_entrada[j] =
 				(int *)malloc(max_nodos * sizeof(int));
 			descendencia[i]->pesos_entrada[j] =
@@ -115,11 +115,11 @@ void copiarDescendencia()
 
 		for(j = 0; j < n_entrenamiento; j++) {
 			descendencia[i]->salidas_parciales[j] =
-				(double *)malloc(predes.n_nodos_salida * sizeof(double));
+				(double *)malloc(netPopulation.n_nodos_salida * sizeof(double));
 			if(descendencia[i]->salidas_parciales[j] == NULL)
 				error(RES_MEM);
 
-			for(k = 0; k < predes.n_nodos_salida; k++)
+			for(k = 0; k < netPopulation.n_nodos_salida; k++)
 				descendencia[i]->salidas_parciales[j][k] =
 					pnodulos.nodulos[noduleOrig]->salidas_parciales[j][k];
 		} /* end for */
@@ -180,7 +180,7 @@ void mutarNodulos(int nodule)
 		num = 0;
 
 	for(i = 0; i <num && pnodulos.nodulos[nodule]->n_nodos > 0; i++) {
-		j = random() % (predes.n_nodos_entrada + predes.n_nodos_salida);
+		j = random() % (netPopulation.n_nodos_entrada + netPopulation.n_nodos_salida);
 		borrarConexion(nodule, j);
 	}
 
@@ -234,7 +234,7 @@ void anadirConexion(int nodule)
 
 	if(sel == 0) {
 		/* We add an input connection. */
-		for(i = 0; i < predes.n_nodos_entrada; i++)
+		for(i = 0; i < netPopulation.n_nodos_entrada; i++)
 			for(j = 0; j < pnodulos.nodulos[nodule]->n_nodos; j++)
 				if(pnodulos.nodulos[nodule]->conexiones_entrada[i][j] == 0) {
 					origin = (int *)realloc(origin, (num + 1) * sizeof(int));
@@ -257,7 +257,7 @@ void anadirConexion(int nodule)
 	if((sel == 1 && num == 0) || num == 0) {
 		/* We add an output connection. */
 		for(i = 0; i < pnodulos.nodulos[nodule]->n_nodos; i++)
-			for(j = 0; j < predes.n_nodos_salida; j++)
+			for(j = 0; j < netPopulation.n_nodos_salida; j++)
 				if(pnodulos.nodulos[nodule]->conexiones_salida[i][j] == 0) {
 					origin = (int *)realloc(origin, (num + 1) * sizeof(int));
 					destination = (int *)realloc(destination, (num + 1) * sizeof(int));
@@ -333,7 +333,7 @@ void borrarConexion(int nodule, int node)
 {
 	int i, sel;
 
-	if(node < predes.n_nodos_entrada){
+	if(node < netPopulation.n_nodos_entrada){
 		/* We delete an input connection. */
 		for(i = 0; i < pnodulos.nodulos[nodule]->n_nodos &&
 				pnodulos.nodulos[nodule]->conexiones_entrada[node][i] != 1; i++);
@@ -346,7 +346,7 @@ void borrarConexion(int nodule, int node)
 		} /* end if */
 	} else {
 		/* We delete an output connection. */
-		node -= predes.n_nodos_entrada;
+		node -= netPopulation.n_nodos_entrada;
 		for(i = 0; i < pnodulos.nodulos[nodule]->n_nodos &&
 				pnodulos.nodulos[nodule]->conexiones_salida[i][node] != 1; i++);
 		if(i < pnodulos.nodulos[nodule]->n_nodos) {
@@ -388,7 +388,7 @@ void borrarNodo(int nodule, int nodes)
 		for(i = node + 1; i < pnodulos.nodulos[nodule]->n_nodos; i++) {
 			pnodulos.nodulos[nodule]->transf[i - 1] =
 				pnodulos.nodulos[nodule]->transf[i];
-			for(j = 0; j < predes.n_nodos_salida; j++) {
+			for(j = 0; j < netPopulation.n_nodos_salida; j++) {
 				pnodulos.nodulos[nodule]->conexiones_salida[i - 1][j] =
 					pnodulos.nodulos[nodule]->conexiones_salida[i][j];
 				pnodulos.nodulos[nodule]->pesos_salida[i - 1][j] =
@@ -398,12 +398,12 @@ void borrarNodo(int nodule, int nodes)
 			} /* end for */
 		} /* end for */
 
-		for(j = 0; j < predes.n_nodos_salida; j++) {
+		for(j = 0; j < netPopulation.n_nodos_salida; j++) {
 			pnodulos.nodulos[nodule]->conexiones_salida[i - 1][j] = 0;
 			pnodulos.nodulos[nodule]->pesos_salida[i - 1][j] = 0;
 		} /* end for */
 
-		for(i = 0; i < predes.n_nodos_entrada; i++) {
+		for(i = 0; i < netPopulation.n_nodos_entrada; i++) {
 			for(j = node + 1; j < pnodulos.nodulos[nodule]->n_nodos; j++) {
 				pnodulos.nodulos[nodule]->conexiones_entrada[i][j - 1] =
 					pnodulos.nodulos[nodule]->conexiones_entrada[i][j];
@@ -472,10 +472,10 @@ void sustituirNodulos()
 	  nodules of the original subpopulation. 
 	*/
 	for(i = num_nodulos; i > nodsel; i--){
-		for(j = 0; j < predes.n_redes; j++)
-			if(predes.redes[j]->nodulos[pnodulos.n_subpobl - 1] ==
+		for(j = 0; j < netPopulation.n_redes; j++)
+			if(netPopulation.redes[j]->nodulos[pnodulos.n_subpobl - 1] ==
 			   pnodulos.nodulos[id[i - 1]])
-				predes.redes[j]->nodulos[pnodulos.n_subpobl - 1] =
+				netPopulation.redes[j]->nodulos[pnodulos.n_subpobl - 1] =
 					descendencia[i - nodsel - 1];
 		liberarNodulo(pnodulos.nodulos[id[i - 1]]);
 		free(pnodulos.nodulos[id[i - 1]]);

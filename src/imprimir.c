@@ -46,7 +46,7 @@ void imprimirNodulo(nodulo *imp, int iter)
 	*/
 	fOutput = fopen("nodules.txt", "a");
 	fprintf(fOutput, "id: %d\nNumber of nodes: %d\naptitude: %lf\n\nInput connections matrix:", imp->id, imp->n_nodos, imp->aptitud);
-	for(i = 0; i < predes.n_nodos_entrada; i++) {
+	for(i = 0; i < netPopulation.n_nodos_entrada; i++) {
 		fprintf(fOutput, "\n");
 		for(j = 0; j < imp->n_nodos; j++)
 			fprintf(fOutput, "%d ", imp->conexiones_entrada[i][j]);
@@ -55,12 +55,12 @@ void imprimirNodulo(nodulo *imp, int iter)
 	fprintf(fOutput, "\nOutput connections matrix:");
 	for(i=0;i<imp->n_nodos;i++) {
 		fprintf(fOutput, "\n");
-		for(j = 0; j < predes.n_nodos_salida; j++)
+		for(j = 0; j < netPopulation.n_nodos_salida; j++)
 			fprintf(fOutput, "%d ", imp->conexiones_salida[i][j]);
 	}
 
 	fprintf(fOutput, "\nInput weights matrix:");
-	for(i = 0; i < predes.n_nodos_entrada; i++) {
+	for(i = 0; i < netPopulation.n_nodos_entrada; i++) {
 		fprintf(fOutput, "\n");
 		for(j = 0; j < imp->n_nodos; j++)
 			fprintf(fOutput, "%lf ", imp->pesos_entrada[i][j]);
@@ -69,13 +69,13 @@ void imprimirNodulo(nodulo *imp, int iter)
 	fprintf(fOutput, "\nOutput weights matrix:");
 	for(i = 0; i < imp->n_nodos; i++) {
 		fprintf(fOutput, "\n");
-		for(j = 0; j < predes.n_nodos_salida; j++)
+		for(j = 0; j < netPopulation.n_nodos_salida; j++)
 			fprintf(fOutput, "%lf ", imp->pesos_salida[i][j]);
 	}
 
 	fprintf(fOutput, "\nPartial outputs\n");
 	for(i = 0; i < iter; i++)
-		for(j = 0; j < predes.n_nodos_salida; j++)
+		for(j = 0; j < netPopulation.n_nodos_salida; j++)
 			fprintf(fOutput, "%lf ", imp->salidas_parciales[i][j]);
 	fprintf(fOutput, "\n\n");
 
@@ -115,7 +115,7 @@ void imprimirRed(red *network)
 
 	fprintf(fOutput, "\naptitude: %lf\n", network->aptitud);
 	fprintf(fOutput, "Output values:\n");
-	for(i = 0; i < predes.n_nodos_salida; i++)
+	for(i = 0; i < netPopulation.n_nodos_salida; i++)
 		fprintf(fOutput, "%lf ", network->valores_salida[i]);
 	fprintf(fOutput, "\n");
 

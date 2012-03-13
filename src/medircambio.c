@@ -61,15 +61,15 @@ bool medirCambio(double *aptitudRedes, int iteracion)
 				generarSalidaNodulo(entrada[i], j, i, NULL);
 
 			/* We measure the network aptitude. */
-			for(j = 0; j < predes.n_redes; j++) {
+			for(j = 0; j < netPopulation.n_redes; j++) {
 				generarSalidaRed(j, i);
 				medirAptitudRed(salida[i], j);
 			}
 		}
 
 		/* We normalize the networks aptitude. */
-		for(i = 0; i < predes.n_redes; i++)
-			predes.redes[i]->aptitud /= n_entrenamiento;
+		for(i = 0; i < netPopulation.n_redes; i++)
+			netPopulation.redes[i]->aptitud /= n_entrenamiento;
 
 		/* We measure the nodules aptitude. */
 		for(i = 0; i < pnodulos.n_nodulos; i++)
@@ -80,9 +80,9 @@ bool medirCambio(double *aptitudRedes, int iteracion)
 		aptitudTemp = 0.0;
 
 		/* We measure the average aptitude of all the networks. */
-		for(i = 0; i < predes.n_redes; i++)
-			aptitudTemp += predes.redes[i]->aptitud;
-		aptitudTemp /= predes.n_redes;
+		for(i = 0; i < netPopulation.n_redes; i++)
+			aptitudTemp += netPopulation.redes[i]->aptitud;
+		aptitudTemp /= netPopulation.n_redes;
 	}
 
 	/* If it's the first iteration or the difference between the previous ant the
@@ -123,10 +123,10 @@ void medirCambioNodulo(int nodule)
 {
 	int i, j;
 
-	for(i = 0; i < predes.n_redes; i++) {
+	for(i = 0; i < netPopulation.n_redes; i++) {
 		/* We train the networks of the modified nodule. */
-		if(predes.redes[i]->nodulos[pnodulos.n_subpobl - 1] == pnodulos.nodulos[nodule]) {
-			predes.redes[i]->aptitud = 0;
+		if(netPopulation.redes[i]->nodulos[pnodulos.n_subpobl - 1] == pnodulos.nodulos[nodule]) {
+			netPopulation.redes[i]->aptitud = 0;
 			/* We calculate the networks aptitude. */
 			for(j = 0; j < n_entrenamiento; j++) {
 				generarSalidaNodulo(entrada[j], nodule, j, NULL);
@@ -135,7 +135,7 @@ void medirCambioNodulo(int nodule)
 			}
 
 			/* We normalize the networks aptitude. */
-			predes.redes[i]->aptitud /= n_entrenamiento;
+			netPopulation.redes[i]->aptitud /= n_entrenamiento;
 		}
 	}
 

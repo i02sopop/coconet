@@ -70,7 +70,7 @@ typedef struct {
 	double best;
 } ponderacion;
 
-pobl_redes predes;            /* Network population. */
+pobl_redes netPopulation;            /* Network population. */
 pobl_nodulos pnodulos;        /* Nodule population.. */
 int max_nodos;	              /* Max number of nodes in a nodule. */
 int num_nodulos;              /* Max number of nodules in a subpopulation. */

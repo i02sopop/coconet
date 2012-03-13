@@ -71,12 +71,12 @@ void ordenarRedes()
 	red *aux;
 
 	/* We order the networks from higher to lower aptitude. */
-	for(i = 0; i < predes.n_redes; i++) {
-		for(j = i; j < predes.n_redes; j++) {
-			if(predes.redes[i]->aptitud < predes.redes[j]->aptitud) {
-				aux = predes.redes[i];
-				predes.redes[i] = predes.redes[j];
-				predes.redes[j] = aux;
+	for(i = 0; i < netPopulation.n_redes; i++) {
+		for(j = i; j < netPopulation.n_redes; j++) {
+			if(netPopulation.redes[i]->aptitud < netPopulation.redes[j]->aptitud) {
+				aux = netPopulation.redes[i];
+				netPopulation.redes[i] = netPopulation.redes[j];
+				netPopulation.redes[j] = aux;
 			} /* end if */
 		} /* end for */
 	} /* end for */

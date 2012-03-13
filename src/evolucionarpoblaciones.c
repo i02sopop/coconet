@@ -56,8 +56,8 @@ void evolucionarPoblaciones()
 
 	/* Local variables initialization. */
 	networkAptitude = 0.0;
-	for(i = 0; i < predes.n_redes; i++)
-		predes.redes[i]->aptitud=0;
+	for(i = 0; i < netPopulation.n_redes; i++)
+		netPopulation.redes[i]->aptitud = 0;
 
 	/* We evolve the networks until its average aptitude doesn't get enhaced
 	   enough. */
@@ -80,15 +80,15 @@ void evolucionarPoblaciones()
 					generarSalidaNodulo(entrada[j], k, j, NULL);
 
 				/* We measure the networks aptitude. */
-				for(k = 0; k < predes.n_redes; k++) {
+				for(k = 0; k < netPopulation.n_redes; k++) {
 					generarSalidaRed(k, j);
 					medirAptitudRed(salida[j], k);
 				}
 			}
 
 			/* We normalize the network aptitude. */
-			for(j = 0; j < predes.n_redes; j++)
-				predes.redes[j]->aptitud /= n_entrenamiento;
+			for(j = 0; j < netPopulation.n_redes; j++)
+				netPopulation.redes[j]->aptitud /= n_entrenamiento;
 
 			/* We measure and normalize the nodules aptitude. */
 			for(j = 0; j < pnodulos.n_nodulos; j++)
@@ -168,14 +168,14 @@ void retropropagacion(int nodule, int numPatterns, int iter)
 	func *transf;
 
 	/* We initializate the local variables. */
-	numNodes = pnodulos.nodulos[nodule]->n_nodos + predes.n_nodos_entrada +
-		predes.n_nodos_salida;
+	numNodes = pnodulos.nodulos[nodule]->n_nodos + netPopulation.n_nodos_entrada +
+		netPopulation.n_nodos_salida;
 
-	transf = (func *)malloc((predes.n_nodos_salida + pnodulos.nodulos[nodule]->n_nodos) * sizeof(func));
+	transf = (func *)malloc((netPopulation.n_nodos_salida + pnodulos.nodulos[nodule]->n_nodos) * sizeof(func));
 	out = (double *)malloc(numNodes * sizeof(double));
 	F_W = (double **)malloc(numNodes * sizeof(double));
 	weights = (double **)malloc(numNodes * sizeof(double));
-	initialError = (double *)malloc(predes.n_nodos_salida * sizeof(double));
+	initialError = (double *)malloc(netPopulation.n_nodos_salida * sizeof(double));
 
 	if(transf == NULL || out == NULL || F_W == NULL || weights == NULL ||
 	   initialError == NULL)
@@ -196,7 +196,7 @@ void retropropagacion(int nodule, int numPatterns, int iter)
 	for(i = 0; i < pnodulos.nodulos[nodule]->n_nodos; i++)
 		transf[i] = pnodulos.nodulos[nodule]->transf[i];
 
-	for(;i < pnodulos.nodulos[nodule]->n_nodos + predes.n_nodos_salida; i++)
+	for(;i < pnodulos.nodulos[nodule]->n_nodos + netPopulation.n_nodos_salida; i++)
 		transf[i] = net_transf;
 
 	/* Backpropagation. */
@@ -206,18 +206,18 @@ void retropropagacion(int nodule, int numPatterns, int iter)
 		generarSalidaNodulo(entrada[pattern], nodule, pattern, out);
 
 		/* We assign the weight to the weights matrix*/
-		for(j = 0; j < predes.n_nodos_salida; j++)
-			initialError[j] = out[j + predes.n_nodos_entrada + pnodulos.nodulos[nodule]->n_nodos] -
+		for(j = 0; j < netPopulation.n_nodos_salida; j++)
+			initialError[j] = out[j + netPopulation.n_nodos_entrada + pnodulos.nodulos[nodule]->n_nodos] -
 				salida[pattern][j];
 
 		for(i = 0; i < pnodulos.nodulos[nodule]->n_nodos; i++)
-			for(j = 0; j < predes.n_nodos_entrada; j++)
-				weights[i + predes.n_nodos_entrada][j] =
+			for(j = 0; j < netPopulation.n_nodos_entrada; j++)
+				weights[i + netPopulation.n_nodos_entrada][j] =
 					pnodulos.nodulos[nodule]->pesos_entrada[j][i];
 
-		for(i = 0; i < predes.n_nodos_salida; i++)
+		for(i = 0; i < netPopulation.n_nodos_salida; i++)
 			for(j = 0; j < pnodulos.nodulos[nodule]->n_nodos; j++)
-				weights[i + predes.n_nodos_entrada + pnodulos.nodulos[nodule]->n_nodos][j + predes.n_nodos_entrada] =
+				weights[i + netPopulation.n_nodos_entrada + pnodulos.nodulos[nodule]->n_nodos][j + netPopulation.n_nodos_entrada] =
 					pnodulos.nodulos[nodule]->pesos_salida[j][i];
 
 		/* Obtain the weight change. */
@@ -225,14 +225,14 @@ void retropropagacion(int nodule, int numPatterns, int iter)
 
 		/* We update the weigths. */
 		for(i = 0; i < pnodulos.nodulos[nodule]->n_nodos; i++)
-			for(j = 0; j < predes.n_nodos_entrada; j++)
+			for(j = 0; j < netPopulation.n_nodos_entrada; j++)
 				pnodulos.nodulos[nodule]->pesos_entrada[j][i] -= alpharet *
-					F_W[i + predes.n_nodos_entrada][j];
+					F_W[i + netPopulation.n_nodos_entrada][j];
 
-		for(i = 0; i < predes.n_nodos_salida; i++)
+		for(i = 0; i < netPopulation.n_nodos_salida; i++)
 			for(j = 0; j < pnodulos.nodulos[nodule]->n_nodos; j++)
 				pnodulos.nodulos[nodule]->pesos_salida[j][i] -= alpharet *
-					F_W[i + predes.n_nodos_entrada + pnodulos.nodulos[nodule]->n_nodos][j + predes.n_nodos_entrada];
+					F_W[i + netPopulation.n_nodos_entrada + pnodulos.nodulos[nodule]->n_nodos][j + netPopulation.n_nodos_entrada];
 	}
 
 	/* Free memory. */
@@ -280,27 +280,27 @@ void cambioPesos(double *initialError, double **weights, double *out, double **F
 	double *nodeError, *netError;
 
 	/* Variable initialization. */
-	numNodes = predes.n_nodos_entrada + nodes;
-	nodeError = (double *)malloc((numNodes + predes.n_nodos_salida) * sizeof(double));
-	netError = (double *)malloc((numNodes + predes.n_nodos_salida) * sizeof(double));
+	numNodes = netPopulation.n_nodos_entrada + nodes;
+	nodeError = (double *)malloc((numNodes + netPopulation.n_nodos_salida) * sizeof(double));
+	netError = (double *)malloc((numNodes + netPopulation.n_nodos_salida) * sizeof(double));
 	if(nodeError == NULL || netError == NULL)
 		error(RES_MEM);
 
 	for(i = 0; i < numNodes; i++)
 		nodeError[i] = 0.0;
 
-	for(i = 0; i < predes.n_nodos_salida; i++)
+	for(i = 0; i < netPopulation.n_nodos_salida; i++)
 		nodeError[numNodes + i] = initialError[i];
 
 	/* We get the updates. */
-	for(i = numNodes + predes.n_nodos_salida - 1; i >= predes.n_nodos_entrada; i--) {
-		for(j = i + 1; j < numNodes + predes.n_nodos_salida; j++)
+	for(i = numNodes + netPopulation.n_nodos_salida - 1; i >= netPopulation.n_nodos_entrada; i--) {
+		for(j = i + 1; j < numNodes + netPopulation.n_nodos_salida; j++)
 			nodeError[i] += weights[j][i] * netError[j];
 
-		if(transf[i - predes.n_nodos_entrada] == (func)&Logistic)
+		if(transf[i - netPopulation.n_nodos_entrada] == (func)&Logistic)
 			netError[i] = nodeError[i] * ptransferencia.logistic_b * out[i] *
 				(1.0 - out[i] / ptransferencia.logistic_a);
-		else if(transf[i - predes.n_nodos_entrada] == (func)&HyperbolicTangent)
+		else if(transf[i - netPopulation.n_nodos_entrada] == (func)&HyperbolicTangent)
 			netError[i] = nodeError[i] * (ptransferencia.htan_b / ptransferencia.htan_a) *
 				(ptransferencia.htan_a - out[i]) *
 				(ptransferencia.htan_a + out[i]);
@@ -348,7 +348,7 @@ void enfriamientoSimulado(int nodNumber)
 		k = 0;
 
 		/* Input weights. */
-		for(i = 0; i < predes.n_nodos_entrada; i++)
+		for(i = 0; i < netPopulation.n_nodos_entrada; i++)
 			for(j = 0; j < pnodulos.nodulos[nodNumber]->n_nodos; j++)
 				if(pnodulos.nodulos[nodNumber]->conexiones_entrada[i][j]) {
 					weigths = (double *)realloc(weigths, (k + 1) * sizeof(double));
@@ -358,7 +358,7 @@ void enfriamientoSimulado(int nodNumber)
 
 		/* Output weights. */
 		for(i = 0; i < pnodulos.nodulos[nodNumber]->n_nodos; i++)
-			for(j = 0; j < predes.n_nodos_salida; j++)
+			for(j = 0; j < netPopulation.n_nodos_salida; j++)
 				if(pnodulos.nodulos[nodNumber]->conexiones_salida[i][j]) {
 					weigths = (double *)realloc(weigths, (k + 1) * sizeof(double));
 					weigths[k] = pnodulos.nodulos[nodNumber]->pesos_salida[i][j];
@@ -378,7 +378,7 @@ void enfriamientoSimulado(int nodNumber)
 			k = 0;
 
 			/* Input weights. */
-			for(i = 0; i < predes.n_nodos_entrada; i++)
+			for(i = 0; i < netPopulation.n_nodos_entrada; i++)
 				for(j = 0; j < pnodulos.nodulos[nodNumber]->n_nodos; j++)
 					if(pnodulos.nodulos[nodNumber]->conexiones_entrada[i][j]) {
 						pnodulos.nodulos[nodNumber]->pesos_entrada[i][j] = weigths[k];
@@ -387,7 +387,7 @@ void enfriamientoSimulado(int nodNumber)
 
 			/* Output weights. */
 			for(i = 0; i < pnodulos.nodulos[nodNumber]->n_nodos; i++)
-				for(j = 0; j < predes.n_nodos_salida; j++)
+				for(j = 0; j < netPopulation.n_nodos_salida; j++)
 					if(pnodulos.nodulos[nodNumber]->conexiones_salida[i][j]) {
 						pnodulos.nodulos[nodNumber]->pesos_salida[i][j] = weigths[k];
 						k++;
@@ -425,7 +425,7 @@ void pasoAleatorio(int nodNumber)
 	int i, j;
 
 	/* Randon step in input connection weights. */
-	for(i = 0; i < predes.n_nodos_entrada; i++)
+	for(i = 0; i < netPopulation.n_nodos_entrada; i++)
 		for(j = 0; j < pnodulos.nodulos[nodNumber]->n_nodos; j++)
 			if(pnodulos.nodulos[nodNumber]->conexiones_entrada[i][j])
 				pnodulos.nodulos[nodNumber]->pesos_entrada[i][j] +=
@@ -433,7 +433,7 @@ void pasoAleatorio(int nodNumber)
 
 	/* Random step in output connection weights.  */
 	for(i = 0; i < pnodulos.nodulos[nodNumber]->n_nodos; i++)
-		for(j = 0; j < predes.n_nodos_salida; j++)
+		for(j = 0; j < netPopulation.n_nodos_salida; j++)
 			if(pnodulos.nodulos[nodNumber]->conexiones_salida[i][j] == 1)
 				pnodulos.nodulos[nodNumber]->pesos_salida[i][j] +=
 					Normal(0.0, 1.0);

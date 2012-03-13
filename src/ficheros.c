@@ -51,8 +51,8 @@ void cargarFichero(char *config, char *training)
 		error(IO);
 
 	if(fscanf(trainingFile, "$ %d\n", &n_entrenamiento) == EOF ||
-	   fscanf(trainingFile, "$ %d\n", &predes.n_nodos_entrada) == EOF ||
-	   fscanf(trainingFile,"$ %d\n",&predes.n_nodos_salida) == EOF)
+	   fscanf(trainingFile, "$ %d\n", &netPopulation.n_nodos_entrada) == EOF ||
+	   fscanf(trainingFile,"$ %d\n",&netPopulation.n_nodos_salida) == EOF)
 		error(IO);
 
 	/* Loading the training data. */
@@ -62,16 +62,16 @@ void cargarFichero(char *config, char *training)
 		error(RES_MEM);
 
 	for(i = 0; i < n_entrenamiento; i++) {
-		entrada[i] = (double *)malloc(predes.n_nodos_entrada * sizeof(double));
-		salida[i] = (double *)malloc(predes.n_nodos_salida * sizeof(double));
+		entrada[i] = (double *)malloc(netPopulation.n_nodos_entrada * sizeof(double));
+		salida[i] = (double *)malloc(netPopulation.n_nodos_salida * sizeof(double));
 		if(entrada[i] == NULL || salida[i] == NULL)
 			error(RES_MEM);
 
-		for(j = 0; j < predes.n_nodos_entrada; j++)
+		for(j = 0; j < netPopulation.n_nodos_entrada; j++)
 			if(fscanf(trainingFile, "%lf", &entrada[i][j]) == EOF)
 				error(IO);
 
-		for(j = 0; j < predes.n_nodos_salida; j++)
+		for(j = 0; j < netPopulation.n_nodos_salida; j++)
 			if(fscanf(trainingFile, "%lf", &salida[i][j]) == EOF)
 				error(IO);
 	}
@@ -156,8 +156,8 @@ void leerGeneralizacion(char *filename)
 
 	/* We load the generalization data. */
 	if(fscanf(file, "$ %d\n", &n_generalizacion) == EOF ||
-	   fscanf(file, "$ %d\n", &predes.n_nodos_entrada) == EOF ||
-	   fscanf(file, "$ %d\n", &predes.n_nodos_salida) == EOF)
+	   fscanf(file, "$ %d\n", &netPopulation.n_nodos_entrada) == EOF ||
+	   fscanf(file, "$ %d\n", &netPopulation.n_nodos_salida) == EOF)
 		error(IO);
 
 	for(i = 0; i < n_entrenamiento; i++) {
@@ -173,16 +173,16 @@ void leerGeneralizacion(char *filename)
 		error(RES_MEM);
 
 	for(i = 0; i < n_generalizacion; i++) {
-		entrada[i] = (double *)malloc(predes.n_nodos_entrada * sizeof(double));
-		salida[i] = (double *)malloc(predes.n_nodos_salida * sizeof(double));
+		entrada[i] = (double *)malloc(netPopulation.n_nodos_entrada * sizeof(double));
+		salida[i] = (double *)malloc(netPopulation.n_nodos_salida * sizeof(double));
 		if(entrada[i] == NULL || salida[i] == NULL)
 			error(RES_MEM);
 
-		for(j = 0; j < predes.n_nodos_entrada; j++)
+		for(j = 0; j < netPopulation.n_nodos_entrada; j++)
 			if(fscanf(file, "%lf", &entrada[i][j]) == EOF)
 				error(IO);
 
-		for(j = 0; j < predes.n_nodos_salida; j++)
+		for(j = 0; j < netPopulation.n_nodos_salida; j++)
 			if(fscanf(file, "%lf", &salida[i][j]) == EOF)
 				error(IO);
 	}
@@ -238,11 +238,11 @@ void exportarMejorRed(char *filename)
 			error(RES_MEM);
 
 		for(j = 0; j < n_generalizacion; j++){
-			pnodulos.nodulos[i]->salidas_parciales[j] = (double *)malloc(predes.n_nodos_salida * sizeof(double));
+			pnodulos.nodulos[i]->salidas_parciales[j] = (double *)malloc(netPopulation.n_nodos_salida * sizeof(double));
 			if(pnodulos.nodulos[i]->salidas_parciales[j] == NULL)
 				error(RES_MEM);
 
-			for(k = 0; k < predes.n_nodos_salida; k++)
+			for(k = 0; k < netPopulation.n_nodos_salida; k++)
 				pnodulos.nodulos[i]->salidas_parciales[j][k] = 0.0;
 		}
 	}
@@ -253,8 +253,8 @@ void exportarMejorRed(char *filename)
 
 	/* We store the aptitude of the selected networks. */
 	for(i = 0; i < 5; i++){
-		aptitud[i] = predes.redes[i]->aptitud;
-		predes.redes[i]->aptitud = 0.0;
+		aptitud[i] = netPopulation.redes[i]->aptitud;
+		netPopulation.redes[i]->aptitud = 0.0;
 	}
 
 	/* We calculate the network generalization. */
@@ -274,7 +274,7 @@ void exportarMejorRed(char *filename)
 
 	/* We normalize the generalization aptitude. */
 	for(i = 0; i < 5; i++)
-		predes.redes[i]->aptitud /= n_generalizacion;
+		netPopulation.redes[i]->aptitud /= n_generalizacion;
 
 	/*
 	  We pick the network with best generalization from the 5 best by
@@ -285,45 +285,45 @@ void exportarMejorRed(char *filename)
 	max = 0.0;
 	idmax = 0;
 	for(i = 0; i < 5; i++) {
-		if(predes.redes[i]->aptitud > max) {
-			max = predes.redes[i]->aptitud;
+		if(netPopulation.redes[i]->aptitud > max) {
+			max = netPopulation.redes[i]->aptitud;
 			idmax = i;
-		} else if(predes.redes[i]->aptitud == max) {
+		} else if(netPopulation.redes[i]->aptitud == max) {
 			if(aptitud[idmax] < aptitud[i]) {
-				max = predes.redes[i]->aptitud;
+				max = netPopulation.redes[i]->aptitud;
 				idmax = i;
 			} else if(aptitud[idmax] == aptitud[i]) {
 				nodes = 0;
 				for(j = 0; j < pnodulos.n_subpobl; j++)
-					nodes += (predes.redes[idmax]->nodulos[j]->n_nodos -
-							  predes.redes[i]->nodulos[j]->n_nodos);
+					nodes += (netPopulation.redes[idmax]->nodulos[j]->n_nodos -
+							  netPopulation.redes[i]->nodulos[j]->n_nodos);
 
 				if(nodes > 0) {
-					max = predes.redes[i]->aptitud;
+					max = netPopulation.redes[i]->aptitud;
 					idmax = i;
 				} else if(nodes == 0) {
 					connections = 0;
 					for(l = 0; l < pnodulos.n_subpobl; l++) {
-						for(j = 0; j < predes.n_nodos_entrada; j++)
-							for(k = 0; k < predes.redes[idmax]->nodulos[l]->n_nodos; k++)
-								if(predes.redes[idmax]->nodulos[l]->conexiones_entrada[j][k] == 1)
+						for(j = 0; j < netPopulation.n_nodos_entrada; j++)
+							for(k = 0; k < netPopulation.redes[idmax]->nodulos[l]->n_nodos; k++)
+								if(netPopulation.redes[idmax]->nodulos[l]->conexiones_entrada[j][k] == 1)
 									connections++;
-						for(j = 0; j < predes.redes[idmax]->nodulos[l]->n_nodos; j++)
-							for(k = 0; k < predes.n_nodos_salida; k++)
-								if(predes.redes[idmax]->nodulos[l]->conexiones_salida[j][k] == 1)
+						for(j = 0; j < netPopulation.redes[idmax]->nodulos[l]->n_nodos; j++)
+							for(k = 0; k < netPopulation.n_nodos_salida; k++)
+								if(netPopulation.redes[idmax]->nodulos[l]->conexiones_salida[j][k] == 1)
 									connections++;
-						for(j = 0; j < predes.n_nodos_entrada; j++)
-							for(k = 0; k < predes.redes[i]->nodulos[l]->n_nodos; k++)
-								if(predes.redes[i]->nodulos[l]->conexiones_entrada[j][k] == 1)
+						for(j = 0; j < netPopulation.n_nodos_entrada; j++)
+							for(k = 0; k < netPopulation.redes[i]->nodulos[l]->n_nodos; k++)
+								if(netPopulation.redes[i]->nodulos[l]->conexiones_entrada[j][k] == 1)
 									connections--;
-						for(j = 0; j < predes.redes[i]->nodulos[l]->n_nodos; j++)
-							for(k = 0; k < predes.n_nodos_salida; k++)
-								if(predes.redes[i]->nodulos[l]->conexiones_salida[j][k] == 1)
+						for(j = 0; j < netPopulation.redes[i]->nodulos[l]->n_nodos; j++)
+							for(k = 0; k < netPopulation.n_nodos_salida; k++)
+								if(netPopulation.redes[i]->nodulos[l]->conexiones_salida[j][k] == 1)
 									connections--;
 					}
 
 					if(connections > 0) {
-						max = predes.redes[i]->aptitud;
+						max = netPopulation.redes[i]->aptitud;
 						idmax = i;
 					}
 				}
@@ -337,24 +337,24 @@ void exportarMejorRed(char *filename)
 	  input and output connections.
 	*/
 	if(fprintf(out, "Aptitude: %lf\n", aptitud[idmax]) == EOF ||
-	   fprintf(out, "Generalization: %lf\n", predes.redes[idmax]->aptitud) == EOF ||
+	   fprintf(out, "Generalization: %lf\n", netPopulation.redes[idmax]->aptitud) == EOF ||
 	   fprintf(out, "Number of Nodules: %d\n", pnodulos.n_subpobl) == EOF ||
-	   fprintf(out, "Number of Input Nodes: %d\n", predes.n_nodos_entrada) == EOF)
+	   fprintf(out, "Number of Input Nodes: %d\n", netPopulation.n_nodos_entrada) == EOF)
 		error(IO);
 
 	nodes = 0;
 	for(i = 0; i < pnodulos.n_subpobl; i++)
-		nodes += predes.redes[idmax]->nodulos[i]->n_nodos;
+		nodes += netPopulation.redes[idmax]->nodulos[i]->n_nodos;
 
 	if(fprintf(out, "Number of Hidden Nodes: %d\n", nodes) == EOF ||
-	   fprintf(out, "Number of Output Nodes: %d\n", predes.n_nodos_salida) == EOF)
+	   fprintf(out, "Number of Output Nodes: %d\n", netPopulation.n_nodos_salida) == EOF)
 		error(IO);
 
 	connections = 0;
 	for(i = 0; i < pnodulos.n_subpobl; i++)
-		for(j = 0; j < predes.n_nodos_entrada; j++)
-			for(k = 0; k < predes.redes[idmax]->nodulos[i]->n_nodos; k++)
-				if(predes.redes[idmax]->nodulos[i]->conexiones_entrada[j][k] == 1)
+		for(j = 0; j < netPopulation.n_nodos_entrada; j++)
+			for(k = 0; k < netPopulation.redes[idmax]->nodulos[i]->n_nodos; k++)
+				if(netPopulation.redes[idmax]->nodulos[i]->conexiones_entrada[j][k] == 1)
 					connections++;
 
 	if(fprintf(out, "Number of Input Connections: %d\n", connections) == EOF)
@@ -362,9 +362,9 @@ void exportarMejorRed(char *filename)
 
 	connections = 0;
 	for(i = 0; i < pnodulos.n_subpobl; i++)
-		for(j = 0; j < predes.redes[idmax]->nodulos[i]->n_nodos; j++)
-			for(k = 0; k < predes.n_nodos_salida; k++)
-				if(predes.redes[idmax]->nodulos[i]->conexiones_salida[j][k] == 1)
+		for(j = 0; j < netPopulation.redes[idmax]->nodulos[i]->n_nodos; j++)
+			for(k = 0; k < netPopulation.n_nodos_salida; k++)
+				if(netPopulation.redes[idmax]->nodulos[i]->conexiones_salida[j][k] == 1)
 					connections++;
 
 	if(fprintf(out, "Number of Output Connections: %d\n", connections) == EOF)
