@@ -39,7 +39,7 @@ void liberarNodulo(nodule *nodule)
 	  We free the memory allocated by the matrix and vectors of the given
 	  nodule.
 	*/
-	for(i = 0; i < max_nodos; i++) {
+	for(i = 0; i < maxNodes; i++) {
 		free(nodule->outConn[i]);
 		free(nodule->outWeights[i]);
 	} for(i = 0; i < netPopulation.n_nodos_entrada; i++) {
@@ -76,14 +76,14 @@ void ajustarMatrices()
 	int i, j;
 
 	/* We adjust the matriz size of the last nodule subpopulation. */
-	for(i = num_nodulos * (pnodulos.n_subpobl - 1); i < pnodulos.n_nodulos; i++) {
+	for(i = numNodules * (nodulePopulation.n_subpobl - 1); i < nodulePopulation.n_nodulos; i++) {
 		for(j = 0; j < netPopulation.n_nodos_entrada; j++) {
-			pnodulos.nodulos[i]->inConn[j] = (int *)realloc(pnodulos.nodulos[i]->inConn[j], pnodulos.nodulos[i]->nodes * sizeof(int));
-			pnodulos.nodulos[i]->inWeights[j] = (double *)realloc(pnodulos.nodulos[i]->inWeights[j], pnodulos.nodulos[i]->nodes * sizeof(double));
+			nodulePopulation.nodulos[i]->inConn[j] = (int *)realloc(nodulePopulation.nodulos[i]->inConn[j], nodulePopulation.nodulos[i]->nodes * sizeof(int));
+			nodulePopulation.nodulos[i]->inWeights[j] = (double *)realloc(nodulePopulation.nodulos[i]->inWeights[j], nodulePopulation.nodulos[i]->nodes * sizeof(double));
 		}
 
-		pnodulos.nodulos[i]->outConn = (int **)realloc(pnodulos.nodulos[i]->outConn, pnodulos.nodulos[i]->nodes * sizeof(int));
-		pnodulos.nodulos[i]->outWeights = (double **)realloc(pnodulos.nodulos[i]->outWeights, pnodulos.nodulos[i]->nodes * sizeof(double));
-		pnodulos.nodulos[i]->transf = (func *)realloc(pnodulos.nodulos[i]->transf, pnodulos.nodulos[i]->nodes * sizeof(func));
+		nodulePopulation.nodulos[i]->outConn = (int **)realloc(nodulePopulation.nodulos[i]->outConn, nodulePopulation.nodulos[i]->nodes * sizeof(int));
+		nodulePopulation.nodulos[i]->outWeights = (double **)realloc(nodulePopulation.nodulos[i]->outWeights, nodulePopulation.nodulos[i]->nodes * sizeof(double));
+		nodulePopulation.nodulos[i]->transf = (func *)realloc(nodulePopulation.nodulos[i]->transf, nodulePopulation.nodulos[i]->nodes * sizeof(func));
 	}
 }

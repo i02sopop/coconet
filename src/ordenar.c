@@ -38,15 +38,15 @@ void ordenarNodulos()
 	nodule *aux;
 
 	/* We order the nodules and copy them to the new population. */
-	for(i = num_nodulos * (pnodulos.n_subpobl - 1); i < pnodulos.n_nodulos; i++) {
-		for(j = i; j < pnodulos.n_nodulos; j++) {
-			if(pnodulos.nodulos[i]->aptitude < pnodulos.nodulos[j]->aptitude) {
-				aux = pnodulos.nodulos[i];
-				pnodulos.nodulos[i] = pnodulos.nodulos[j];
-				pnodulos.nodulos[j] = aux;
+	for(i = numNodules * (nodulePopulation.n_subpobl - 1); i < nodulePopulation.n_nodulos; i++) {
+		for(j = i; j < nodulePopulation.n_nodulos; j++) {
+			if(nodulePopulation.nodulos[i]->aptitude < nodulePopulation.nodulos[j]->aptitude) {
+				aux = nodulePopulation.nodulos[i];
+				nodulePopulation.nodulos[i] = nodulePopulation.nodulos[j];
+				nodulePopulation.nodulos[j] = aux;
 			} /* end if */
 
-			pnodulos.nodulos[i]->id = i;
+			nodulePopulation.nodulos[i]->id = i;
 		} /* end for */
 	} /* end for */
 }

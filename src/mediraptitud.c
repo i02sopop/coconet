@@ -127,7 +127,7 @@ void medirAptitudNodulos(int nodule)
 	/* We measure the partial aptitude of the nodule. */
 	/* We calculate the final aptitude by ponderating the aptitudes calculated
 	   previously. */
-	pnodulos.nodulos[nodule]->aptitude = pond.sust * sust + pond.dif * dif +
+	nodulePopulation.nodulos[nodule]->aptitude = pond.sust * sust + pond.dif * dif +
 		pond.best * best;
 }
 
@@ -157,13 +157,13 @@ void copiarRed(red **origin, red **destination)
 		if(destination[i] == NULL)
 			error(RES_MEM);
 
-		destination[i]->nodulos = (nodule **)malloc(pnodulos.n_subpobl * sizeof(nodule));
+		destination[i]->nodulos = (nodule **)malloc(nodulePopulation.n_subpobl * sizeof(nodule));
 		destination[i]->valores_salida = (double *)malloc(netPopulation.n_nodos_salida * sizeof(double));
 		if(destination[i]->nodulos == NULL || destination[i]->valores_salida == NULL)
 			error(RES_MEM);
 
 		destination[i]->aptitud = origin[i]->aptitud;
-		for(j = 0; j < pnodulos.n_subpobl; j++)
+		for(j = 0; j < nodulePopulation.n_subpobl; j++)
 			destination[i]->nodulos[j] = origin[i]->nodulos[j];
 		for(j = 0; j < netPopulation.n_nodos_salida; j++)
 			destination[i]->valores_salida[j] = origin[i]->valores_salida[j];
@@ -203,7 +203,7 @@ double diferencia(int nodule, red **population)
 
 	/* We store the networks in which the nodule takes part. */
 	for(i = 0; i < pnetIds.n_netIds; i++)
-		if(pnetIds.netIds[i]->nodulos[pnodulos.n_subpobl - 1] == pnodulos.nodulos[nodule]) {
+		if(pnetIds.netIds[i]->nodulos[nodulePopulation.n_subpobl - 1] == nodulePopulation.nodulos[nodule]) {
 			pnetIds.netIds[i]->aptitud = 0;
 			netIds[netNumber] = i;
 			netNumber++;
@@ -214,12 +214,12 @@ double diferencia(int nodule, red **population)
 			/* We generate the network outputs without the partial outputs of the nodule that we are measuring. */
 			for(k = 0; k < pnetIds.n_nodos_salida; k++) {
 				pnetIds.netIds[netIds[i]]->valores_salida[k] = 0.0;
-				for(l = 0; l < pnodulos.n_subpobl - 1; l++)
+				for(l = 0; l < nodulePopulation.n_subpobl - 1; l++)
 					pnetIds.netIds[netIds[i]]->valores_salida[k] += (*(net_transf))(pnetIds.netIds[netIds[i]]->nodulos[l]->partialOutputs[j][k]);
 			}
 
 			/* We measure the networks aptitude. */
-			if(pnodulos.n_subpobl > 1)
+			if(nodulePopulation.n_subpobl > 1)
 				medirAptitudRed(salida[j], netIds[i]);
 			else
 				pnetIds.netIds[netIds[i]]->aptitud = 0.0;
@@ -263,7 +263,7 @@ double mejores(int nodule)
 	netNumber = 0;
   
 	for(i = 0; i < netPopulation.n_redes && netNumber < redsel; i++) {
-		if(netPopulation.redes[i]->nodulos[pnodulos.n_subpobl - 1] == pnodulos.nodulos[nodule]) {
+		if(netPopulation.redes[i]->nodulos[nodulePopulation.n_subpobl - 1] == nodulePopulation.nodulos[nodule]) {
 			netNumber++;
 			sum += netPopulation.redes[i]->aptitud;
 		}
@@ -305,9 +305,9 @@ double sustitucion(int nodule, red **population)
 	selected = redsel;
   
 	for(i = 0; i < selected && i < netPopulation.n_redes; i++) {
-		if(netPopulation.redes[i]->nodulos[pnodulos.n_subpobl-1] != pnodulos.nodulos[nodule]) {
+		if(netPopulation.redes[i]->nodulos[nodulePopulation.n_subpobl-1] != nodulePopulation.nodulos[nodule]) {
 			/* We change the nodules of its subpopulation by the nodule to measure. */
-			netPopulation.redes[i]->nodulos[pnodulos.n_subpobl-1] = pnodulos.nodulos[nodule];
+			netPopulation.redes[i]->nodulos[nodulePopulation.n_subpobl-1] = nodulePopulation.nodulos[nodule];
 
 			/* We initializate the networks aptitude to make a new measure. */
 			netPopulation.redes[i]->aptitud = 0;
@@ -355,12 +355,12 @@ void normalizarAptitudNodulos()
   
 	/* We calculate the minimal value of the nodules aptitude. */
 	min = 0;
-	for(i = 0; i < pnodulos.n_nodulos; i++)
-		if(min > pnodulos.nodulos[i]->aptitude)
-			min = pnodulos.nodulos[i]->aptitude;
+	for(i = 0; i < nodulePopulation.n_nodulos; i++)
+		if(min > nodulePopulation.nodulos[i]->aptitude)
+			min = nodulePopulation.nodulos[i]->aptitude;
 
 	/* We set the minimal nodule aptitude to 0. */
 	if(min < 0)
-		for(i = 0; i < pnodulos.n_nodulos; i++)
-			pnodulos.nodulos[i]->aptitude -= min;
+		for(i = 0; i < nodulePopulation.n_nodulos; i++)
+			nodulePopulation.nodulos[i]->aptitude -= min;
 }

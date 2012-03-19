@@ -37,9 +37,9 @@
 void anadirNodulosRedes()
 {
 	/* If it's the first nodes population we create a network per node. */
-	if(pnodulos.n_subpobl == 1) {
-		netPopulation.n_redes = num_nodulos;
-		netPopulation.redes = (red **)malloc(num_nodulos * sizeof(red));
+	if(nodulePopulation.n_subpobl == 1) {
+		netPopulation.n_redes = numNodules;
+		netPopulation.redes = (red **)malloc(numNodules * sizeof(red));
 		if(netPopulation.redes == NULL)
 			error(RES_MEM);
 		crearRedes();
@@ -74,18 +74,18 @@ void crearDescendencia()
 	red **dnet; /* New network population. Descend of the actual population. */
 
 	/* Creation of the new network. */
-	dnet = (red **)malloc(max_redes * sizeof(red));
+	dnet = (red **)malloc(maxNetworks * sizeof(red));
 	if(dnet == NULL)
 		error(RES_MEM);
 
-	for(i = 0; i < max_redes; i++) {
+	for(i = 0; i < maxNetworks; i++) {
 		dnet[i] = (red *)malloc(sizeof(red));
 		if(dnet[i] == NULL)
 			error(RES_MEM);
 
 		dnet[i]->aptitud = 0;
 		dnet[i]->valores_salida = (double *)malloc(netPopulation.n_nodos_salida * sizeof(double));
-		dnet[i]->nodulos = (nodulo **)malloc(pnodulos.n_subpobl * sizeof(nodulo));
+		dnet[i]->nodulos = (nodulo **)malloc(nodulePopulation.n_subpobl * sizeof(nodulo));
 		if(dnet[i]->valores_salida == NULL || dnet[i]->nodulos == NULL)
 			error(RES_MEM);
 
@@ -93,13 +93,13 @@ void crearDescendencia()
 		netsel = random() % netPopulation.n_redes;
 
 		/* Random selection of the node to add. */
-		nodsel = random() % num_nodulos;
+		nodsel = random() % numNodules;
 
 		/* Creation of the new network. */
-		for(j = 0; j < pnodulos.n_subpobl - 1; j++)
+		for(j = 0; j < nodulePopulation.n_subpobl - 1; j++)
 			dnet[i]->nodulos[j] = netPopulation.redes[netsel]->nodulos[j];
 
-		dnet[i]->nodulos[pnodulos.n_subpobl - 1] = pnodulos.nodulos[(pnodulos.n_subpobl - 1) * num_nodulos + nodsel];
+		dnet[i]->nodulos[nodulePopulation.n_subpobl - 1] = nodulePopulation.nodulos[(nodulePopulation.n_subpobl - 1) * numNodules + nodsel];
 	}
 
 	/* We fix the new network. */
@@ -129,7 +129,7 @@ void liberarRed(red *network)
 	int i;
 
 	/* We delete all the network. */
-	for(i = 0; i < pnodulos.n_subpobl; i++)
+	for(i = 0; i < nodulePopulation.n_subpobl; i++)
 		network->nodulos[i] = NULL;
 
 	free(network->nodulos);
@@ -158,96 +158,96 @@ void crearNodulos()
 	int i, j, k;
 
 	/* We create the nodule subpopulation. */
-	for(i = pnodulos.n_nodulos - num_nodulos; i < pnodulos.n_nodulos; i++) {
-		pnodulos.nodulos[i] = (nodulo *)malloc(sizeof(nodulo));
-		if(pnodulos.nodulos[i] == NULL)
+	for(i = nodulePopulation.n_nodulos - numNodules; i < nodulePopulation.n_nodulos; i++) {
+		nodulePopulation.nodulos[i] = (nodulo *)malloc(sizeof(nodulo));
+		if(nodulePopulation.nodulos[i] == NULL)
 			error(RES_MEM);
 
 		/* Nodule id. */
-		pnodulos.nodulos[i]->id = i;
+		nodulePopulation.nodulos[i]->id = i;
 
 		/* Number of hidden nodes of the nodule. */
-		pnodulos.nodulos[i]->nodes = random() % max_nodos;
+		nodulePopulation.nodulos[i]->nodes = random() % maxNodes;
 
 		/* Initial aptitude. */
-		pnodulos.nodulos[i]->aptitude = 0;
+		nodulePopulation.nodulos[i]->aptitude = 0;
 
-		if(pnodulos.nodulos[i]->nodes == 0)
-			pnodulos.nodulos[i]->nodes++;
+		if(nodulePopulation.nodulos[i]->nodes == 0)
+			nodulePopulation.nodulos[i]->nodes++;
 
 		/* Memory allocation for the creation of connections and weights. */
 		/* Connections from input to hidden nodes. */
-		pnodulos.nodulos[i]->inConn = (int **)malloc(netPopulation.n_nodos_entrada * sizeof(int));
+		nodulePopulation.nodulos[i]->inConn = (int **)malloc(netPopulation.n_nodos_entrada * sizeof(int));
 
 		/* Connections from hidden to output nodes. */
-		pnodulos.nodulos[i]->outConn = (int **)malloc(max_nodos * sizeof(int));
+		nodulePopulation.nodulos[i]->outConn = (int **)malloc(maxNodes * sizeof(int));
 
 		/* Weights of connections between input and hidden nodes. */
-		pnodulos.nodulos[i]->inWeights = (double **)malloc(netPopulation.n_nodos_entrada * sizeof(double));
+		nodulePopulation.nodulos[i]->inWeights = (double **)malloc(netPopulation.n_nodos_entrada * sizeof(double));
 
 		/* Weights of connections between hidden and output nodes. */
-		pnodulos.nodulos[i]->outWeights = (double **)malloc(max_nodos * sizeof(double));
-		pnodulos.nodulos[i]->partialOutputs = (double **)malloc(n_entrenamiento * sizeof(double));
-		pnodulos.nodulos[i]->transf = (func *)malloc(max_nodos * sizeof(func));
+		nodulePopulation.nodulos[i]->outWeights = (double **)malloc(maxNodes * sizeof(double));
+		nodulePopulation.nodulos[i]->partialOutputs = (double **)malloc(n_entrenamiento * sizeof(double));
+		nodulePopulation.nodulos[i]->transf = (func *)malloc(maxNodes * sizeof(func));
 
-		if(pnodulos.nodulos[i]->inConn == NULL || pnodulos.nodulos[i]->outConn == NULL ||
-		   pnodulos.nodulos[i]->inWeights == NULL || pnodulos.nodulos[i]->outWeights == NULL ||
-		   pnodulos.nodulos[i]->partialOutputs == NULL || pnodulos.nodulos[i]->transf == NULL)
+		if(nodulePopulation.nodulos[i]->inConn == NULL || nodulePopulation.nodulos[i]->outConn == NULL ||
+		   nodulePopulation.nodulos[i]->inWeights == NULL || nodulePopulation.nodulos[i]->outWeights == NULL ||
+		   nodulePopulation.nodulos[i]->partialOutputs == NULL || nodulePopulation.nodulos[i]->transf == NULL)
 			error(RES_MEM);
 
 		/* Creation of connections and weigths. */
 		/* Entry connections and weights. */
 		for(j = 0; j < netPopulation.n_nodos_entrada; j++) {
-			pnodulos.nodulos[i]->inConn[j] = (int *)malloc(max_nodos * sizeof(int));
-			pnodulos.nodulos[i]->inWeights[j] = (double *)malloc(max_nodos * sizeof(double));
-			if(pnodulos.nodulos[i]->inConn[j] == NULL || pnodulos.nodulos[i]->inWeights[j] == NULL)
+			nodulePopulation.nodulos[i]->inConn[j] = (int *)malloc(maxNodes * sizeof(int));
+			nodulePopulation.nodulos[i]->inWeights[j] = (double *)malloc(maxNodes * sizeof(double));
+			if(nodulePopulation.nodulos[i]->inConn[j] == NULL || nodulePopulation.nodulos[i]->inWeights[j] == NULL)
 				error(RES_MEM);
 
-			for(k = 0; k < max_nodos; k++) {
-				if(random() % 2 == 1 && k < pnodulos.nodulos[i]->nodes) {
-					pnodulos.nodulos[i]->inConn[j][k] = 1;
-					pnodulos.nodulos[i]->inWeights[j][k] = doubleRandom() / 2;
+			for(k = 0; k < maxNodes; k++) {
+				if(random() % 2 == 1 && k < nodulePopulation.nodulos[i]->nodes) {
+					nodulePopulation.nodulos[i]->inConn[j][k] = 1;
+					nodulePopulation.nodulos[i]->inWeights[j][k] = doubleRandom() / 2;
 				} else {
-					pnodulos.nodulos[i]->inConn[j][k] = 0;
-					pnodulos.nodulos[i]->inWeights[j][k] = 0.0;
+					nodulePopulation.nodulos[i]->inConn[j][k] = 0;
+					nodulePopulation.nodulos[i]->inWeights[j][k] = 0.0;
 				}
 			}
 		}
 
 		/* Output connections and weights. */
-		for(j = 0; j < max_nodos; j++) {
-			pnodulos.nodulos[i]->outConn[j] = (int *)malloc(netPopulation.n_nodos_salida * sizeof(int));
-			pnodulos.nodulos[i]->outWeights[j] = (double *)malloc(netPopulation.n_nodos_salida * sizeof(double));
-			if(pnodulos.nodulos[i]->outConn[j] == NULL || pnodulos.nodulos[i]->outWeights[j] == NULL)
+		for(j = 0; j < maxNodes; j++) {
+			nodulePopulation.nodulos[i]->outConn[j] = (int *)malloc(netPopulation.n_nodos_salida * sizeof(int));
+			nodulePopulation.nodulos[i]->outWeights[j] = (double *)malloc(netPopulation.n_nodos_salida * sizeof(double));
+			if(nodulePopulation.nodulos[i]->outConn[j] == NULL || nodulePopulation.nodulos[i]->outWeights[j] == NULL)
 				error(RES_MEM);
 
 			for(k = 0; k < netPopulation.n_nodos_salida; k++) {
-				if(random() % 2 == 1 && j < pnodulos.nodulos[i]->nodes) {
-					pnodulos.nodulos[i]->outConn[j][k] = 1;
-					pnodulos.nodulos[i]->outWeights[j][k] = doubleRandom() / 2;
+				if(random() % 2 == 1 && j < nodulePopulation.nodulos[i]->nodes) {
+					nodulePopulation.nodulos[i]->outConn[j][k] = 1;
+					nodulePopulation.nodulos[i]->outWeights[j][k] = doubleRandom() / 2;
 				} else {
-					pnodulos.nodulos[i]->outConn[j][k] = 0;
-					pnodulos.nodulos[i]->outWeights[j][k] = 0.0;
+					nodulePopulation.nodulos[i]->outConn[j][k] = 0;
+					nodulePopulation.nodulos[i]->outWeights[j][k] = 0.0;
 				}
 			}
 		}
 
 		/* Partial outputs. */
 		for(j = 0; j < n_entrenamiento; j++) {
-			pnodulos.nodulos[i]->partialOutputs[j] = (double *)malloc(netPopulation.n_nodos_salida * sizeof(double));
-			if(pnodulos.nodulos[i]->partialOutputs[j] == NULL)
+			nodulePopulation.nodulos[i]->partialOutputs[j] = (double *)malloc(netPopulation.n_nodos_salida * sizeof(double));
+			if(nodulePopulation.nodulos[i]->partialOutputs[j] == NULL)
 				error(RES_MEM);
 
 			for(k = 0; k < netPopulation.n_nodos_salida; k++)
-				pnodulos.nodulos[i]->partialOutputs[j][k] = 0.0;
+				nodulePopulation.nodulos[i]->partialOutputs[j][k] = 0.0;
 		}
 
 		/* Assign the transfer function to each node. */
-		for(j = 0; j < pnodulos.nodulos[i]->nodes; j++) {
+		for(j = 0; j < nodulePopulation.nodulos[i]->nodes; j++) {
 			if(random() % 2 == 0)
-				pnodulos.nodulos[i]->transf[j] = (func)&HyperbolicTangent;
+				nodulePopulation.nodulos[i]->transf[j] = (func)&HyperbolicTangent;
 			else
-				pnodulos.nodulos[i]->transf[j] = (func)&Logistic;
+				nodulePopulation.nodulos[i]->transf[j] = (func)&Logistic;
 		}
 	}
 }
@@ -271,12 +271,12 @@ void crearPoblacionNodulos()
 	  We update the number of subpopulations and nodules of the nodule
 	  population.
 	*/
-	pnodulos.n_subpobl++;
-	pnodulos.n_nodulos = pnodulos.n_subpobl * num_nodulos;
+	nodulePopulation.n_subpobl++;
+	nodulePopulation.n_nodulos = nodulePopulation.n_subpobl * numNodules;
 
 	/* Memory allocation for the new subpopulation. */
-	pnodulos.nodulos = (pnodulos.n_subpobl == 1) ? (nodule **)malloc(num_nodulos * sizeof(nodulo)) : (nodule **)realloc(pnodulos.nodulos, pnodulos.n_nodulos * sizeof(nodulo));
-	if(pnodulos.nodulos == NULL)
+	nodulePopulation.nodulos = (nodulePopulation.n_subpobl == 1) ? (nodule **)malloc(numNodules * sizeof(nodulo)) : (nodule **)realloc(nodulePopulation.nodulos, nodulePopulation.n_nodulos * sizeof(nodulo));
+	if(nodulePopulation.nodulos == NULL)
 		error(RES_MEM);
 
 	/* We create the nodules of the new subpopulation. */
@@ -301,7 +301,7 @@ void crearRedes()
 {
 	int i, j;
 
-	for(i = 0; i < num_nodulos; i++) {
+	for(i = 0; i < numNodules; i++) {
 		if((netPopulation.redes[i] = (red *)malloc(sizeof(red))) == NULL)
 			error(RES_MEM);
 
@@ -313,7 +313,7 @@ void crearRedes()
 
 		/* Initialization of variables. */
 		netPopulation.redes[i]->aptitud = 0.0;
-		netPopulation.redes[i]->nodulos[0] = pnodulos.nodulos[i];
+		netPopulation.redes[i]->nodulos[0] = nodulePopulation.nodulos[i];
 		for(j = 0; j < netPopulation.n_nodos_salida; j++)
 			netPopulation.redes[i]->valores_salida[j] = 0.0;
 	}

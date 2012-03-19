@@ -70,28 +70,28 @@ typedef struct {
 	double best;
 } ponderacion;
 
-pobl_redes netPopulation;            /* Network population. */
-pobl_nodulos pnodulos;        /* Nodule population. */
-int max_nodos;	              /* Max number of nodes in a nodule. */
-int num_nodulos;              /* Max number of nodules in a subpopulation. */
-int max_redes;                /* Max number of networks in the population. */
-transf_param ptransferencia;  /* Parameters of the transfer functions. */
-int n_entrenamiento;          /* Number of entries at the training file, */
-int n_generalizacion;         /* Number of entries at the generalization file. */
-double **entrada;             /* Input data. */
-double **salida;              /* Output data. */
-ponderacion pond;             /* Parameters ponderation values for the nodule aptitude. */
-int redsel;                   /* Number of networks selected to perform some operations. */
-double ToSA;                  /* Initial temperatire for the simulated annealing. */
-double alphasa;               /* Change factor in the weight mutation for the simulated annealing. */
-int iteraciones_sa;           /* Number of iterations of the simulated annealing. */
-int nodsel;                   /* Number of nodes selected to perform some operations. */
-int delta_min;                /* Min value of delta for the structural mutation. */
-int delta_max;                /* Max value of delta for the structural mutation. */
-nodule **descendencia;        /* Descendant of the last nodules subpopulation. */
-double evolim;                /* Modification limit for the stop criteria. */
-func net_transf;              /* Transfer function for the networks. */
-double alpharet;              /* Ponderation in the changing of weights during the backpropagation. */
+pobl_redes netPopulation;      /* Network population. */
+pobl_nodulos nodulePopulation; /* Nodule population. */
+int numNodules;                /* Max number of nodules in a subpopulation. */
+int maxNodes;	               /* Max number of nodes in a nodule. */
+int maxNetworks;               /* Max number of networks in the population. */
+transf_param ptransferencia;   /* Parameters of the transfer functions. */
+int n_entrenamiento;           /* Number of entries at the training file, */
+int n_generalizacion;          /* Number of entries at the generalization file. */
+double **entrada;              /* Input data. */
+double **salida;               /* Output data. */
+ponderacion pond;              /* Parameters ponderation values for the nodule aptitude. */
+int redsel;                    /* Number of networks selected to perform some operations. */
+double ToSA;                   /* Initial temperatire for the simulated annealing. */
+double alphasa;                /* Change factor in the weight mutation for the simulated annealing. */
+int iteraciones_sa;            /* Number of iterations of the simulated annealing. */
+int nodsel;                    /* Number of nodes selected to perform some operations. */
+int delta_min;                 /* Min value of delta for the structural mutation. */
+int delta_max;                 /* Max value of delta for the structural mutation. */
+nodule **descendencia;         /* Descendant of the last nodules subpopulation. */
+double evolim;                 /* Modification limit for the stop criteria. */
+func net_transf;               /* Transfer function for the networks. */
+double alpharet;               /* Ponderation in the changing of weights during the backpropagation. */
 
 #include <functions.h>
 

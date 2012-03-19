@@ -64,7 +64,7 @@ void evolucionarPoblaciones()
 	  enough.
 	*/
 	for(i = 0; medirCambio(&networkAptitude, i) == false; i++) {
-		initNumNodules = num_nodulos * (pnodulos.n_subpobl - 1);
+		initNumNodules = numNodules * (nodulePopulation.n_subpobl - 1);
 		if(i == 0) {
 			/*
 			  If the subpopulation is new we run the backpropagation to reduce
@@ -72,7 +72,7 @@ void evolucionarPoblaciones()
 			*/
 			fprintf(stderr, "Doing the backpropagation to a new nodule "
 					"subpopulation. \n");
-			for(j = 0; j < num_nodulos; j++)
+			for(j = 0; j < numNodules; j++)
 				retropropagacion(initNumNodules + j, n_entrenamiento, 5000);
 
 			/*
@@ -82,7 +82,7 @@ void evolucionarPoblaciones()
 			fprintf(stderr, "We train by first time the networks.\n");
 			for(j = 0; j < n_entrenamiento; j++) {
 				/* We generate the nodules output. */
-				for(k = pnodulos.n_nodulos - num_nodulos; k < pnodulos.n_nodulos ;k++)
+				for(k = nodulePopulation.n_nodulos - numNodules; k < nodulePopulation.n_nodulos ;k++)
 					generarSalidaNodulo(entrada[j], k, j, NULL);
 
 				/* We measure the networks aptitude. */
@@ -97,7 +97,7 @@ void evolucionarPoblaciones()
 				netPopulation.redes[j]->aptitud /= n_entrenamiento;
 
 			/* We measure and normalize the nodules aptitude. */
-			for(j = 0; j < pnodulos.n_nodulos; j++)
+			for(j = 0; j < nodulePopulation.n_nodulos; j++)
 				medirAptitudNodulos(j);
 			normalizarAptitudNodulos();
 		}
@@ -108,7 +108,7 @@ void evolucionarPoblaciones()
 
 		/* We train the networks by simulate annealing. */
 		fprintf(stderr, "Training the networks by simulate annealing.\n");
-		for(j = initNumNodules; j < pnodulos.n_nodulos; j++)
+		for(j = initNumNodules; j < nodulePopulation.n_nodulos; j++)
 			enfriamientoSimulado(j);
 
 		/* We normalize the nodules aptitude. */
@@ -125,7 +125,7 @@ void evolucionarPoblaciones()
 
 		/* We make the structural mutation of the nodules. */
 		fprintf(stderr, "Nodules mutation.\n");
-		for(j = initNumNodules; j < pnodulos.n_nodulos; j++)
+		for(j = initNumNodules; j < nodulePopulation.n_nodulos; j++)
 			mutarNodulos(j);
 
 		/* We substitude the worst nodules by the best ones in the descendant
@@ -174,10 +174,10 @@ void retropropagacion(int nodule, int numPatterns, int iter)
 	func *transf;
 
 	/* We initializate the local variables. */
-	numNodes = pnodulos.nodulos[nodule]->nodes + netPopulation.n_nodos_entrada +
+	numNodes = nodulePopulation.nodulos[nodule]->nodes + netPopulation.n_nodos_entrada +
 		netPopulation.n_nodos_salida;
 
-	transf = (func *)malloc((netPopulation.n_nodos_salida + pnodulos.nodulos[nodule]->nodes) * sizeof(func));
+	transf = (func *)malloc((netPopulation.n_nodos_salida + nodulePopulation.nodulos[nodule]->nodes) * sizeof(func));
 	out = (double *)malloc(numNodes * sizeof(double));
 	F_W = (double **)malloc(numNodes * sizeof(double));
 	weights = (double **)malloc(numNodes * sizeof(double));
@@ -199,10 +199,10 @@ void retropropagacion(int nodule, int numPatterns, int iter)
 		}
 	}
 
-	for(i = 0; i < pnodulos.nodulos[nodule]->nodes; i++)
-		transf[i] = pnodulos.nodulos[nodule]->transf[i];
+	for(i = 0; i < nodulePopulation.nodulos[nodule]->nodes; i++)
+		transf[i] = nodulePopulation.nodulos[nodule]->transf[i];
 
-	for(;i < pnodulos.nodulos[nodule]->nodes + netPopulation.n_nodos_salida; i++)
+	for(;i < nodulePopulation.nodulos[nodule]->nodes + netPopulation.n_nodos_salida; i++)
 		transf[i] = net_transf;
 
 	/* Backpropagation. */
@@ -213,32 +213,32 @@ void retropropagacion(int nodule, int numPatterns, int iter)
 
 		/* We assign the weight to the weights matrix*/
 		for(j = 0; j < netPopulation.n_nodos_salida; j++)
-			initialError[j] = out[j + netPopulation.n_nodos_entrada + pnodulos.nodulos[nodule]->nodes] -
+			initialError[j] = out[j + netPopulation.n_nodos_entrada + nodulePopulation.nodulos[nodule]->nodes] -
 				salida[pattern][j];
 
-		for(i = 0; i < pnodulos.nodulos[nodule]->nodes; i++)
+		for(i = 0; i < nodulePopulation.nodulos[nodule]->nodes; i++)
 			for(j = 0; j < netPopulation.n_nodos_entrada; j++)
 				weights[i + netPopulation.n_nodos_entrada][j] =
-					pnodulos.nodulos[nodule]->inWeights[j][i];
+					nodulePopulation.nodulos[nodule]->inWeights[j][i];
 
 		for(i = 0; i < netPopulation.n_nodos_salida; i++)
-			for(j = 0; j < pnodulos.nodulos[nodule]->nodes; j++)
-				weights[i + netPopulation.n_nodos_entrada + pnodulos.nodulos[nodule]->nodes][j + netPopulation.n_nodos_entrada] =
-					pnodulos.nodulos[nodule]->outWeights[j][i];
+			for(j = 0; j < nodulePopulation.nodulos[nodule]->nodes; j++)
+				weights[i + netPopulation.n_nodos_entrada + nodulePopulation.nodulos[nodule]->nodes][j + netPopulation.n_nodos_entrada] =
+					nodulePopulation.nodulos[nodule]->outWeights[j][i];
 
 		/* Obtain the weight change. */
-		cambioPesos(initialError, weight, out, F_W, pnodulos.nodulos[nodule]->nodes, transf);
+		cambioPesos(initialError, weight, out, F_W, nodulePopulation.nodulos[nodule]->nodes, transf);
 
 		/* We update the weigths. */
-		for(i = 0; i < pnodulos.nodulos[nodule]->nodes; i++)
+		for(i = 0; i < nodulePopulation.nodulos[nodule]->nodes; i++)
 			for(j = 0; j < netPopulation.n_nodos_entrada; j++)
-				pnodulos.nodulos[nodule]->inWeights[j][i] -= alpharet *
+				nodulePopulation.nodulos[nodule]->inWeights[j][i] -= alpharet *
 					F_W[i + netPopulation.n_nodos_entrada][j];
 
 		for(i = 0; i < netPopulation.n_nodos_salida; i++)
-			for(j = 0; j < pnodulos.nodulos[nodule]->nodes; j++)
-				pnodulos.nodulos[nodule]->outWeights[j][i] -= alpharet *
-					F_W[i + netPopulation.n_nodos_entrada + pnodulos.nodulos[nodule]->nodes][j + netPopulation.n_nodos_entrada];
+			for(j = 0; j < nodulePopulation.nodulos[nodule]->nodes; j++)
+				nodulePopulation.nodulos[nodule]->outWeights[j][i] -= alpharet *
+					F_W[i + netPopulation.n_nodos_entrada + nodulePopulation.nodulos[nodule]->nodes][j + netPopulation.n_nodos_entrada];
 	}
 
 	/* Free memory. */
@@ -346,7 +346,7 @@ void enfriamientoSimulado(int nodule)
 	/* Variable initialization. */
 	T = ToSA;
 	weights = NULL;
-	oldAptitude = pnodulos.nodulos[nodule]->aptitude;
+	oldAptitude = nodulePopulation.nodulos[nodule]->aptitude;
 
 	/* Simulated annealing. */
 	for(steps = 0; steps < iteraciones_sa; steps++) {
@@ -355,19 +355,19 @@ void enfriamientoSimulado(int nodule)
 
 		/* Input weights. */
 		for(i = 0; i < netPopulation.n_nodos_entrada; i++)
-			for(j = 0; j < pnodulos.nodulos[nodule]->nodes; j++)
-				if(pnodulos.nodulos[nodule]->inConn[i][j]) {
+			for(j = 0; j < nodulePopulation.nodulos[nodule]->nodes; j++)
+				if(nodulePopulation.nodulos[nodule]->inConn[i][j]) {
 					weigths = (double *)realloc(weigths, (k + 1) * sizeof(double));
-					weigths[k] = pnodulos.nodulos[nodule]->inWeights[i][j];
+					weigths[k] = nodulePopulation.nodulos[nodule]->inWeights[i][j];
 					k++;
 				}
 
 		/* Output weights. */
-		for(i = 0; i < pnodulos.nodulos[nodule]->nodes; i++)
+		for(i = 0; i < nodulePopulation.nodulos[nodule]->nodes; i++)
 			for(j = 0; j < netPopulation.n_nodos_salida; j++)
-				if(pnodulos.nodulos[nodule]->outConn[i][j]) {
+				if(nodulePopulation.nodulos[nodule]->outConn[i][j]) {
 					weigths = (double *)realloc(weigths, (k + 1) * sizeof(double));
-					weigths[k] = pnodulos.nodulos[nodule]->outWeights[i][j];
+					weigths[k] = nodulePopulation.nodulos[nodule]->outWeights[i][j];
 					k++;
 				}
 
@@ -378,31 +378,31 @@ void enfriamientoSimulado(int nodule)
 		medirCambioNodulo(nodule);
 
 		/* If the aptitude is worst we reject the change. */
-		if((oldAptitude > pnodulos.nodulos[nodule]->aptitude) &&
-		   doubleRandom() < (oldAptitude - pnodulos.nodulos[nodule]->aptitude) * T) {
+		if((oldAptitude > nodulePopulation.nodulos[nodule]->aptitude) &&
+		   doubleRandom() < (oldAptitude - nodulePopulation.nodulos[nodule]->aptitude) * T) {
 			/* We restore the old weights. */
 			k = 0;
 
 			/* Input weights. */
 			for(i = 0; i < netPopulation.n_nodos_entrada; i++)
-				for(j = 0; j < pnodulos.nodulos[nodule]->nodes; j++)
-					if(pnodulos.nodulos[nodule]->inConn[i][j]) {
-						pnodulos.nodulos[nodule]->inWeights[i][j] = weigths[k];
+				for(j = 0; j < nodulePopulation.nodulos[nodule]->nodes; j++)
+					if(nodulePopulation.nodulos[nodule]->inConn[i][j]) {
+						nodulePopulation.nodulos[nodule]->inWeights[i][j] = weigths[k];
 						k++;
 					}
 
 			/* Output weights. */
-			for(i = 0; i < pnodulos.nodulos[nodule]->nodes; i++)
+			for(i = 0; i < nodulePopulation.nodulos[nodule]->nodes; i++)
 				for(j = 0; j < netPopulation.n_nodos_salida; j++)
-					if(pnodulos.nodulos[nodule]->outConn[i][j]) {
-						pnodulos.nodulos[nodule]->outWeights[i][j] = weigths[k];
+					if(nodulePopulation.nodulos[nodule]->outConn[i][j]) {
+						nodulePopulation.nodulos[nodule]->outWeights[i][j] = weigths[k];
 						k++;
 					}
 
 			/* We recalculate the aptitude of the nodule. */
 			medirCambioNodulo(nodule);
 		} else
-			oldAptitude = pnodulos.nodulos[nodule]->aptitude;
+			oldAptitude = nodulePopulation.nodulos[nodule]->aptitude;
 
 		/* We update the aptitude temperature. */
 		T = alphasa * T;
@@ -432,15 +432,15 @@ void pasoAleatorio(int nodule)
 
 	/* Randon step in input connection weights. */
 	for(i = 0; i < netPopulation.n_nodos_entrada; i++)
-		for(j = 0; j < pnodulos.nodulos[nodule]->nodes; j++)
-			if(pnodulos.nodulos[nodule]->inConn[i][j])
-				pnodulos.nodulos[nodule]->inWeights[i][j] +=
+		for(j = 0; j < nodulePopulation.nodulos[nodule]->nodes; j++)
+			if(nodulePopulation.nodulos[nodule]->inConn[i][j])
+				nodulePopulation.nodulos[nodule]->inWeights[i][j] +=
 					Normal(0.0, 1.0);
 
 	/* Random step in output connection weights.  */
-	for(i = 0; i < pnodulos.nodulos[nodule]->nodes; i++)
+	for(i = 0; i < nodulePopulation.nodulos[nodule]->nodes; i++)
 		for(j = 0; j < netPopulation.n_nodos_salida; j++)
-			if(pnodulos.nodulos[nodule]->outConn[i][j])
-				pnodulos.nodulos[nodule]->outWeights[i][j] +=
+			if(nodulePopulation.nodulos[nodule]->outConn[i][j])
+				nodulePopulation.nodulos[nodule]->outWeights[i][j] +=
 					Normal(0.0, 1.0);
 }

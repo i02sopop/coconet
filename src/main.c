@@ -60,8 +60,8 @@ int main(int argc, char **argv)
 
 	/* We load the config and training files. */
 	cargarFichero(argv + 1, argv + 2);
-	if(nodsel > num_nodulos)
-		nodsel = num_nodulos;
+	if(nodsel > numNodules)
+		nodsel = numNodules;
 
 	/* Initialization of the average flair of the networks. */
 	netAptitude = 0.0;

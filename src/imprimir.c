@@ -110,7 +110,7 @@ void imprimirRed(red *network)
 
 	/* We print the network data. */
 	fprintf(fOutput, "nodules: ");
-	for(i = 0; i < pnodulos.n_subpobl; i++)
+	for(i = 0; i < nodulePopulation.n_subpobl; i++)
 		fprintf(fOutput, "%d ", network->nodulos[i]->id);
 
 	fprintf(fOutput, "\naptitude: %lf\n", network->aptitud);
