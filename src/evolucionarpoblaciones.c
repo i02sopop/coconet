@@ -189,7 +189,7 @@ void retropropagacion(int nodule, int numPatterns, int iter)
 
 	for(i = 0; i < numNodes; i++) {
 		F_W[i] = (double *)malloc(numNodes * sizeof(double));
-		weights[i] = (double *)malloc(numNodes * sizeof(double))
+		weights[i] = (double *)malloc(numNodes * sizeof(double));
 		if(F_W[i] == NULL || weights[i] == NULL)
 			error(RES_MEM);
 
@@ -227,7 +227,7 @@ void retropropagacion(int nodule, int numPatterns, int iter)
 					nodulePopulation.nodulos[nodule]->outWeights[j][i];
 
 		/* Obtain the weight change. */
-		cambioPesos(initialError, weight, out, F_W, nodulePopulation.nodulos[nodule]->nodes, transf);
+		cambioPesos(initialError, weights, out, F_W, nodulePopulation.nodulos[nodule]->nodes, transf);
 
 		/* We update the weigths. */
 		for(i = 0; i < nodulePopulation.nodulos[nodule]->nodes; i++)
@@ -357,8 +357,8 @@ void enfriamientoSimulado(int nodule)
 		for(i = 0; i < netPopulation.n_nodos_entrada; i++)
 			for(j = 0; j < nodulePopulation.nodulos[nodule]->nodes; j++)
 				if(nodulePopulation.nodulos[nodule]->inConn[i][j]) {
-					weigths = (double *)realloc(weigths, (k + 1) * sizeof(double));
-					weigths[k] = nodulePopulation.nodulos[nodule]->inWeights[i][j];
+					weights = (double *)realloc(weights, (k + 1) * sizeof(double));
+					weights[k] = nodulePopulation.nodulos[nodule]->inWeights[i][j];
 					k++;
 				}
 
@@ -366,8 +366,8 @@ void enfriamientoSimulado(int nodule)
 		for(i = 0; i < nodulePopulation.nodulos[nodule]->nodes; i++)
 			for(j = 0; j < netPopulation.n_nodos_salida; j++)
 				if(nodulePopulation.nodulos[nodule]->outConn[i][j]) {
-					weigths = (double *)realloc(weigths, (k + 1) * sizeof(double));
-					weigths[k] = nodulePopulation.nodulos[nodule]->outWeights[i][j];
+					weights = (double *)realloc(weights, (k + 1) * sizeof(double));
+					weights[k] = nodulePopulation.nodulos[nodule]->outWeights[i][j];
 					k++;
 				}
 
@@ -387,7 +387,7 @@ void enfriamientoSimulado(int nodule)
 			for(i = 0; i < netPopulation.n_nodos_entrada; i++)
 				for(j = 0; j < nodulePopulation.nodulos[nodule]->nodes; j++)
 					if(nodulePopulation.nodulos[nodule]->inConn[i][j]) {
-						nodulePopulation.nodulos[nodule]->inWeights[i][j] = weigths[k];
+						nodulePopulation.nodulos[nodule]->inWeights[i][j] = weights[k];
 						k++;
 					}
 
@@ -395,7 +395,7 @@ void enfriamientoSimulado(int nodule)
 			for(i = 0; i < nodulePopulation.nodulos[nodule]->nodes; i++)
 				for(j = 0; j < netPopulation.n_nodos_salida; j++)
 					if(nodulePopulation.nodulos[nodule]->outConn[i][j]) {
-						nodulePopulation.nodulos[nodule]->outWeights[i][j] = weigths[k];
+						nodulePopulation.nodulos[nodule]->outWeights[i][j] = weights[k];
 						k++;
 					}
 
@@ -408,7 +408,7 @@ void enfriamientoSimulado(int nodule)
 		T = alphasa * T;
 	}
 
-	free(weigths);
+	free(weights);
 }
 
 /******************************************************************************

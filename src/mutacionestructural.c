@@ -72,7 +72,7 @@ void copiarDescendencia()
 
 		for(j = 0; j < netPopulation.n_nodos_entrada; j++) {
 			descendencia[i]->inConn[j] = (int *)malloc(maxNodes * sizeof(int));
-			descendencia[i]->inWeights[j] = (double *)malloc(maxNodes * sizeof(double))
+			descendencia[i]->inWeights[j] = (double *)malloc(maxNodes * sizeof(double));
 			if(descendencia[i]->inConn[j] == NULL ||
 				descendencia[i]->inWeights[j] == NULL)
 				error(RES_MEM);
@@ -104,7 +104,7 @@ void copiarDescendencia()
 				error(RES_MEM);
 
 			for(k = 0; k < netPopulation.n_nodos_salida; k++)
-				descendencia[i]->partialOutputs[j][k] = nodulePopulation.nodulos[noduleOrig]->salidas_parciales[j][k];
+				descendencia[i]->partialOutputs[j][k] = nodulePopulation.nodulos[noduleOrig]->partialOutputs[j][k];
 		} /* end for */
 	} /* end for */
 }
@@ -141,7 +141,7 @@ void mutarNodulos(int nodule)
 				* (delta_min - delta_max));
 	if(num < 0)
 		num = 0;
-	else if(nodulePopulation.nodulos[numNodulo]->nodes < num)
+	else if(nodulePopulation.nodulos[nodule]->nodes < num)
 		num = nodulePopulation.nodulos[nodule]->nodes;
 	else if(num > 0)
 		borrarNodo(nodule, num);
@@ -151,7 +151,7 @@ void mutarNodulos(int nodule)
 				* (delta_min - delta_max));
 	if(num < 0)
 		num = 0;
-	else if((nodulePopulation.nodulos[numNodulo]->nodes + num) > maxNodes)
+	else if((nodulePopulation.nodulos[nodule]->nodes + num) > maxNodes)
 		num = maxNodes - nodulePopulation.nodulos[nodule]->nodes;
 	else if(num > 0)
 		anadirNodo(nodule, num); /* We add a new node,*/
@@ -470,7 +470,7 @@ void sustituirNodulos()
 		liberarNodulo(descendencia[i]);
 	free(descendencia);
 	descendencia = NULL;
-	orderarNodulos();
+	ordenarNodulos();
 	free(id);
 	free(order);
 }

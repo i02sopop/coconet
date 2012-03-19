@@ -98,7 +98,7 @@ void medirAptitudNodulos(int nodule)
 		error(RES_MEM);
 
 	/* We make a copy of the network population. */
-	populationrRed(netPopulation.redes, population);
+	copiarRed(netPopulation.redes, population);
 
 	/* We measure the partial aptitude of the nodule by substitution. */
 	sust = sustitucion(nodule, population);
@@ -110,7 +110,7 @@ void medirAptitudNodulos(int nodule)
 		error(RES_MEM);
 
 	/* We restore the network population. */
-	populationrRed(population, netPopulation.redes);
+	copiarRed(population, netPopulation.redes);
 
 	/* We measure the nodule partial aptitude by difference. */
 	dif = diferencia(nodule, population);
@@ -198,13 +198,13 @@ double diferencia(int nodule, red **population)
   
 	netNumber = 0;
 	sum = 0.0;
-	if((netIds = (int *)malloc(max_netIds * sizeof(int))) == NULL)
+	if((netIds = (int *)malloc(maxNetworks * sizeof(int))) == NULL)
 		error(RES_MEM);
 
 	/* We store the networks in which the nodule takes part. */
-	for(i = 0; i < pnetIds.n_netIds; i++)
-		if(pnetIds.netIds[i]->nodulos[nodulePopulation.n_subpobl - 1] == nodulePopulation.nodulos[nodule]) {
-			pnetIds.netIds[i]->aptitud = 0;
+	for(i = 0; i < netPopulation.n_redes; i++)
+		if(netPopulation.redes[i]->nodulos[nodulePopulation.n_subpobl - 1] == nodulePopulation.nodulos[nodule]) {
+			netPopulation.redes[i]->aptitud = 0;
 			netIds[netNumber] = i;
 			netNumber++;
 		}
@@ -212,23 +212,23 @@ double diferencia(int nodule, red **population)
 	for(i = 0; i < netNumber; i++) {
 		for(j = 0; j < n_entrenamiento; j++) {
 			/* We generate the network outputs without the partial outputs of the nodule that we are measuring. */
-			for(k = 0; k < pnetIds.n_nodos_salida; k++) {
-				pnetIds.netIds[netIds[i]]->valores_salida[k] = 0.0;
+			for(k = 0; k < netPopulation.n_nodos_salida; k++) {
+				netPopulation.redes[netIds[i]]->valores_salida[k] = 0.0;
 				for(l = 0; l < nodulePopulation.n_subpobl - 1; l++)
-					pnetIds.netIds[netIds[i]]->valores_salida[k] += (*(net_transf))(pnetIds.netIds[netIds[i]]->nodulos[l]->partialOutputs[j][k]);
+					netPopulation.redes[netIds[i]]->valores_salida[k] += (*(net_transf))(netPopulation.redes[netIds[i]]->nodulos[l]->partialOutputs[j][k]);
 			}
 
 			/* We measure the networks aptitude. */
 			if(nodulePopulation.n_subpobl > 1)
 				medirAptitudRed(salida[j], netIds[i]);
 			else
-				pnetIds.netIds[netIds[i]]->aptitud = 0.0;
+				netPopulation.redes[netIds[i]]->aptitud = 0.0;
 		}
 
-		pnetIds.netIds[netIds[i]]->aptitud /= n_entrenamiento;
+		netPopulation.redes[netIds[i]]->aptitud /= n_entrenamiento;
 
 		/* We add the difference between the network aptitude with and without the nodule. */
-		sum += pnetIds.netIds[netIds[i]]->aptitud - population[netIds[i]]->aptitud;
+		sum += netPopulation.redes[netIds[i]]->aptitud - population[netIds[i]]->aptitud;
 	}
 
 	/* We make the average of the aptitudes calculated previously. */

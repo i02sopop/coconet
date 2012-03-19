@@ -86,7 +86,7 @@ double Normal(double media, double sigma)
 		do {
 			v1 = 2 * doubleRandom() -1;
 			v2 = 2 * doubleRandom() - 1;
-			r = v 1 * v1 + v2 * v2;
+			r = v1 * v1 + v2 * v2;
 		} while(r >= 1);
 
 		fac = sqrt(-2 * log(r) / r);
@@ -170,7 +170,7 @@ void escalarDatosEntrada(int iterations)
  Calling Functions: None
 ******************************************************************************/
 
-void escalarDataSalida(double **data, int iterations, double lbound, double ubound)
+void escalarDatosSalida(double **data, int iterations, double lbound, double ubound)
 {
 	int i, j;
 	double max, min, a, b;

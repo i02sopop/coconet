@@ -59,7 +59,7 @@ int main(int argc, char **argv)
 		error(COMMAND);
 
 	/* We load the config and training files. */
-	cargarFichero(argv + 1, argv + 2);
+	cargarFichero(argv[1], argv[2]);
 	if(nodsel > numNodules)
 		nodsel = numNodules;
 
