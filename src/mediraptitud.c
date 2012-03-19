@@ -98,7 +98,7 @@ void medirAptitudNodulos(int nodule)
 		error(RES_MEM);
 
 	/* We make a copy of the network population. */
-	populationrRed(netPopulation.redes,population);
+	populationrRed(netPopulation.redes, population);
 
 	/* We measure the partial aptitude of the nodule by substitution. */
 	sust = sustitucion(nodule, population);
@@ -127,7 +127,7 @@ void medirAptitudNodulos(int nodule)
 	/* We measure the partial aptitude of the nodule. */
 	/* We calculate the final aptitude by ponderating the aptitudes calculated
 	   previously. */
-	pnodulos.nodulos[nodule]->aptitud = pond.sust * sust + pond.dif * dif +
+	pnodulos.nodulos[nodule]->aptitude = pond.sust * sust + pond.dif * dif +
 		pond.best * best;
 }
 
@@ -157,7 +157,7 @@ void copiarRed(red **origin, red **destination)
 		if(destination[i] == NULL)
 			error(RES_MEM);
 
-		destination[i]->nodulos = (nodulo **)malloc(pnodulos.n_subpobl * sizeof(nodulo));
+		destination[i]->nodulos = (nodule **)malloc(pnodulos.n_subpobl * sizeof(nodule));
 		destination[i]->valores_salida = (double *)malloc(netPopulation.n_nodos_salida * sizeof(double));
 		if(destination[i]->nodulos == NULL || destination[i]->valores_salida == NULL)
 			error(RES_MEM);
@@ -215,7 +215,7 @@ double diferencia(int nodule, red **population)
 			for(k = 0; k < pnetIds.n_nodos_salida; k++) {
 				pnetIds.netIds[netIds[i]]->valores_salida[k] = 0.0;
 				for(l = 0; l < pnodulos.n_subpobl - 1; l++)
-					pnetIds.netIds[netIds[i]]->valores_salida[k] += (*(net_transf))(pnetIds.netIds[netIds[i]]->nodulos[l]->salidas_parciales[j][k]);
+					pnetIds.netIds[netIds[i]]->valores_salida[k] += (*(net_transf))(pnetIds.netIds[netIds[i]]->nodulos[l]->partialOutputs[j][k]);
 			}
 
 			/* We measure the networks aptitude. */
@@ -246,7 +246,7 @@ double diferencia(int nodule, red **population)
  Description: Measure the aptitude of a given nodule by the best networks it
               takes part of.
  Input Parameters:
- 	noduleNumber: Integer. Nodule number to measure the aptitude.
+ 	nodule: Integer. Nodule number to measure the aptitude.
  Local Variables:
  	i: Integer. Counter.
  	netNumber: Integer. Number of networks the nodule take part of.
@@ -254,7 +254,7 @@ double diferencia(int nodule, red **population)
  Calling Functions: None
 ******************************************************************************/
 
-double mejores(int noduleNumber)
+double mejores(int nodule)
 {
 	int i, netNumber;
 	double sum;
@@ -263,7 +263,7 @@ double mejores(int noduleNumber)
 	netNumber = 0;
   
 	for(i = 0; i < netPopulation.n_redes && netNumber < redsel; i++) {
-		if(netPopulation.redes[i]->nodulos[pnodulos.n_subpobl - 1] == pnodulos.nodulos[noduleNumber]) {
+		if(netPopulation.redes[i]->nodulos[pnodulos.n_subpobl - 1] == pnodulos.nodulos[nodule]) {
 			netNumber++;
 			sum += netPopulation.redes[i]->aptitud;
 		}
@@ -356,11 +356,11 @@ void normalizarAptitudNodulos()
 	/* We calculate the minimal value of the nodules aptitude. */
 	min = 0;
 	for(i = 0; i < pnodulos.n_nodulos; i++)
-		if(min > pnodulos.nodulos[i]->aptitud)
-			min = pnodulos.nodulos[i]->aptitud;
+		if(min > pnodulos.nodulos[i]->aptitude)
+			min = pnodulos.nodulos[i]->aptitude;
 
 	/* We set the minimal nodule aptitude to 0. */
 	if(min < 0)
 		for(i = 0; i < pnodulos.n_nodulos; i++)
-			pnodulos.nodulos[i]->aptitud -= min;
+			pnodulos.nodulos[i]->aptitude -= min;
 }

@@ -127,6 +127,7 @@ void medirCambioNodulo(int nodule)
 		/* We train the networks of the modified nodule. */
 		if(netPopulation.redes[i]->nodulos[pnodulos.n_subpobl - 1] == pnodulos.nodulos[nodule]) {
 			netPopulation.redes[i]->aptitud = 0;
+
 			/* We calculate the networks aptitude. */
 			for(j = 0; j < n_entrenamiento; j++) {
 				generarSalidaNodulo(entrada[j], nodule, j, NULL);

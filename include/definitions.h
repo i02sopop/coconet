@@ -34,18 +34,18 @@ typedef struct {
 
 typedef struct {
 	int id; /* Id of the nodule. */
-	int n_nodos; /* Number of nodes of the nodule. */
-	double aptitud; /* Nodule aptitude. */
-	int **conexiones_entrada; /* Connections between input and hidden nodes. */
-	int **conexiones_salida; /* Connections between hidden and output nodes. */
-	double **pesos_entrada; /* Weights of the input connections. */
-	double **pesos_salida; /* Weights of the output connections. */
+	int nodes; /* Number of nodes of the nodule. */
+	double aptitude; /* Nodule aptitude. */
+	int **inConn; /* Connections between input and hidden nodes. */
+	int **outConn; /* Connections between hidden and output nodes. */
+	double **inWeights; /* Weights of the input connections. */
+	double **outWeights; /* Weights of the output connections. */
 	func *transf; /* Transfer function of each node. */
-	double **salidas_parciales; /* Partial outputs of the nodule. */
-} nodulo;
+	double **partialOutputs; /* Partial outputs of the nodule. */
+} nodule;
 
 typedef struct {
-	nodulo **nodulos; /* Nodules of the network. */
+	nodule **nodulos; /* Nodules of the network. */
 	double aptitud; /* Network aptitude. */
 	double *valores_salida; /* Output values of the output nodes. */
 } red;
@@ -71,7 +71,7 @@ typedef struct {
 } ponderacion;
 
 pobl_redes netPopulation;            /* Network population. */
-pobl_nodulos pnodulos;        /* Nodule population.. */
+pobl_nodulos pnodulos;        /* Nodule population. */
 int max_nodos;	              /* Max number of nodes in a nodule. */
 int num_nodulos;              /* Max number of nodules in a subpopulation. */
 int max_redes;                /* Max number of networks in the population. */
@@ -88,7 +88,7 @@ int iteraciones_sa;           /* Number of iterations of the simulated annealing
 int nodsel;                   /* Number of nodes selected to perform some operations. */
 int delta_min;                /* Min value of delta for the structural mutation. */
 int delta_max;                /* Max value of delta for the structural mutation. */
-nodulo **descendencia;        /* Descendant of the last nodules subpopulation. */
+nodule **descendencia;        /* Descendant of the last nodules subpopulation. */
 double evolim;                /* Modification limit for the stop criteria. */
 func net_transf;              /* Transfer function for the networks. */
 double alpharet;              /* Ponderation in the changing of weights during the backpropagation. */

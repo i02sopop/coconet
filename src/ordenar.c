@@ -27,7 +27,7 @@
  Local Variables
    i: Integer. Counter.
    j: Integer. Counter.
-   aux: Nodulo. Auxiliar variable to change the order of the nodules.
+   aux: Nodule. Auxiliar variable to change the order of the nodules.
  Return Value: None
  Calling Functions: None
 ******************************************************************************/
@@ -35,12 +35,12 @@
 void ordenarNodulos()
 {
 	int i, j;
-	nodulo *aux;
+	nodule *aux;
 
 	/* We order the nodules and copy them to the new population. */
 	for(i = num_nodulos * (pnodulos.n_subpobl - 1); i < pnodulos.n_nodulos; i++) {
 		for(j = i; j < pnodulos.n_nodulos; j++) {
-			if(pnodulos.nodulos[i]->aptitud < pnodulos.nodulos[j]->aptitud) {
+			if(pnodulos.nodulos[i]->aptitude < pnodulos.nodulos[j]->aptitude) {
 				aux = pnodulos.nodulos[i];
 				pnodulos.nodulos[i] = pnodulos.nodulos[j];
 				pnodulos.nodulos[j] = aux;

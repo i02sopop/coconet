@@ -31,31 +31,31 @@
  Calling Functions: None
 ******************************************************************************/
 
-void liberarNodulo(nodulo *nodule)
+void liberarNodulo(nodule *nodule)
 {
-  int i;
+	int i;
 
-  /* 
-	 We free the memory allocated by the matrix and vectors of the given
-	 nodule.
-  */
-  for(i = 0; i < max_nodos; i++) {
-    free(nodule->conexiones_salida[i]);
-    free(nodule->pesos_salida[i]);
-  } for(i = 0; i < netPopulation.n_nodos_entrada; i++) {
-    free(nodule->conexiones_entrada[i]);
-    free(nodule->pesos_entrada[i]);
-  } for(i = 0; i < netPopulation.n_nodos_salida; i++)
-    nodule->transf = NULL;
-  for(i = 0; i < n_entrenamiento; i++)
-    free(nodule->salidas_parciales[i]);
+	/*
+	  We free the memory allocated by the matrix and vectors of the given
+	  nodule.
+	*/
+	for(i = 0; i < max_nodos; i++) {
+		free(nodule->outConn[i]);
+		free(nodule->outWeights[i]);
+	} for(i = 0; i < netPopulation.n_nodos_entrada; i++) {
+		free(nodule->inConn[i]);
+		free(nodule->inWeights[i]);
+	} for(i = 0; i < netPopulation.n_nodos_salida; i++)
+		  nodule->transf = NULL;
+	for(i = 0; i < n_entrenamiento; i++)
+		free(nodule->partialOutputs[i]);
 
-  free(nodule->conexiones_entrada);
-  free(nodule->conexiones_salida);
-  free(nodule->pesos_entrada);
-  free(nodule->pesos_salida);
-  free(nodule->transf);
-  free(nodule->salidas_parciales);
+	free(nodule->inConn);
+	free(nodule->outConn);
+	free(nodule->inWeights);
+	free(nodule->outWeights);
+	free(nodule->transf);
+	free(nodule->partialOutputs);
 }
 
 /******************************************************************************
@@ -73,17 +73,17 @@ void liberarNodulo(nodulo *nodule)
 
 void ajustarMatrices()
 {
-  int i, j;
-  
-  /* We adjust the matriz size of the last nodule subpopulation. */
-  for(i = num_nodulos * (pnodulos.n_subpobl - 1); i < pnodulos.n_nodulos; i++) {
-    for(j = 0; j < netPopulation.n_nodos_entrada; j++) {
-      pnodulos.nodulos[i]->conexiones_entrada[j] = (int *)realloc(pnodulos.nodulos[i]->conexiones_entrada[j], pnodulos.nodulos[i]->n_nodos * sizeof(int));
-      pnodulos.nodulos[i]->pesos_entrada[j] = (double *)realloc(pnodulos.nodulos[i]->pesos_entrada[j], pnodulos.nodulos[i]->n_nodos * sizeof(double));
-    }
+	int i, j;
 
-    pnodulos.nodulos[i]->conexiones_salida = (int **)realloc(pnodulos.nodulos[i]->conexiones_salida, pnodulos.nodulos[i]->n_nodos * sizeof(int));
-    pnodulos.nodulos[i]->pesos_salida = (double **)realloc(pnodulos.nodulos[i]->pesos_salida, pnodulos.nodulos[i]->n_nodos * sizeof(double));
-    pnodulos.nodulos[i]->transf = (func *)realloc(pnodulos.nodulos[i]->transf, pnodulos.nodulos[i]->n_nodos * sizeof(func));
-  }
+	/* We adjust the matriz size of the last nodule subpopulation. */
+	for(i = num_nodulos * (pnodulos.n_subpobl - 1); i < pnodulos.n_nodulos; i++) {
+		for(j = 0; j < netPopulation.n_nodos_entrada; j++) {
+			pnodulos.nodulos[i]->inConn[j] = (int *)realloc(pnodulos.nodulos[i]->inConn[j], pnodulos.nodulos[i]->nodes * sizeof(int));
+			pnodulos.nodulos[i]->inWeights[j] = (double *)realloc(pnodulos.nodulos[i]->inWeights[j], pnodulos.nodulos[i]->nodes * sizeof(double));
+		}
+
+		pnodulos.nodulos[i]->outConn = (int **)realloc(pnodulos.nodulos[i]->outConn, pnodulos.nodulos[i]->nodes * sizeof(int));
+		pnodulos.nodulos[i]->outWeights = (double **)realloc(pnodulos.nodulos[i]->outWeights, pnodulos.nodulos[i]->nodes * sizeof(double));
+		pnodulos.nodulos[i]->transf = (func *)realloc(pnodulos.nodulos[i]->transf, pnodulos.nodulos[i]->nodes * sizeof(func));
+	}
 }

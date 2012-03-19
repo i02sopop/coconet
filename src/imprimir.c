@@ -35,7 +35,7 @@
  Calling Functions: None
 ******************************************************************************/
 
-void imprimirNodulo(nodulo *imp, int iter)
+void imprimirNodulo(nodule *imp, int iter)
 {
 	int i, j;
 	FILE *fOutput;
@@ -45,38 +45,38 @@ void imprimirNodulo(nodulo *imp, int iter)
 	  TODO: Get the output filename from configuration.
 	*/
 	fOutput = fopen("nodules.txt", "a");
-	fprintf(fOutput, "id: %d\nNumber of nodes: %d\naptitude: %lf\n\nInput connections matrix:", imp->id, imp->n_nodos, imp->aptitud);
+	fprintf(fOutput, "id: %d\nNumber of nodes: %d\naptitude: %lf\n\nInput connections matrix:", imp->id, imp->nodes, imp->aptitude);
 	for(i = 0; i < netPopulation.n_nodos_entrada; i++) {
 		fprintf(fOutput, "\n");
-		for(j = 0; j < imp->n_nodos; j++)
-			fprintf(fOutput, "%d ", imp->conexiones_entrada[i][j]);
+		for(j = 0; j < imp->nodes; j++)
+			fprintf(fOutput, "%d ", imp->inConn[i][j]);
 	}
 
 	fprintf(fOutput, "\nOutput connections matrix:");
-	for(i=0;i<imp->n_nodos;i++) {
+	for(i = 0; i < imp->nodes; i++) {
 		fprintf(fOutput, "\n");
 		for(j = 0; j < netPopulation.n_nodos_salida; j++)
-			fprintf(fOutput, "%d ", imp->conexiones_salida[i][j]);
+			fprintf(fOutput, "%d ", imp->outConn[i][j]);
 	}
 
 	fprintf(fOutput, "\nInput weights matrix:");
 	for(i = 0; i < netPopulation.n_nodos_entrada; i++) {
 		fprintf(fOutput, "\n");
-		for(j = 0; j < imp->n_nodos; j++)
-			fprintf(fOutput, "%lf ", imp->pesos_entrada[i][j]);
+		for(j = 0; j < imp->nodes; j++)
+			fprintf(fOutput, "%lf ", imp->inWeights[i][j]);
 	}
 
 	fprintf(fOutput, "\nOutput weights matrix:");
-	for(i = 0; i < imp->n_nodos; i++) {
+	for(i = 0; i < imp->nodes; i++) {
 		fprintf(fOutput, "\n");
 		for(j = 0; j < netPopulation.n_nodos_salida; j++)
-			fprintf(fOutput, "%lf ", imp->pesos_salida[i][j]);
+			fprintf(fOutput, "%lf ", imp->outWeights[i][j]);
 	}
 
 	fprintf(fOutput, "\nPartial outputs\n");
 	for(i = 0; i < iter; i++)
 		for(j = 0; j < netPopulation.n_nodos_salida; j++)
-			fprintf(fOutput, "%lf ", imp->salidas_parciales[i][j]);
+			fprintf(fOutput, "%lf ", imp->partialOutputs[i][j]);
 	fprintf(fOutput, "\n\n");
 
 	/* We close the putput file. */

@@ -59,21 +59,27 @@ void evolucionarPoblaciones()
 	for(i = 0; i < netPopulation.n_redes; i++)
 		netPopulation.redes[i]->aptitud = 0;
 
-	/* We evolve the networks until its average aptitude doesn't get enhaced
-	   enough. */
+	/*
+	  We evolve the networks until its average aptitude doesn't get enhaced
+	  enough.
+	*/
 	for(i = 0; medirCambio(&networkAptitude, i) == false; i++) {
 		initNumNodules = num_nodulos * (pnodulos.n_subpobl - 1);
 		if(i == 0) {
-			/* If the subpopulation is new we run the backpropagation to reduce
-			   its error. */
+			/*
+			  If the subpopulation is new we run the backpropagation to reduce
+			  its error.
+			*/
 			fprintf(stderr, "Doing the backpropagation to a new nodule "
 					"subpopulation. \n");
 			for(j = 0; j < num_nodulos; j++)
 				retropropagacion(initNumNodules + j, n_entrenamiento, 5000);
 
-			/* We train by first time the networks to have an initial value of
-			   the nodules and networks aptitude. */
-			fprintf(stderr,"We train by first time the networks.\n");
+			/*
+			  We train by first time the networks to have an initial value of
+			  the nodules and networks aptitude.
+			*/
+			fprintf(stderr, "We train by first time the networks.\n");
 			for(j = 0; j < n_entrenamiento; j++) {
 				/* We generate the nodules output. */
 				for(k = pnodulos.n_nodulos - num_nodulos; k < pnodulos.n_nodulos ;k++)
@@ -101,33 +107,33 @@ void evolucionarPoblaciones()
 		ordenarRedes();
 
 		/* We train the networks by simulate annealing. */
-		fprintf(stderr,"Training the networks by simulate annealing.\n");
+		fprintf(stderr, "Training the networks by simulate annealing.\n");
 		for(j = initNumNodules; j < pnodulos.n_nodulos; j++)
 			enfriamientoSimulado(j);
 
 		/* We normalize the nodules aptitude. */
-		fprintf(stderr, "Normalization of the nodules aptitude.\n");
+		fprintf(stderr, "Normalize the nodules aptitude.\n");
 		normalizarAptitudNodulos();
 
 		/* We sort the nodules by aptitude. */
-		fprintf(stderr,"Sorting nodules.\n");
+		fprintf(stderr, "Sorting nodules.\n");
 		ordenarNodulos();
 
 		/* We create a new subpopulation descendant of the actual one. */
-		fprintf(stderr,"Creating new subpopulation.\n");
+		fprintf(stderr, "Creating new subpopulation.\n");
 		copiarDescendencia();
 
 		/* We make the structural mutation of the nodules. */
-		fprintf(stderr,"Nodules mutation.\n");
+		fprintf(stderr, "Nodules mutation.\n");
 		for(j = initNumNodules; j < pnodulos.n_nodulos; j++)
 			mutarNodulos(j);
 
 		/* We substitude the worst nodules by the best ones in the descendant
 		   population. */
-		fprintf(stderr,"Susbstitution of the worst nodules by the bes ones.\n");
+		fprintf(stderr, "Susbstitution of the worst nodules by the bes ones.\n");
 		sustituirNodulos();
 
-		fprintf(stderr,"End of the evolve.\n");
+		fprintf(stderr, "End of the evolve.\n");
 	}
 }
 
@@ -164,14 +170,14 @@ void evolucionarPoblaciones()
 void retropropagacion(int nodule, int numPatterns, int iter)
 {
 	int i, j, k, pattern, numNodes;
-	double *initialError, **F_W, *out,* *weights;
+	double *initialError, **F_W, *out, **weights;
 	func *transf;
 
 	/* We initializate the local variables. */
-	numNodes = pnodulos.nodulos[nodule]->n_nodos + netPopulation.n_nodos_entrada +
+	numNodes = pnodulos.nodulos[nodule]->nodes + netPopulation.n_nodos_entrada +
 		netPopulation.n_nodos_salida;
 
-	transf = (func *)malloc((netPopulation.n_nodos_salida + pnodulos.nodulos[nodule]->n_nodos) * sizeof(func));
+	transf = (func *)malloc((netPopulation.n_nodos_salida + pnodulos.nodulos[nodule]->nodes) * sizeof(func));
 	out = (double *)malloc(numNodes * sizeof(double));
 	F_W = (double **)malloc(numNodes * sizeof(double));
 	weights = (double **)malloc(numNodes * sizeof(double));
@@ -193,10 +199,10 @@ void retropropagacion(int nodule, int numPatterns, int iter)
 		}
 	}
 
-	for(i = 0; i < pnodulos.nodulos[nodule]->n_nodos; i++)
+	for(i = 0; i < pnodulos.nodulos[nodule]->nodes; i++)
 		transf[i] = pnodulos.nodulos[nodule]->transf[i];
 
-	for(;i < pnodulos.nodulos[nodule]->n_nodos + netPopulation.n_nodos_salida; i++)
+	for(;i < pnodulos.nodulos[nodule]->nodes + netPopulation.n_nodos_salida; i++)
 		transf[i] = net_transf;
 
 	/* Backpropagation. */
@@ -207,32 +213,32 @@ void retropropagacion(int nodule, int numPatterns, int iter)
 
 		/* We assign the weight to the weights matrix*/
 		for(j = 0; j < netPopulation.n_nodos_salida; j++)
-			initialError[j] = out[j + netPopulation.n_nodos_entrada + pnodulos.nodulos[nodule]->n_nodos] -
+			initialError[j] = out[j + netPopulation.n_nodos_entrada + pnodulos.nodulos[nodule]->nodes] -
 				salida[pattern][j];
 
-		for(i = 0; i < pnodulos.nodulos[nodule]->n_nodos; i++)
+		for(i = 0; i < pnodulos.nodulos[nodule]->nodes; i++)
 			for(j = 0; j < netPopulation.n_nodos_entrada; j++)
 				weights[i + netPopulation.n_nodos_entrada][j] =
-					pnodulos.nodulos[nodule]->pesos_entrada[j][i];
+					pnodulos.nodulos[nodule]->inWeights[j][i];
 
 		for(i = 0; i < netPopulation.n_nodos_salida; i++)
-			for(j = 0; j < pnodulos.nodulos[nodule]->n_nodos; j++)
-				weights[i + netPopulation.n_nodos_entrada + pnodulos.nodulos[nodule]->n_nodos][j + netPopulation.n_nodos_entrada] =
-					pnodulos.nodulos[nodule]->pesos_salida[j][i];
+			for(j = 0; j < pnodulos.nodulos[nodule]->nodes; j++)
+				weights[i + netPopulation.n_nodos_entrada + pnodulos.nodulos[nodule]->nodes][j + netPopulation.n_nodos_entrada] =
+					pnodulos.nodulos[nodule]->outWeights[j][i];
 
 		/* Obtain the weight change. */
-		cambioPesos(initialError, weight, out, F_W, pnodulos.nodulos[nodule]->n_nodos, transf);
+		cambioPesos(initialError, weight, out, F_W, pnodulos.nodulos[nodule]->nodes, transf);
 
 		/* We update the weigths. */
-		for(i = 0; i < pnodulos.nodulos[nodule]->n_nodos; i++)
+		for(i = 0; i < pnodulos.nodulos[nodule]->nodes; i++)
 			for(j = 0; j < netPopulation.n_nodos_entrada; j++)
-				pnodulos.nodulos[nodule]->pesos_entrada[j][i] -= alpharet *
+				pnodulos.nodulos[nodule]->inWeights[j][i] -= alpharet *
 					F_W[i + netPopulation.n_nodos_entrada][j];
 
 		for(i = 0; i < netPopulation.n_nodos_salida; i++)
-			for(j = 0; j < pnodulos.nodulos[nodule]->n_nodos; j++)
-				pnodulos.nodulos[nodule]->pesos_salida[j][i] -= alpharet *
-					F_W[i + netPopulation.n_nodos_entrada + pnodulos.nodulos[nodule]->n_nodos][j + netPopulation.n_nodos_entrada];
+			for(j = 0; j < pnodulos.nodulos[nodule]->nodes; j++)
+				pnodulos.nodulos[nodule]->outWeights[j][i] -= alpharet *
+					F_W[i + netPopulation.n_nodos_entrada + pnodulos.nodulos[nodule]->nodes][j + netPopulation.n_nodos_entrada];
 	}
 
 	/* Free memory. */
@@ -316,7 +322,7 @@ void cambioPesos(double *initialError, double **weights, double *out, double **F
  Author: Pablo Álvarez de Sotomayor Posadillo
  Description: Run the simulated annealing over a given nodule.
  Input Parameters:
-   nodNumber: Integer. Number of nodule to run over.
+   nodule: Integer. Number of nodule to run over.
  Local Variables:
    i: Integer. Counter.
    j: Integer. Counter.
@@ -332,7 +338,7 @@ void cambioPesos(double *initialError, double **weights, double *out, double **F
    doubleRandom(): Returns a random float of double precision.
 ******************************************************************************/
 
-void enfriamientoSimulado(int nodNumber)
+void enfriamientoSimulado(int nodule)
 {
 	int i, j, k, steps;
 	double T, *weights, oldAptitude;
@@ -340,7 +346,7 @@ void enfriamientoSimulado(int nodNumber)
 	/* Variable initialization. */
 	T = ToSA;
 	weights = NULL;
-	oldAptitude = pnodulos.nodulos[nodNumber]->aptitud;
+	oldAptitude = pnodulos.nodulos[nodule]->aptitude;
 
 	/* Simulated annealing. */
 	for(steps = 0; steps < iteraciones_sa; steps++) {
@@ -349,54 +355,54 @@ void enfriamientoSimulado(int nodNumber)
 
 		/* Input weights. */
 		for(i = 0; i < netPopulation.n_nodos_entrada; i++)
-			for(j = 0; j < pnodulos.nodulos[nodNumber]->n_nodos; j++)
-				if(pnodulos.nodulos[nodNumber]->conexiones_entrada[i][j]) {
+			for(j = 0; j < pnodulos.nodulos[nodule]->nodes; j++)
+				if(pnodulos.nodulos[nodule]->inConn[i][j]) {
 					weigths = (double *)realloc(weigths, (k + 1) * sizeof(double));
-					weigths[k] = pnodulos.nodulos[nodNumber]->pesos_entrada[i][j];
+					weigths[k] = pnodulos.nodulos[nodule]->inWeights[i][j];
 					k++;
 				}
 
 		/* Output weights. */
-		for(i = 0; i < pnodulos.nodulos[nodNumber]->n_nodos; i++)
+		for(i = 0; i < pnodulos.nodulos[nodule]->nodes; i++)
 			for(j = 0; j < netPopulation.n_nodos_salida; j++)
-				if(pnodulos.nodulos[nodNumber]->conexiones_salida[i][j]) {
+				if(pnodulos.nodulos[nodule]->outConn[i][j]) {
 					weigths = (double *)realloc(weigths, (k + 1) * sizeof(double));
-					weigths[k] = pnodulos.nodulos[nodNumber]->pesos_salida[i][j];
+					weigths[k] = pnodulos.nodulos[nodule]->outWeights[i][j];
 					k++;
 				}
 
 		/* We make a randon step. */
-		pasoAleatorio(nodNumber);
+		pasoAleatorio(nodule);
 
 		/* We calculate the aptitude of the new nodule. */
-		medirCambioNodulo(nodNumber);
+		medirCambioNodulo(nodule);
 
 		/* If the aptitude is worst we reject the change. */
-		if((oldAptitude > pnodulos.nodulos[nodNumber]->aptitud) &&
-		   doubleRandom() < (oldAptitude - pnodulos.nodulos[nodNumber]->aptitud) * T) {
+		if((oldAptitude > pnodulos.nodulos[nodule]->aptitude) &&
+		   doubleRandom() < (oldAptitude - pnodulos.nodulos[nodule]->aptitude) * T) {
 			/* We restore the old weights. */
 			k = 0;
 
 			/* Input weights. */
 			for(i = 0; i < netPopulation.n_nodos_entrada; i++)
-				for(j = 0; j < pnodulos.nodulos[nodNumber]->n_nodos; j++)
-					if(pnodulos.nodulos[nodNumber]->conexiones_entrada[i][j]) {
-						pnodulos.nodulos[nodNumber]->pesos_entrada[i][j] = weigths[k];
+				for(j = 0; j < pnodulos.nodulos[nodule]->nodes; j++)
+					if(pnodulos.nodulos[nodule]->inConn[i][j]) {
+						pnodulos.nodulos[nodule]->inWeights[i][j] = weigths[k];
 						k++;
 					}
 
 			/* Output weights. */
-			for(i = 0; i < pnodulos.nodulos[nodNumber]->n_nodos; i++)
+			for(i = 0; i < pnodulos.nodulos[nodule]->nodes; i++)
 				for(j = 0; j < netPopulation.n_nodos_salida; j++)
-					if(pnodulos.nodulos[nodNumber]->conexiones_salida[i][j]) {
-						pnodulos.nodulos[nodNumber]->pesos_salida[i][j] = weigths[k];
+					if(pnodulos.nodulos[nodule]->outConn[i][j]) {
+						pnodulos.nodulos[nodule]->outWeights[i][j] = weigths[k];
 						k++;
 					}
 
 			/* We recalculate the aptitude of the nodule. */
-			medirCambioNodulo(nodNumber);
+			medirCambioNodulo(nodule);
 		} else
-			oldAptitude = pnodulos.nodulos[nodNumber]->aptitud;
+			oldAptitude = pnodulos.nodulos[nodule]->aptitude;
 
 		/* We update the aptitude temperature. */
 		T = alphasa * T;
@@ -411,7 +417,7 @@ void enfriamientoSimulado(int nodNumber)
  Author: Pablo Álvarez de Sotomayor Posadillo
  Description: Make a randon step in each nodule weight.
  Input Parameters:
-   nodNumber: Integer. Number of the nodule to work with.
+   nodule: Integer. Number of the nodule to work with.
  Local Variables:
    i: Integer. Counter.
    j: Integer. Counter.
@@ -420,21 +426,21 @@ void enfriamientoSimulado(int nodNumber)
    Normal(): Generate a randon value following a normal distribution.
 ******************************************************************************/
 
-void pasoAleatorio(int nodNumber)
+void pasoAleatorio(int nodule)
 {
 	int i, j;
 
 	/* Randon step in input connection weights. */
 	for(i = 0; i < netPopulation.n_nodos_entrada; i++)
-		for(j = 0; j < pnodulos.nodulos[nodNumber]->n_nodos; j++)
-			if(pnodulos.nodulos[nodNumber]->conexiones_entrada[i][j])
-				pnodulos.nodulos[nodNumber]->pesos_entrada[i][j] +=
+		for(j = 0; j < pnodulos.nodulos[nodule]->nodes; j++)
+			if(pnodulos.nodulos[nodule]->inConn[i][j])
+				pnodulos.nodulos[nodule]->inWeights[i][j] +=
 					Normal(0.0, 1.0);
 
 	/* Random step in output connection weights.  */
-	for(i = 0; i < pnodulos.nodulos[nodNumber]->n_nodos; i++)
+	for(i = 0; i < pnodulos.nodulos[nodule]->nodes; i++)
 		for(j = 0; j < netPopulation.n_nodos_salida; j++)
-			if(pnodulos.nodulos[nodNumber]->conexiones_salida[i][j] == 1)
-				pnodulos.nodulos[nodNumber]->pesos_salida[i][j] +=
+			if(pnodulos.nodulos[nodule]->outConn[i][j])
+				pnodulos.nodulos[nodule]->outWeights[i][j] +=
 					Normal(0.0, 1.0);
 }

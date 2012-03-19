@@ -45,7 +45,7 @@ void generarSalidaNodulo(double *in, int numNodule, int numInput, double *nodOut
 	double *outputs, *inputs;
  
 	/* Variable initialization. */
-	numNodes = pnodulos.nodulos[numNodule]->n_nodos;
+	numNodes = pnodulos.nodulos[numNodule]->nodes;
 	outputs = (double *)malloc(numNodes * sizeof(double));
 	inputs = (double *)malloc(numNodes * sizeof(double));
 
@@ -58,13 +58,13 @@ void generarSalidaNodulo(double *in, int numNodule, int numInput, double *nodOut
 	}
 
 	for(i = 0; i < netPopulation.n_nodos_salida; i++)
-		pnodulos.nodulos[numNodule]->salidas_parciales[numInput][i] = 0.0;
+		pnodulos.nodulos[numNodule]->partialOutputs[numInput][i] = 0.0;
 
 	/* We propagate the input data over the first layer. */
 	for(i = 0; i < netPopulation.n_nodos_entrada; i++)
 		for(j = 0; j < numNodes; j++)
-			if(pnodulos.nodulos[numNodule]->conexiones_entrada[i][j] == 1)
-				inputs[j] += (in[i] * pnodulos.nodulos[numNodule]->pesos_entrada[i][j]);
+			if(pnodulos.nodulos[numNodule]->inConn[i][j] == 1)
+				inputs[j] += (in[i] * pnodulos.nodulos[numNodule]->inWeights[i][j]);
 
 	/* We generate the output of the hidden nodes. */
 	for(i = 0; i < numNodes; i++)
@@ -75,20 +75,20 @@ void generarSalidaNodulo(double *in, int numNodule, int numInput, double *nodOut
 	for(i = 0; i < numNodes; i++)
 		if(outputs[i] != 0)
 			for(j = 0; j < netPopulation.n_nodos_salida; j++)
-				if(pnodulos.nodulos[numNodule]->conexiones_salida[i][j] == 1)
-					pnodulos.nodulos[numNodule]->salidas_parciales[numInput][j] +=
-						(outputs[i] * pnodulos.nodulos[numNodule]->pesos_salida[i][j]);
+				if(pnodulos.nodulos[numNodule]->outConn[i][j] == 1)
+					pnodulos.nodulos[numNodule]->partialOutputs[numInput][j] +=
+						(outputs[i] * pnodulos.nodulos[numNodule]->outWeights[i][j]);
 
 	/* We store the nodule output in nodOut. */
 	if(nodOut != NULL) {
 		for(i = 0; i < netPopulation.n_nodos_entrada; i++)
 			nodOut[i] = in[i];
   
-		for(i = 0; i < pnodulos.nodulos[numNodule]->n_nodos; i++)
+		for(i = 0; i < numNodes; i++)
 			nodOut[i + netPopulation.n_nodos_entrada] = outputs[i];
     
 		for(i = 0; i < netPopulation.n_nodos_salida; i++)
-			nodOut[i + netPopulation.n_nodos_entrada + numNodes] = (*(net_transf))(pnodulos.nodulos[numNodule]->salidas_parciales[numInput][i]);
+			nodOut[i + netPopulation.n_nodos_entrada + numNodes] = (*(net_transf))(pnodulos.nodulos[numNodule]->partialOutputs[numInput][i]);
 	}
 
 	free(outputs);
@@ -120,6 +120,6 @@ void generarSalidaRed(int netNumber, int inputNumber)
 		netPopulation.redes[netNumber]->valores_salida[i] = 0.0;
 		for(j = 0; j < pnodulos.n_subpobl;j ++)
 			netPopulation.redes[netNumber]->valores_salida[i] +=
-				(*(net_transf))(netPopulation.redes[netNumber]->nodulos[j]->salidas_parciales[inputNumber][i]);
+				(*(net_transf))(netPopulation.redes[netNumber]->nodulos[j]->partialOutputs[inputNumber][i]);
 	}
 }
