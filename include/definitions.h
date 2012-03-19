@@ -60,7 +60,7 @@ typedef struct {
 typedef struct {
 	int n_subpobl; /* Number of subpopulations. */
 	int n_nodulos; /* Total number of nodules at the population. */
-	nodulo **nodulos; /* Nodules of the population. */
+	nodule **nodulos; /* Nodules of the population. */
 }pobl_nodulos;
 
 /* Ponderation for the nodule population. */

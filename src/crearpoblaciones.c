@@ -85,7 +85,7 @@ void crearDescendencia()
 
 		dnet[i]->aptitud = 0;
 		dnet[i]->valores_salida = (double *)malloc(netPopulation.n_nodos_salida * sizeof(double));
-		dnet[i]->nodulos = (nodulo **)malloc(nodulePopulation.n_subpobl * sizeof(nodulo));
+		dnet[i]->nodulos = (nodule **)malloc(nodulePopulation.n_subpobl * sizeof(nodule));
 		if(dnet[i]->valores_salida == NULL || dnet[i]->nodulos == NULL)
 			error(RES_MEM);
 
@@ -159,7 +159,7 @@ void crearNodulos()
 
 	/* We create the nodule subpopulation. */
 	for(i = nodulePopulation.n_nodulos - numNodules; i < nodulePopulation.n_nodulos; i++) {
-		nodulePopulation.nodulos[i] = (nodulo *)malloc(sizeof(nodulo));
+		nodulePopulation.nodulos[i] = (nodule *)malloc(sizeof(nodule));
 		if(nodulePopulation.nodulos[i] == NULL)
 			error(RES_MEM);
 
@@ -275,7 +275,7 @@ void crearPoblacionNodulos()
 	nodulePopulation.n_nodulos = nodulePopulation.n_subpobl * numNodules;
 
 	/* Memory allocation for the new subpopulation. */
-	nodulePopulation.nodulos = (nodulePopulation.n_subpobl == 1) ? (nodule **)malloc(numNodules * sizeof(nodulo)) : (nodule **)realloc(nodulePopulation.nodulos, nodulePopulation.n_nodulos * sizeof(nodulo));
+	nodulePopulation.nodulos = (nodulePopulation.n_subpobl == 1) ? (nodule **)malloc(numNodules * sizeof(nodule)) : (nodule **)realloc(nodulePopulation.nodulos, nodulePopulation.n_nodulos * sizeof(nodule));
 	if(nodulePopulation.nodulos == NULL)
 		error(RES_MEM);
 
@@ -306,7 +306,7 @@ void crearRedes()
 			error(RES_MEM);
 
 		/* Allocation of memory. */
-		netPopulation.redes[i]->nodulos = (nodule **)malloc(sizeof(nodulo));
+		netPopulation.redes[i]->nodulos = (nodule **)malloc(sizeof(nodule));
 		netPopulation.redes[i]->valores_salida = (double *)malloc(netPopulation.n_nodos_salida * sizeof(double));
 		if(netPopulation.redes[i]->nodulos == NULL || netPopulation.redes[i]->valores_salida == NULL)
 			error(RES_MEM);
