@@ -35,10 +35,10 @@ CLOSED: [2012-03-05 lun 01:31]
 :LOGGING: TODO(!) STARTED(!) WAITING(!) DELEGATED(!) APPT(!) DONE(!) DEFERRED(!) CANCELLED(!)
 :STYLE: habit
 :COOKIE_DATA: todo recursive
-:ASSIGNED: ?
+:ASSIGNED: i02sp[p[
 :DIFICULTY: Easy
-:HOURS_ESTIMATED: ?
-:HOURS: ?
+:HOURS_ESTIMATED: 10
+:HOURS: (2) ?
 :DESCRIPTION: Traducir el código al inglés para facilitar la colaboración de otras personas.
 :CREATED_BY: i02sopop
 :CREATION_DATE: [2012-03-09 vie]
@@ -96,11 +96,26 @@ CLOSED: [2012-03-05 lun 01:31]
 :COOKIE_DATA: todo recursive
 :ASSIGNED: ?
 :DIFICULTY: EASY
-:HOURS_ESTIMATED: ?
+:HOURS_ESTIMATED: 1
 :HOURS: ?
 :DESCRIPTION: Finalizar el fichero INSTALL tanto en castellano como en inglés.
 :CREATED_BY: i02sopop
 :CREATION_DATE: [2012-03-09 vie]
+:END_DATE: -
+:END:
+* TODO Compilar con autotools.
+:PROPERTIES:
+:ORDERED: t
+:LOGGING: TODO(!) STARTED(!) WAITING(!) DELEGATED(!) APPT(!) DONE(!) DEFERRED(!) CANCELLED(!)
+:STYLE: habit
+:COOKIE_DATA: todo recursive
+:ASSIGNED: ?
+:DIFICULTY: EASY
+:HOURS_ESTIMATED: 2
+:HOURS: ?
+:DESCRIPTION: Crear los ficheros de configuracion para poder compilar con las herramientas automake/configure.
+:CREATED_BY: i02sopop
+:CREATION_DATE: <2012-03-19 lun>
 :END_DATE: -
 :END:
 
