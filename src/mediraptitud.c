@@ -20,7 +20,7 @@
 
 /******************************************************************************
  File: medirAptitud.c
- Function: medirAptitudRed()
+ Function: measureNetworkAptitude()
  Author: Pablo Álvarez de Sotomayor Posadillo
  Description: Measure the network aptitude from its outputs.
  Input Parameters:
@@ -36,7 +36,7 @@
  Calling Functions: None
 ******************************************************************************/
 
-void medirAptitudRed(double *output, int netNumber)
+void measureNetworkAptitude(double *output, int netNumber)
 {
 	int i;
 	double max_output[2], max_file[2];
@@ -64,7 +64,7 @@ void medirAptitudRed(double *output, int netNumber)
 
 /******************************************************************************
  File: medirAptitud.c
- Function: medirAptitudNodulos()
+ Function: measureNoduleAptitude()
  Author: Pablo Álvarez de Sotomayor Posadillo
  Description: Measure the nodule aptitude from several parameters.
  Input Parameters:
@@ -73,24 +73,24 @@ void medirAptitudRed(double *output, int netNumber)
    i: Integer. Counter.
    sust: Float. Partial aptitude by substitution.
    dif: Float. Partial aptitude by difference.
-   best: Float. Partial aptitude by the best networks in which the nodule takes
-         part.
+   bestNets: Float. Partial aptitude by the best networks in which the nodule
+             takes part.
    population: Vector of networks. Copy of the network population.
  Return Value: None
  Calling Functions:
    error(): Function to show an error message depending on an error number.
-   copiarRed(): Make a copy of the network population.
-   liberarRed(): Free the memory of a network.
-   sustitucion(): Measure the aptitude by substitution.
-   diferencia(): Measure the aptitude by difference.
-   mejores(): Measure the aptitude by the best networks in which the nodule
+   copyNetwork(): Make a copy of the network population.
+   freeNetwork(): Free the memory of a network.
+   replace(): Measure the aptitude by substitution.
+   differ(): Measure the aptitude by difference.
+   best(): Measure the aptitude by the best networks in which the nodule
               takes part.
 ******************************************************************************/
 
-void medirAptitudNodulos(int nodule)
+void measureNoduleAptitude(int nodule)
 {
 	int i;
-	double sust, dif, best;
+	double sust, dif, bestNets;
 	network **population;
   
 	population = NULL;
@@ -98,42 +98,42 @@ void medirAptitudNodulos(int nodule)
 		error(RES_MEM);
 
 	/* We make a copy of the network population. */
-	copiarRed(cNetPopulation.nets, population);
+	copyNetwork(cNetPopulation.nets, population);
 
 	/* We measure the partial aptitude of the nodule by substitution. */
-	sust = sustitucion(nodule, population);
+	sust = replace(nodule, population);
 	for(i = 0; i < cNetPopulation.numNets; i++)
-		liberarRed(cNetPopulation.nets[i]);
+		freeNetwork(cNetPopulation.nets[i]);
 
 	free(cNetPopulation.nets);
 	if((cNetPopulation.nets = (network **)malloc(cNetPopulation.numNets * sizeof(network))) == NULL)
 		error(RES_MEM);
 
 	/* We restore the network population. */
-	copiarRed(population, cNetPopulation.nets);
+	copyNetwork(population, cNetPopulation.nets);
 
 	/* We measure the nodule partial aptitude by difference. */
-	dif = diferencia(nodule, population);
+	dif = differ(nodule, population);
 
 	/* We restore the network population. */
 	for(i = 0; i < cNetPopulation.numNets; i++)
-		liberarRed(cNetPopulation.nets[i]);
+		freeNetwork(cNetPopulation.nets[i]);
 
 	free(cNetPopulation.nets);
 	cNetPopulation.nets = population;
 	population = NULL;
-	best = mejores(nodule);
+	bestNets = best(nodule);
 
 	/* We measure the partial aptitude of the nodule. */
 	/* We calculate the final aptitude by ponderating the aptitudes calculated
 	   previously. */
 	cNodulePopulation.nodules[nodule]->aptitude = adj.sust * sust + adj.dif * dif +
-		adj.best * best;
+		adj.best * bestNets;
 }
 
 /******************************************************************************
  File: medirAptitud.c
- Function: copiarRed()
+ Function: copyNetwork()
  Author: Pablo Álvarez de Sotomayor Posadillo
  Description: Make a copy of the network population.
  Input Parameters:
@@ -147,7 +147,7 @@ void medirAptitudNodulos(int nodule)
    error(): Function to show an error message depending on an error number.
 ******************************************************************************/
 
-void copiarRed(network **origin, network **destination)
+void copyNetwork(network **origin, network **destination)
 {
 	int i, j;
 
@@ -172,7 +172,7 @@ void copiarRed(network **origin, network **destination)
 
 /*******************************************************************************
  File: medirAptitud.c
- Function: diferencia()
+ Function: differ()
  Author: Pablo Álvarez de Sotomayor Posadillo
  Description: Measure the partial output of a nodule by difference.
  Input Parameters:
@@ -187,11 +187,11 @@ void copiarRed(network **origin, network **destination)
  	netIds: Vector of integers. Network ids in which the nodule takes part.
  Return Value: Float. Partial output of the nodule.
  Calling Functions:
-   medirAptitudRed(): Function to measure the aptitude of a network.
+   measureNetworkAptitude(): Function to measure the aptitude of a network.
    error(): Function to show an error message depending on an error number.
 ******************************************************************************/
 
-double diferencia(int nodule, network **population)
+double differ(int nodule, network **population)
 {
 	int i, j, k, l, netNumber, *netIds;
 	double sum;
@@ -220,7 +220,7 @@ double diferencia(int nodule, network **population)
 
 			/* We measure the networks aptitude. */
 			if(cNodulePopulation.numSubpops > 1)
-				medirAptitudRed(outputData[j], netIds[i]);
+				measureNetworkAptitude(outputData[j], netIds[i]);
 			else
 				cNetPopulation.nets[netIds[i]]->aptitude = 0.0;
 		}
@@ -241,7 +241,7 @@ double diferencia(int nodule, network **population)
 
 /******************************************************************************
  File: medirAptitud.c
- Function: mejores()
+ Function: best()
  Author: Pablo Álvarez de Sotomayor Posadillo
  Description: Measure the aptitude of a given nodule by the best networks it
               takes part of.
@@ -254,7 +254,7 @@ double diferencia(int nodule, network **population)
  Calling Functions: None
 ******************************************************************************/
 
-double mejores(int nodule)
+double best(int nodule)
 {
 	int i, netNumber;
 	double sum;
@@ -277,7 +277,7 @@ double mejores(int nodule)
 
 /******************************************************************************
  File: medirAptitud.c
- Function: sustitucion()
+ Function: replace()
  Author: Pablo Álvarez de Sotomayor Posadillo
  Description: Mide la aptitud parcial del nódulo por sustitción.
  Input Parameters:
@@ -290,11 +290,11 @@ double mejores(int nodule)
    selected: Integer. Number of networks selected.
  Return Value: Float. Partial aptitude of the nodule.
  Calling Functions:
-   generarSalidaRed(): Generate the network output from an input pattern.
+   generateNetOutput(): Generate the network output from an input pattern.
    meditAptitudRed(): Measure the network aptitude from the generated output.
 ******************************************************************************/
 
-double sustitucion(int nodule, network **population)
+double replace(int nodule, network **population)
 {
 	int i, j, netNumber, selected;
 	double sum;
@@ -313,8 +313,8 @@ double sustitucion(int nodule, network **population)
 
 			/* We train the modified networks. */
 			for(j = 0; j < numTrain; j++) {
-				generarSalidaRed(i, j);
-				medirAptitudRed(outputData[j], i);
+				generateNetOutput(i, j);
+				measureNetworkAptitude(outputData[j], i);
 			}
 
 			/* We normalize the networks aptitude depending on the number of entries of the training file. */
@@ -335,7 +335,7 @@ double sustitucion(int nodule, network **population)
 
 /******************************************************************************
  File: medirAptitud.c
- Function: normalizarAptitudNodulos()
+ Function: normalizeNoduleAptitude()
  Author: Pablo Álvarez de Sotomayor Posadillo
  Description: Normalize the nodule aptitude by setting the minimal aptitude to
               0.
@@ -347,7 +347,7 @@ double sustitucion(int nodule, network **population)
  Calling Functions: None
 ******************************************************************************/
 
-void normalizarAptitudNodulos()
+void normalizeNoduleAptitude()
 {
 	int i;
 	double min;

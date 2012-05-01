@@ -19,8 +19,8 @@
 #include <definitions.h>
 
 /*****************************************************************************
- File: evolucionarPoblaciones.c
- Function: evolucionarPoblaciones()
+ File: evolvePopulations.c
+ Function: evolvePopulations()
  Author: Pablo Álvarez de Sotomayor Posadillo
  Description: Evolve the networks and nodules populations.
  Input Parameters: None
@@ -32,24 +32,24 @@
    networkAptitude: Float. Store the average aptitude of the networks.
  Return Value: None
  Calling Functions:
-   retropropagacion(): Run the backpropagation algorithm over a given nodule.
-   generarSalidaNodulo(): Generate the outout of a nodule with an input data
+   backpropagation(): Run the backpropagation algorithm over a given nodule.
+   generateNoduleOutput(): Generate the outout of a nodule with an input data
                           given.
-   generarSalidaRed(): Generate the output of a network combining the nodule
+   generateNetOutput(): Generate the output of a network combining the nodule
                        outputs.
-   medirAptitudRed(): Measure the network aptitude.
-   medirAptitudNodulos(): Measure the nodule aptitude.
-   normalizarAptitudNodulos(): Normalize the nodule aptitude.
-   ordenarRedes(): Sort the networks by aptitude.
-   enfriamientoSimulado(): Run the simulated annealing over a nodule.
-   ordenarNodulos(): Sort the nodules by aptitude.
-   copiarDescendencia(): Make a copy of the nodules subpopulation.
-   mutarNodulos(): Make an structural mutation of a nodule.
-   sustituirNodulos(): Substitution of the worst nodules by the mutation of
+   measureNetworkAptitude(): Measure the network aptitude.
+   measureNoduleAptitude(): Measure the nodule aptitude.
+   normalizeNoduleAptitude(): Normalize the nodule aptitude.
+   sortNetworks(): Sort the networks by aptitude.
+   simulatedAnnealing(): Run the simulated annealing over a nodule.
+   sortNodules(): Sort the nodules by aptitude.
+   copyDescendant(): Make a copy of the nodules subpopulation.
+   mutasteNodules(): Make an structural mutation of a nodule.
+   replaceNodules(): Substitution of the worst nodules by the mutation of
                        the best nodules in the subpopulation.
 *****************************************************************************/
 
-void evolucionarPoblaciones()
+void evolvePopulations()
 {
 	int i, j, k, initNumNodules;
 	double networkAptitude;
@@ -63,7 +63,7 @@ void evolucionarPoblaciones()
 	  We evolve the networks until its average aptitude doesn't get enhaced
 	  enough.
 	*/
-	for(i = 0; medirCambio(&networkAptitude, i) == false; i++) {
+	for(i = 0; measureChange(&networkAptitude, i) == false; i++) {
 		initNumNodules = numNodules * (cNodulePopulation.numSubpops - 1);
 		if(!i) {
 			/*
@@ -73,7 +73,7 @@ void evolucionarPoblaciones()
 			fprintf(stderr, "Doing the backpropagation to a new nodule "
 					"subpopulation. \n");
 			for(j = 0; j < numNodules; j++)
-				retropropagacion(initNumNodules + j, numTrain, 5000);
+				backpropagation(initNumNodules + j, numTrain, 5000);
 
 			/*
 			  We train by first time the networks to have an initial value of
@@ -83,12 +83,12 @@ void evolucionarPoblaciones()
 			for(j = 0; j < numTrain; j++) {
 				/* We generate the nodules output. */
 				for(k = cNodulePopulation.numNodules - numNodules; k < cNodulePopulation.numNodules ;k++)
-					generarSalidaNodulo(inputData[j], k, j, NULL);
+					generateNoduleOutput(inputData[j], k, j, NULL);
 
 				/* We measure the networks aptitude. */
 				for(k = 0; k < cNetPopulation.numNets; k++) {
-					generarSalidaRed(k, j);
-					medirAptitudRed(outputData[j], k);
+					generateNetOutput(k, j);
+					measureNetworkAptitude(outputData[j], k);
 				}
 			}
 
@@ -98,48 +98,48 @@ void evolucionarPoblaciones()
 
 			/* We measure and normalize the nodules aptitude. */
 			for(j = 0; j < cNodulePopulation.numNodules; j++)
-				medirAptitudNodulos(j);
-			normalizarAptitudNodulos();
+				measureNoduleAptitude(j);
+			normalizeNoduleAptitude();
 		}
 
 		/* We sort the networks by aptitude. */
 		fprintf(stderr, "Sorting networks.\n");
-		ordenarRedes();
+		sortNetworks();
 
 		/* We train the networks by simulate annealing. */
 		fprintf(stderr, "Training the networks by simulate annealing.\n");
 		for(j = initNumNodules; j < cNodulePopulation.numNodules; j++)
-			enfriamientoSimulado(j);
+			simulatedAnnealing(j);
 
 		/* We normalize the nodules aptitude. */
 		fprintf(stderr, "Normalize the nodules aptitude.\n");
-		normalizarAptitudNodulos();
+		normalizeNoduleAptitude();
 
 		/* We sort the nodules by aptitude. */
 		fprintf(stderr, "Sorting nodules.\n");
-		ordenarNodulos();
+		sortNodules();
 
 		/* We create a new subpopulation descendant of the actual one. */
 		fprintf(stderr, "Creating new subpopulation.\n");
-		copiarDescendencia();
+		copyDescendant();
 
 		/* We make the structural mutation of the nodules. */
 		fprintf(stderr, "Nodules mutation.\n");
 		for(j = initNumNodules; j < cNodulePopulation.numNodules; j++)
-			mutarNodulos(j);
+			mutasteNodules(j);
 
 		/* We substitude the worst nodules by the best ones in the descendant
 		   population. */
 		fprintf(stderr, "Susbstitution of the worst nodules by the bes ones.\n");
-		sustituirNodulos();
+		replaceNodules();
 
 		fprintf(stderr, "End of the evolve.\n");
 	}
 }
 
 /******************************************************************************
- File: evolucionarPoblaciones.c
- Function: retropropagacion()
+ File: evolvePopulations.c
+ Function: backpropagation()
  Author: Pablo Álvarez de Sotomayor Posadillo
  Description: Run the backpropagation algorithm to a given nodule.
  Input Parameters:
@@ -160,14 +160,14 @@ void evolucionarPoblaciones()
            nodule.
  Return Value: None
  Calling Functions:
-   generarSalidaNodulo(): Generate the output of a nodule given an entry
+   generateNoduleOutput(): Generate the output of a nodule given an entry
                           pattern.
-   cambioPesos(): Function to calculate the change value of each weight to
+   changeWeight(): Function to calculate the change value of each weight to
                   reduce the output error.
    error(): Function to print an error message.
 ******************************************************************************/
 
-void retropropagacion(int nodule, int numPatterns, int iter)
+void backpropagation(int nodule, int numPatterns, int iter)
 {
 	int i, j, k, pattern, numNodes;
 	double *initialError, **F_W, *out, **weights;
@@ -207,7 +207,7 @@ void retropropagacion(int nodule, int numPatterns, int iter)
 	for(k = 0; k < iter; k++) {
 		/* We pick a pattern. */
 		pattern = random() % numPatterns;
-		generarSalidaNodulo(inputData[pattern], nodule, pattern, out);
+		generateNoduleOutput(inputData[pattern], nodule, pattern, out);
 
 		/* We assign the weight to the weights matrix*/
 		for(j = 0; j < cNetPopulation.numOutputNodes; j++)
@@ -225,7 +225,7 @@ void retropropagacion(int nodule, int numPatterns, int iter)
 					cNodulePopulation.nodules[nodule]->outWeights[j][i];
 
 		/* Obtain the weight change. */
-		cambioPesos(initialError, weights, out, F_W, cNodulePopulation.nodules[nodule]->nodes, transf);
+		changeWeight(initialError, weights, out, F_W, cNodulePopulation.nodules[nodule]->nodes, transf);
 
 		/* We update the weigths. */
 		for(i = 0; i < cNodulePopulation.nodules[nodule]->nodes; i++)
@@ -253,8 +253,8 @@ void retropropagacion(int nodule, int numPatterns, int iter)
 }
 
 /******************************************************************************
- File: evolucionarPoblaciones.c
- Function: cambioPesos()
+ File: evolvePopulations.c
+ Function: changeWeight()
  Author: Pablo Álvarez de Sotomayor Posadillo
  Description: Calculate the differential value to apply to each weight to
               reduce the error of a nodule.
@@ -277,7 +277,7 @@ void retropropagacion(int nodule, int numPatterns, int iter)
    error(): Function to print an error message.
 ******************************************************************************/
 
-void cambioPesos(double *initialError, double **weights, double *out, double **F_W,
+void changeWeight(double *initialError, double **weights, double *out, double **F_W,
 				 int nodes, func *transf)
 {
 	int i, j, numNodes;
@@ -314,8 +314,8 @@ void cambioPesos(double *initialError, double **weights, double *out, double **F
 }
 
 /******************************************************************************
- File: evolucionarPoblaciones.c
- Function: enfriamientoSimulado()
+ File: evolvePopulations.c
+ Function: simulatedAnnealing()
  Author: Pablo Álvarez de Sotomayor Posadillo
  Description: Run the simulated annealing over a given nodule.
  Input Parameters:
@@ -330,12 +330,12 @@ void cambioPesos(double *initialError, double **weights, double *out, double **F
    oldAptitude: Float. Old nodule aptitude.
  Return Value: None
  Calling functions:
-   pasoAleatorio(): Make a random step in the connection weights.
-   medirCambioNodulo(): Measure the aptitude change at the nodule.
+   randomStep(): Make a random step in the connection weights.
+   measureNoduleChange(): Measure the aptitude change at the nodule.
    doubleRandom(): Returns a random float of double precision.
 ******************************************************************************/
 
-void enfriamientoSimulado(int nodule)
+void simulatedAnnealing(int nodule)
 {
 	int i, j, k, steps;
 	double T, *weights, oldAptitude;
@@ -369,10 +369,10 @@ void enfriamientoSimulado(int nodule)
 				}
 
 		/* We make a randon step. */
-		pasoAleatorio(nodule);
+		randomStep(nodule);
 
 		/* We calculate the aptitude of the new nodule. */
-		medirCambioNodulo(nodule);
+		measureNoduleChange(nodule);
 
 		/* If the aptitude is worst we reject the change. */
 		if((oldAptitude > cNodulePopulation.nodules[nodule]->aptitude) &&
@@ -397,7 +397,7 @@ void enfriamientoSimulado(int nodule)
 					}
 
 			/* We recalculate the aptitude of the nodule. */
-			medirCambioNodulo(nodule);
+			measureNoduleChange(nodule);
 		} else
 			oldAptitude = cNodulePopulation.nodules[nodule]->aptitude;
 
@@ -409,8 +409,8 @@ void enfriamientoSimulado(int nodule)
 }
 
 /******************************************************************************
- File: evolucionarPoblaciones.c
- Function: pasoAleatorio()
+ File: evolvePopulations.c
+ Function: randomStep()
  Author: Pablo Álvarez de Sotomayor Posadillo
  Description: Make a randon step in each nodule weight.
  Input Parameters:
@@ -423,7 +423,7 @@ void enfriamientoSimulado(int nodule)
    Normal(): Generate a randon value following a normal distribution.
 ******************************************************************************/
 
-void pasoAleatorio(int nodule)
+void randomStep(int nodule)
 {
 	int i, j;
 

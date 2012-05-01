@@ -20,7 +20,7 @@
 
 /******************************************************************************
  File: mutacionEstructural.c
- Function: copiarDescendencia()
+ Function: copyDescendant()
  Author: Pablo Álvarez de Sotomayor Posadillo
  Description: Copy the actual nodule population into a new descendant
               population.
@@ -36,7 +36,7 @@
    error(): Function to show an error message depending on an error number.
 ******************************************************************************/
 
-void copiarDescendencia()
+void copyDescendant()
 {
 	int i, j, k, noduleOrig, initialNodule;
 
@@ -113,7 +113,7 @@ void copiarDescendencia()
 
 /******************************************************************************
  File: mutacionEstructural.c
- Function: mutarNodulos()
+ Function: mutasteNodules()
  Author: Pablo Álvarez de Sotomayor Posadillo
  Description: Make an estructural mutation in a given nodule.
  Input Parameters:
@@ -124,16 +124,16 @@ void copiarDescendencia()
    num: Integer. Number of mutation elements.
  Return Value: None
  Calling Functions: 
-   anadirNodo(): Add a node to the nodule.
-   borrarNodo(): Delete a node from the nodule.
-   anadirConexion(): Add a connection to the nodule.
-   borrarConexion(): Delete a connection from the nodule.
-   medirCambioNodulo(): Calculate the nodules aptitude variation after the
+   addNode(): Add a node to the nodule.
+   deleteNode(): Delete a node from the nodule.
+   addConnection(): Add a connection to the nodule.
+   deleteConnection(): Delete a connection from the nodule.
+   measureNoduleChange(): Calculate the nodules aptitude variation after the
                         mutation.
    doubleRandom(): Returns a random float of double precision.
 ******************************************************************************/
 
-void mutarNodulos(int nodule)
+void mutasteNodules(int nodule)
 {
 	int i, j, num;
 
@@ -147,7 +147,7 @@ void mutarNodulos(int nodule)
 	else if(cNodulePopulation.nodules[nodule]->nodes < num)
 		num = cNodulePopulation.nodules[nodule]->nodes;
 	else if(num > 0)
-		borrarNodo(nodule, num);
+		deleteNode(nodule, num);
 
 	/* Add nodes. */
 	num = (int)(delta_min + doubleRandom() *
@@ -158,7 +158,7 @@ void mutarNodulos(int nodule)
 	else if((cNodulePopulation.nodules[nodule]->nodes + num) > maxNodes)
 		num = maxNodes - cNodulePopulation.nodules[nodule]->nodes;
 	else if(num > 0)
-		anadirNodo(nodule, num); /* We add a new node,*/
+		addNode(nodule, num); /* We add a new node,*/
 
 	/* Delete connections. */
 	num = (int)(delta_min + doubleRandom() *
@@ -166,7 +166,7 @@ void mutarNodulos(int nodule)
 				(delta_min - delta_max));
 	for(i = 0; i < num && cNodulePopulation.nodules[nodule]->nodes > 0; i++) {
 		j = random() % (cNetPopulation.numInputNodes + cNetPopulation.numOutputNodes);
-		borrarConexion(nodule, j);
+		deleteConnection(nodule, j);
 	}
 
 	/* Add connections. */
@@ -174,18 +174,18 @@ void mutarNodulos(int nodule)
 				(1 - cNodulePopulation.nodules[nodule]->aptitude) *
 				(delta_min - delta_max));
 	for(i = 0; i < num && cNodulePopulation.nodules[nodule]->nodes > 0; i++)
-		anadirConexion(nodule);
+		addConnection(nodule);
 
 	/*
 	  We make the calculations over the modified nodule, both his partial
 	  outputs and his aptitude.
 	*/
-	medirCambioNodulo(nodule);
+	measureNoduleChange(nodule);
 }
 
 /******************************************************************************
  File: mutacionEstructural.c
- Function: anadirConexion()
+ Function: addConnection()
  Author: Pablo Álvarez de Sotomayor Posadillo
  Description: Add a connection to a given nodule.
  Input Parameters:
@@ -204,7 +204,7 @@ void mutarNodulos(int nodule)
    doubleRandom(): Returns a random float of double precision.
 ******************************************************************************/
 
-void anadirConexion(int nodule)
+void addConnection(int nodule)
 {
 	int i, j, sel, *origin, *destination, num, pos;
 
@@ -265,7 +265,7 @@ void anadirConexion(int nodule)
 
 /********************************************************************************
  File: mutacionEstructural.c
- Function: anadirNodo()
+ Function: addNode()
  Author: Pablo Álvarez de Sotomayor Posadillo
  Description: Add some nodes to a nodule.
  Input Parameters:
@@ -277,7 +277,7 @@ void anadirConexion(int nodule)
  Calling Functions: None
 *******************************************************************************/
 
-void anadirNodo(int nodule, int nodes)
+void addNode(int nodule, int nodes)
 {
 	int i;
 
@@ -295,7 +295,7 @@ void anadirNodo(int nodule, int nodes)
 
 /*******************************************************************************
  File: mutacionEstructural.c
- Function: borrarConexion()
+ Function: deleteConnection()
  Author: Pablo Álvarez de Sotomayor Posadillo
  Description: Delete a connection of a given node.
  Input Parameters:
@@ -308,7 +308,7 @@ void anadirNodo(int nodule, int nodes)
  Calling Functions: None
 *******************************************************************************/
 
-void borrarConexion(int nodule, int node)
+void deleteConnection(int nodule, int node)
 {
 	int i, sel;
 
@@ -342,7 +342,7 @@ void borrarConexion(int nodule, int node)
 
 /********************************************************************************
  File: mutacionEstructural.c
- Function: borrarNodo()
+ Function: deleteNode()
  Author: Pablo Álvarez de Sotomayor Posadillo
  Description: Delete a given number of nodes from a nodule.
  Input Parameters:
@@ -358,7 +358,7 @@ void borrarConexion(int nodule, int node)
    error(): Function to show an error message depending on an error number.
 *******************************************************************************/
 
-void borrarNodo(int nodule, int nodes)
+void deleteNode(int nodule, int nodes)
 {
 	int i, j, k, node;
   
@@ -404,7 +404,7 @@ void borrarNodo(int nodule, int nodes)
 
 /********************************************************************************
  File: mutacionEstructural.c
- Function: sustituirNodulos()
+ Function: replaceNodules()
  Author: Pablo Álvarez de Sotomayor Posadillo
  Description: Substitude the worst nodules of a population with the bset nodules
               of its descendant population.
@@ -417,12 +417,12 @@ void borrarNodo(int nodule, int nodes)
    order: Vector of floats. Store the nodules aptitude in order to sort them.
  Return Value: None
  Calling Functions
-   liberarNodulo(): Free the memory ocuppied by a given nodule.
-   ordenarNodulos(): Sort the nodules of the population.
+   freeNodule(): Free the memory ocuppied by a given nodule.
+   sortNodules(): Sort the nodules of the population.
    error(): Function to show an error message depending on an error number.
 *******************************************************************************/
 
-void sustituirNodulos()
+void replaceNodules()
 {
 	int i, j, *id;
 	double *order;
@@ -459,17 +459,17 @@ void sustituirNodulos()
 			   cNodulePopulation.nodules[id[i - 1]])
 				cNetPopulation.nets[j]->nodules[cNodulePopulation.numSubpops - 1] =
 					descend[i - nodSel - 1];
-		liberarNodulo(cNodulePopulation.nodules[id[i - 1]]);
+		freeNodule(cNodulePopulation.nodules[id[i - 1]]);
 		free(cNodulePopulation.nodules[id[i - 1]]);
 		cNodulePopulation.nodules[id[i - 1]] = descend[i - nodSel - 1];
 		descend[i - nodSel - 1] = NULL;
 	}
 
 	for(i = numNodules - nodSel; i < numNodules; i++)
-		liberarNodulo(descend[i]);
+		freeNodule(descend[i]);
 	free(descend);
 	descend = NULL;
-	ordenarNodulos();
+	sortNodules();
 	free(id);
 	free(order);
 }

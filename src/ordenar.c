@@ -20,7 +20,7 @@
 
 /******************************************************************************
  File: ordenar.c
- Funtion: ordenarNodulos()
+ Funtion: sortNodules()
  Author: Pablo Álvarez de Sotomayor Posadillo
  Description: Order the nodules by aptitude.
  Input Parameters: None
@@ -32,7 +32,7 @@
  Calling Functions: None
 ******************************************************************************/
 
-void ordenarNodulos()
+void sortNodules()
 {
 	int i, j;
 	nodule *aux;
@@ -53,7 +53,7 @@ void ordenarNodulos()
 
 /******************************************************************************
  File: ordenar.c
- Function: ordenarRedes()
+ Function: sortNetworks()
  Author: Pablo Álvarez de Sotomayor Posadillo
  Description: Order the networks by aptitude.
  Input Parameters: None
@@ -65,7 +65,7 @@ void ordenarNodulos()
  Calling Functions: None
 ******************************************************************************/
 
-void ordenarRedes()
+void sortNetworks()
 {
 	int i,j;
 	network *aux;

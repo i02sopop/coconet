@@ -34,18 +34,18 @@
  Return Value: 0 with no errors and -1 otherwise.
  Calling Functions:
    error(): Function to show an error message depending on an error number.
-   cargarFichero(): Function to load the data from config and training files.
-   escalarDatosEntrada(): Scale the data from the input nodes.
-   escalarDatosSalida(): Scale the data from the output nodes.
-   medirCambio(): Measure the average flair change in the network population.
-   crearPoblacionNodulos(): Create a new subpopulation of nodes.
+   loadFile(): Function to load the data from config and training files.
+   scaleInputData(): Scale the data from the input nodes.
+   scaleOutputData(): Scale the data from the output nodes.
+   measureChange(): Measure the average flair change in the network population.
+   createNodulePopulation(): Create a new subpopulation of nodes.
    anadirNoduloRedes(): Add a new node subpopulation to the networks
                         population.
-   evolucionarPoblaciones(): Evolve the networks and nodes populations.
-   ordenarRedes(): Order the networks by aptitude.
-   leerGeneralizacion(): Read the data to measure the network generalization.
-   exportarMejorRed(): Export the best network in the generalization process.
-   ajustarMatrices(): Adjust the size of the matrix used in the new nodes
+   evolvePopulations(): Evolve the networks and nodes populations.
+   sortNetworks(): Order the networks by aptitude.
+   readGeneralization(): Read the data to measure the network generalization.
+   exportBestNetwork(): Export the best network in the generalization process.
+   adjustMatrix(): Adjust the size of the matrix used in the new nodes
 				      subpopulation.
 ******************************************************************************/
 
@@ -59,7 +59,7 @@ int main(int argc, char **argv)
 		error(COMMAND);
 
 	/* We load the config and training files. */
-	cargarFichero(argv[1], argv[2]);
+	loadFile(argv[1], argv[2]);
 	if(nodSel > numNodules)
 		nodSel = numNodules;
 
@@ -68,60 +68,60 @@ int main(int argc, char **argv)
 
 	/* Scaling of input and output data from the training file. */
 	fprintf(stderr, "Scaling the input data.\n");
-	escalarDatosEntrada(numTrain);
+	scaleInputData(numTrain);
 	fprintf(stderr, "Scaling the output data.\n");
 	if(netTransf == (func)&Logistic)
-		escalarDatosSalida(outputData,
+		scaleOutputData(outputData,
 						   numTrain,
 						   0.0 + pTransfer.epsilon,
 						   pTransfer.logistic_a - pTransfer.epsilon);
 	else
-		escalarDatosSalida(outputData,
+		scaleOutputData(outputData,
 						   numTrain,
 						   pTransfer.epsilon - pTransfer.htan_a,
 						   pTransfer.htan_a - pTransfer.epsilon);
 
 	/* We evolve the networks and nodes ppulations. */
-	for(i = 0; medirCambio(&netAptitude, i) == false; i++) {
+	for(i = 0; measureChange(&netAptitude, i) == false; i++) {
 		/* We create a new population of nodes. */
 		fprintf(stderr, "Especie %d\n", i + 1);
-		crearPoblacionNodulos();
+		createNodulePopulation();
 
 		/*
 		  We add the new population of nodes to the previous population of
 		  networks.
 		*/
 		fprintf(stderr,"Add nodes to networks.\n");
-		anadirNodulosRedes();
+		addNodulesNetworks();
 
 		/* We evolve the populations of networks and nodes. */
 		fprintf(stderr, "Evolve popularions.\n");
-		evolucionarPoblaciones();
+		evolvePopulations();
 
 		/* We adjust the size of the last node's subpopulation matrix. */
 		fprintf(stderr, "Ajust matrix\n");
-		ajustarMatrices();
+		adjustMatrix();
 	}
 
 	/* We order the networks by its flair. */
 	fprintf(stderr, "Sorting networks.\n");
-	ordenarRedes();
+	sortNetworks();
 
 	/* We read the data of the generalization file. */
 	fprintf(stderr, "Read the generalization data.\n");
-	leerGeneralizacion(argv[3]);
+	readGeneralization(argv[3]);
 
 	/* We scale the input and output data from the generalization file. */
 	fprintf(stderr, "Scaling input data.\n");
-	escalarDatosEntrada(numGeneral);
+	scaleInputData(numGeneral);
 	fprintf(stderr,"Scaling output data.\n");
 	if(netTransf == (func)&Logistic)
-		escalarDatosSalida(outputData,
+		scaleOutputData(outputData,
 						   numGeneral,
 						   0.0 + pTransfer.epsilon,
 						   pTransfer.logistic_a - pTransfer.epsilon);
 	else
-		escalarDatosSalida(outputData,
+		scaleOutputData(outputData,
 						   numGeneral,
 						   -pTransfer.htan_a + pTransfer.epsilon,
 						   pTransfer.htan_a - pTransfer.epsilon);
@@ -129,9 +129,9 @@ int main(int argc, char **argv)
 	/* We export the best network found. */
 	fprintf(stderr, "Exporting the best network.\n");
 	if(argc == 6)
-		exportarMejorRed(argv[5]);
+		exportBestNetwork(argv[5]);
 	else
-		exportarMejorRed("output.txt");
+		exportBestNetwork("output.txt");
 	fprintf(stderr,"End\n");
 
 	return 0;

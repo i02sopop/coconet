@@ -19,8 +19,8 @@
 #include <definitions.h>
 
 /******************************************************************************
- File: medirCambio.c
- Function: medirCambio()
+ File: measureChange.c
+ Function: measureChange()
  Author: Pablo Álvarez de Sotomayor Posadillo
  Description: Measure the change in the average aptitude of the network
               population.
@@ -35,15 +35,15 @@
  Return Value: True if the difference between average aptitudes is smaller than
                the evolution limit.
  Calling Functions:
-   generarSalidaNodulo(): Generate the nodule ouput depending on the entry data.
-   generarSalidaRed(): Generate the network output depending on the nodules
+   generateNoduleOutput(): Generate the nodule ouput depending on the entry data.
+   generateNetOutput(): Generate the network output depending on the nodules
                        output.
-   medirAptitudRed(): Measure the network aptitude depending on its outputs.
-   medirAptitudNodulos(): Measure the nodule aptitude given three parameters.
-   normalizarAptitudNodulos(): Normalize the minimal aptitude to 0.
+   measureNetworkAptitude(): Measure the network aptitude depending on its outputs.
+   measureNoduleAptitude(): Measure the nodule aptitude given three parameters.
+   normalizeNoduleAptitude(): Normalize the minimal aptitude to 0.
 ******************************************************************************/
 
-bool medirCambio(double *networkAptitude, int iter)
+bool measureChange(double *networkAptitude, int iter)
 {
 	int i, j;
 	double tmpAptitude, diff;
@@ -58,12 +58,12 @@ bool medirCambio(double *networkAptitude, int iter)
 		for(i = 0; i < numTrain; i++) {
 			/* We generate the nodule output. */
 			for(j = cNodulePopulation.numNodules - numNodules; j < cNodulePopulation.numNodules; j++)
-				generarSalidaNodulo(inputData[i], j, i, NULL);
+				generateNoduleOutput(inputData[i], j, i, NULL);
 
 			/* We measure the network aptitude. */
 			for(j = 0; j < cNetPopulation.numNets; j++) {
-				generarSalidaRed(j, i);
-				medirAptitudRed(outputData[i], j);
+				generateNetOutput(j, i);
+				measureNetworkAptitude(outputData[i], j);
 			}
 		}
 
@@ -73,10 +73,10 @@ bool medirCambio(double *networkAptitude, int iter)
 
 		/* We measure the nodules aptitude. */
 		for(i = 0; i < cNodulePopulation.numNodules; i++)
-			medirAptitudNodulos(i);
+			measureNoduleAptitude(i);
 
 		/* We normalize the nodules aptitude. */
-		normalizarAptitudNodulos();
+		normalizeNoduleAptitude();
 		tmpAptitude = 0.0;
 
 		/* We measure the average aptitude of all the networks. */
@@ -100,8 +100,8 @@ bool medirCambio(double *networkAptitude, int iter)
 }
 
 /*******************************************************************************
- File: medirCambio.c
- Function: medirCambioNodulo()
+ File: measureChange.c
+ Function: measureNoduleChange()
  Author: Pablo Álvarez de Sotomayor Posadillo
  Description: Measure the aptitude change suffer by a given nodule.
  Input Parameters:
@@ -111,15 +111,15 @@ bool medirCambio(double *networkAptitude, int iter)
  	j: Integer. Counter.
  Return Value: None
  Calling Functions:
-	ordenarRedes(): Sort the networks by aptitude.
- 	generarSalidaNodulo(): Generate the nodule output from its input data.
- 	generarSalidaRed(): Generate the network output from its nodule output.
- 	medirAptitudRed(): Measure the network aptitude from the generated outputs.
+	sortNetworks(): Sort the networks by aptitude.
+ 	generateNoduleOutput(): Generate the nodule output from its input data.
+ 	generateNetOutput(): Generate the network output from its nodule output.
+ 	measureNetworkAptitude(): Measure the network aptitude from the generated outputs.
  	medirAptitudNodulo(): Measure the nodule aptitude from several parameters.
-	normalizarAptitudNodulos(): Normalize the nodule aptitude.
+	normalizeNoduleAptitude(): Normalize the nodule aptitude.
 ******************************************************************************/
 
-void medirCambioNodulo(int nodule)
+void measureNoduleChange(int nodule)
 {
 	int i, j;
 
@@ -130,9 +130,9 @@ void medirCambioNodulo(int nodule)
 
 			/* We calculate the networks aptitude. */
 			for(j = 0; j < numTrain; j++) {
-				generarSalidaNodulo(inputData[j], nodule, j, NULL);
-				generarSalidaRed(i, j);
-				medirAptitudRed(outputData[j], i);
+				generateNoduleOutput(inputData[j], nodule, j, NULL);
+				generateNetOutput(i, j);
+				measureNetworkAptitude(outputData[j], i);
 			}
 
 			/* We normalize the networks aptitude. */
@@ -141,9 +141,9 @@ void medirCambioNodulo(int nodule)
 	}
 
 	/* We sort the networks by aptitude. */
-	ordenarRedes();
+	sortNetworks();
 
 	/* We measure the new nodule aptitude. */
-	medirAptitudNodulos(nodule);
-	normalizarAptitudNodulos();
+	measureNoduleAptitude(nodule);
+	normalizeNoduleAptitude();
 }

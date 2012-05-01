@@ -21,7 +21,7 @@
 
 /******************************************************************************
  File: ficheros.c
- Function: cargarFichero()
+ Function: loadFile()
  Author: Pablo Alvarez de Sotomayor Posadillo
  Description: Load the input data from training and configuration files.
  Input Parameters:
@@ -37,7 +37,7 @@
    error(): Function to print an error message.
 ******************************************************************************/
 
-void cargarFichero(char *config, char *training)
+void loadFile(char *config, char *training)
 {
 	int i, j;
 	FILE *configFile, *trainingFile;
@@ -90,9 +90,9 @@ void cargarFichero(char *config, char *training)
 		error(IO);
 
 	/* Adjustment for nodule aptitude. */
-	if(fscanf(configFile, "Sustitucion: %lf\n", &adj.sust) == EOF ||
-	   fscanf(configFile, "Diferencia: %lf\n", &adj.dif) == EOF ||
-	   fscanf(configFile, "Mejores: %lf\n", &adj.best) == EOF)
+	if(fscanf(configFile, "replace: %lf\n", &adj.sust) == EOF ||
+	   fscanf(configFile, "differ: %lf\n", &adj.dif) == EOF ||
+	   fscanf(configFile, "best: %lf\n", &adj.best) == EOF)
 		error(IO);
 
 	if(fscanf(configFile, "Redes Seleccionadas: %d\n", &selNets) == EOF ||
@@ -109,7 +109,7 @@ void cargarFichero(char *config, char *training)
 		error(IO);
 
 	if(fscanf(configFile, "Limite Evolucion: %lf\n", &evolim) == EOF ||
-	   fscanf(configFile, "Alpha Retropropagacion: %lf\n", &alpharet) == EOF)
+	   fscanf(configFile, "Alpha backpropagation: %lf\n", &alpharet) == EOF)
 		error(IO);
 
 	if(fclose(configFile) == EOF || fclose(trainingFile) == EOF)
@@ -128,7 +128,7 @@ void cargarFichero(char *config, char *training)
 
 /******************************************************************************
  File: ficheros.c
- Function: leerGeneralizacion()
+ Function: readGeneralization()
  Author: Pablo Alvarez de Sotomayor Posadillo
  Description: Read the input data to measure the generalization.
  Input Parameters:
@@ -142,7 +142,7 @@ void cargarFichero(char *config, char *training)
    error(): Function to print an error message.
 ******************************************************************************/
 
-void leerGeneralizacion(char *filename)
+void readGeneralization(char *filename)
 {
 	int i, j;
 	FILE *file;
@@ -191,7 +191,7 @@ void leerGeneralizacion(char *filename)
 
 /******************************************************************************
  File: ficheros.c
- Function: exportarMejorRed()
+ Function: exportBestNetwork()
  Author: Pablo Alvarez de Sotomayor Posadillo
  Description: Export the network who fits best to the problem to an output
               file.
@@ -210,13 +210,13 @@ void leerGeneralizacion(char *filename)
    out: Pointer to file. Output file
  Return Value: None
  Calling Functions:
-   generarSalidaRed(): Generate the network output from the nodules output.
-   generarSalidaNodulo(): Generate the nodule output from an input parameter.
-   medirAptitudRed(): Measure the net aptitude from the generated outputs.
+   generateNetOutput(): Generate the network output from the nodules output.
+   generateNoduleOutput(): Generate the nodule output from an input parameter.
+   measureNetworkAptitude(): Measure the net aptitude from the generated outputs.
    error(): Function to print an error message.
 ******************************************************************************/
 
-void exportarMejorRed(char *filename)
+void exportBestNetwork(char *filename)
 {
 	int i, j, k, l, nodes, idmax, connections;
 	double *aptitude, max;
@@ -258,14 +258,14 @@ void exportarMejorRed(char *filename)
 	for(i = 0; i < numGeneral; i++) {
 		/* We generate the nodule partial outputs from the generaliation data. */
 		for(j = 0; j < cNodulePopulation.numNodules; j++)
-			generarSalidaNodulo(inputData[i], j, i, NULL);
+			generateNoduleOutput(inputData[i], j, i, NULL);
 
 		for(j = 0; j < 5; j++) {
 			/* We generate the network outputs from the nodules outputs. */
-			generarSalidaRed(j, i);
+			generateNetOutput(j, i);
 
 			/* We measure the network aptitude from the generated outputs. */
-			medirAptitudRed(outputData[i], j);
+			measureNetworkAptitude(outputData[i], j);
 		}
 	}
 

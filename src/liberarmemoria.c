@@ -20,7 +20,7 @@
 
 /******************************************************************************
  File: liberarMemoria.c
- Function: liberarNodulo()
+ Function: freeNodule()
  Author: Pablo Alvarez de Sotomayor Posadillo
  Description: Free the memory allocated by a nodule.
  Input Parameters:
@@ -31,7 +31,7 @@
  Calling Functions: None
 ******************************************************************************/
 
-void liberarNodulo(nodule *nodule)
+void freeNodule(nodule *nodule)
 {
 	int i;
 
@@ -60,7 +60,7 @@ void liberarNodulo(nodule *nodule)
 
 /******************************************************************************
  File: liberarMemoria.c
- Function: ajustarMatrices()
+ Function: adjustMatrix()
  Author: Pablo Alvarez de Sotomayor Posadillo
  Description: Adjust the matriz size of the last nodule subpopulation.
  Input Parameters: None
@@ -71,7 +71,7 @@ void liberarNodulo(nodule *nodule)
  Calling Functions: None
 ******************************************************************************/
 
-void ajustarMatrices()
+void adjustMatrix()
 {
 	int i, j;
 

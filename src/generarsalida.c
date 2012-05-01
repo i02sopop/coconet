@@ -20,7 +20,7 @@
 
 /******************************************************************************
  File: generarSalida.c
- Function: generarSalidaNodulo()
+ Function: generateNoduleOutput()
  Author: Pablo Alvarez de Sotomayor Posadillo
  Description: Generate the nodule output from an input data.
  Input Parameters:
@@ -39,7 +39,7 @@
    error(): Function to show an error message depending on an error number.
 ******************************************************************************/
 
-void generarSalidaNodulo(double *in, int numNodule, int numInput, double *nodOut)
+void generateNoduleOutput(double *in, int numNodule, int numInput, double *nodOut)
 {
 	int i, j, numNodes;
 	double *outputs, *inputs;
@@ -97,7 +97,7 @@ void generarSalidaNodulo(double *in, int numNodule, int numInput, double *nodOut
 
 /******************************************************************************
  File: generarSalida.c
- Function: generarSalidaRed()
+ Function: generateNetOutput()
  Author: Pablo Alvarez de Sotomayor Posadillo
  Description: Generate a network output from its nodules outputs.
  Input Parameters:
@@ -110,7 +110,7 @@ void generarSalidaNodulo(double *in, int numNodule, int numInput, double *nodOut
  Calling Functions: None
 *******************************************************************************/
 
-void generarSalidaRed(int netNumber, int inputNumber)
+void generateNetOutput(int netNumber, int inputNumber)
 {
 	int i, j;
 

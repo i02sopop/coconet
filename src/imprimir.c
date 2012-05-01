@@ -20,7 +20,7 @@
 
 /******************************************************************************
  File: imprimir.c
- Function: imprimirNodulo()
+ Function: printNodule()
  Author: Pablo Alvarez de Sotomayor Posadillo
  Description: Print the information related with a given nodule to an output
               file.
@@ -35,7 +35,7 @@
  Calling Functions: None
 ******************************************************************************/
 
-void imprimirNodulo(nodule *imp, int iter)
+void printNodule(nodule *imp, int iter)
 {
 	int i, j;
 	FILE *fOutput;
@@ -85,7 +85,7 @@ void imprimirNodulo(nodule *imp, int iter)
 
 /******************************************************************************
  File: imprimir.c
- Function: imprimirRed()
+ Function: printNetwork()
  Author: Pablo Alvarez de Sotomayor Posadillo
  Description: Print the network data into an output file.
  Input Parameters:
@@ -97,7 +97,7 @@ void imprimirNodulo(nodule *imp, int iter)
  Calling Functions: None
 ******************************************************************************/
 
-void imprimirRed(network *net)
+void printNetwork(network *net)
 {
 	int i;
 	FILE *fOutput;

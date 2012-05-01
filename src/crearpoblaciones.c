@@ -27,14 +27,14 @@
  Local Variables: None
  Return Value: None
  Calling Functions:
-   crearRedes(): Create a new network population from the previous nodes
+   createNetworks(): Create a new network population from the previous nodes
                  population.
-   crearDescendencia(): Create a new network population from the nodule
+   createDescendant(): Create a new network population from the nodule
                         subpopulation and the previous network population.
    error(): Function to show an error message depending on an error number.
 *****************************************************************************/
 
-void anadirNodulosRedes()
+void addNodulesNetworks()
 {
 	/* If it's the first nodes population we create a network per node. */
 	if(cNodulePopulation.numSubpops == 1) {
@@ -42,16 +42,16 @@ void anadirNodulosRedes()
 		cNetPopulation.nets = (network **)malloc(numNodules * sizeof(network));
 		if(cNetPopulation.nets == NULL)
 			error(RES_MEM);
-		crearRedes();
+		createNetworks();
 	} else {
 		/* We create the new population adding a new node to each network. */
-		crearDescendencia();
+		createDescendant();
 	}
 }
 
 /******************************************************************************
  File: crearPoblaciones.c
- Function: crearDescendencia()
+ Function: createDescendant()
  Author: Pablo Álvarez de Sotomayor Posadillo
  Description: Create a new network population from a new nodule population
 			  and the previous network population.
@@ -64,11 +64,11 @@ void anadirNodulosRedes()
    dnet: Array of networks. New descendant network population.
  Return Value: None
  Calling Functions:
-   liberarRed(): Function to free a given network.
+   freeNetwork(): Function to free a given network.
    error(): Function to show an error message depending on an error number.
 *****************************************************************************/
 
-void crearDescendencia()
+void createDescendant()
 {
 	int i, j, net, node;
 	network **dnet; /* New network population. Descend of the actual population. */
@@ -104,7 +104,7 @@ void crearDescendencia()
 
 	/* We fix the new network. */
 	for(i = 0; i < cNetPopulation.numNets; i++)
-		liberarRed(cNetPopulation.nets[i]);
+		freeNetwork(cNetPopulation.nets[i]);
 
 	free(cNetPopulation.nets);
 	cNetPopulation.nets = dnet;
@@ -113,7 +113,7 @@ void crearDescendencia()
 
 /******************************************************************************
  File: crearPoblaciones.c
- Function: liberarRed()
+ Function: freeNetwork()
  Author: Pablo Álvarez de Sotomayor Posadillo
  Description: Function to free a given network.
  Input Parameters:
@@ -124,7 +124,7 @@ void crearDescendencia()
  Calling Functions: None
 *****************************************************************************/
 
-void liberarRed(network *net)
+void freeNetwork(network *net)
 {
 	int i;
 
@@ -139,7 +139,7 @@ void liberarRed(network *net)
 
 /******************************************************************************
  File: crearPoblaciones.c
- Function: crearNodulos()
+ Function: createNodules()
  Author: Pablo Álvarez de Sotomayor Posadillo
  Description: Create a new nodule subpopulation.
  Input OParameters: None
@@ -153,7 +153,7 @@ void liberarRed(network *net)
    doubleRandom(): Returns a random float of double precision.
  *****************************************************************************/
 
-void crearNodulos()
+void createNodules()
 {
 	int i, j, k;
 
@@ -250,18 +250,18 @@ void crearNodulos()
 
 /******************************************************************************
  File: crearPoblaciones.c
- Function: crearPoblacionNodulos()
+ Function: createNodulePopulation()
  Author: Pablo Álvarez de Sotomayor Posadillo
  Description: Create or expand the nodule population.
  Input Parameters: None
  Local Variables: None
  Return Value: None
  Callimg Functions:
-   crearNodulos(): Function to create a new nodule subpopulation.
+   createNodules(): Function to create a new nodule subpopulation.
    error(): Function to show an error message depending on an error number.
 ******************************************************************************/
 
-void crearPoblacionNodulos()
+void createNodulePopulation()
 {
 	/*
 	  We update the number of subpopulations and nodules of the nodule
@@ -278,12 +278,12 @@ void crearPoblacionNodulos()
 		error(RES_MEM);
 
 	/* We create the nodules of the new subpopulation. */
-	crearNodulos();
+	createNodules();
 }
 
 /******************************************************************************
  File: crearPoblaciones.c
- Function: crearRedes()
+ Function: createNetworks()
  Author: Pablo Alvarez de Sotomayor Posadillo
  Description: Create a new network population.
  Input Parameters: None
@@ -295,7 +295,7 @@ void crearPoblacionNodulos()
    error(): Function to show an error message depending on an error number.
  *****************************************************************************/
 
-void crearRedes()
+void createNetworks()
 {
 	int i, j;
 

@@ -103,7 +103,7 @@ double Normal(double media, double sigma)
 
 /*******************************************************************************
  File: math.c
- Function: escalarDatosEntrada()
+ Function: scaleInputData()
  Author: Pablo Álvarez de Sotomayor Posadillo
  Description: Scale the data of the input nodes.
  Input Parameters:
@@ -119,7 +119,7 @@ double Normal(double media, double sigma)
  Calling Functions: None
 ******************************************************************************/
 
-void escalarDatosEntrada(int iterations)
+void scaleInputData(int iterations)
 {
 	int i, j;
 	double max, min, a, b;
@@ -151,7 +151,7 @@ void escalarDatosEntrada(int iterations)
 
 /******************************************************************************
  File: math.c
- Function: escalarDatosSalida()
+ Function: scaleOutputData()
  Author: Pablo Álvarez de Sotomayor Posadillo
  Description: Scale the data of the output nodes.
  Input Parameters:
@@ -170,7 +170,7 @@ void escalarDatosEntrada(int iterations)
  Calling Functions: None
 ******************************************************************************/
 
-void escalarDatosSalida(double **data, int iterations, double lbound, double ubound)
+void scaleOutputData(double **data, int iterations, double lbound, double ubound)
 {
 	int i, j;
 	double max, min, a, b;
