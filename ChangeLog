@@ -1,17 +1,22 @@
-coconet 1.0.1
+coconet 1.0.2
 
+2012-05-01 Pablo Alvarez de Sotomayor Posadillo <palvarez@ritho.net>
+	* Release of Coconet 1.0.2.
+	* src: Translations of global variables, function names and
+	filenames.
+	* src: Some code optimizations.
+	* include: Translations of global variables, function names and
+	data structures into english.
+	* TODO: Update the tasks to do and done.
 2012-03-03 Pablo Alvarez de Sotomayor Posadillo <palvarez@ritho.net>
-
 	* Release of Coconet 1.0.1.
-	* src: Translations of comments and vars, formatting enhacements and little optimizations.
+	* src: Translations of comments and vars, formatting enhacements
+	and little optimizations.
 	* src: Updated the copyright statement and the license statement.
 	* Updated the license to GPLv3
 	* README: Updating info of the project.
 	* Added a bootstrap file for autoconf.
 	* Deleted the NEWS file and updated my email address.
 	* Created the basic info structure for the project.
-
 2007-11-27 Pablo Alvarez de Sotomayor Posadillo <palvarez@ritho.net>
-
 	* First release of coconet.
-

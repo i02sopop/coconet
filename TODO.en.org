@@ -1,5 +1,5 @@
 * DONE [#B] Create the project info structure.
-CLOSED: [2012-03-05 lun 01:31]
+CLOSED: [2012-03-05 mon 01:31]
 :PROPERTIES:
 :ORDERED: t
 :LOGGING: TODO(!) STARTED(!) WAITING(!) DELEGATED(!) APPT(!) DONE(!) DEFERRED(!) CANCELLED(!)
@@ -11,7 +11,7 @@ CLOSED: [2012-03-05 lun 01:31]
 :HOURS: 2
 :DESCRIPTION: Create the project info structure (AUTHORS, TRANSLATORS, ...). 
 :CREATED_BY: i02sopop
-:CREATION_DATE: [2012-03-05 lun]
+:CREATION_DATE: [2012-03-05 mon]
 :NOTES: -
 :END:
 * TODO Refactorize the source to optimize it and correct bugs.
@@ -26,10 +26,11 @@ CLOSED: [2012-03-05 lun 01:31]
 :HOURS: ?
 :DESCRIPTION: Refactorize the source code to optimize the timing of the program and to correct bugs. 
 :CREATED_BY: i02sopop
-:CREATION_DATE: [2012-03-09 vie]
+:CREATION_DATE: [2012-03-09 fri]
 :NOTES: -
 :END:
-* TODO Translate code to english
+* DONE [#B] Translate Code to english
+CLOSED: [2012-05-01 tue 15:38]
 :PROPERTIES:
 :ORDERED: t
 :LOGGING: TODO(!) STARTED(!) WAITING(!) DELEGATED(!) APPT(!) DONE(!) DEFERRED(!) CANCELLED(!)
@@ -38,10 +39,10 @@ CLOSED: [2012-03-05 lun 01:31]
 :ASSIGNED: i02sopop
 :DIFICULTY: Easy
 :HOURS_ESTIMATED: 10
-:HOURS: (2) ?
+:HOURS: 8
 :DESCRIPTION: Traslate the code to english to facilitate the colaboration of others. 
 :CREATED_BY: i02sopop
-:CREATION_DATE: [2012-03-09 vie]
+:CREATION_DATE: [2012-03-09 fri]
 :NOTES: -
 :END:
 * TODO Improve the documentation
@@ -56,7 +57,7 @@ CLOSED: [2012-03-05 lun 01:31]
 :HOURS: ?
 :DESCRIPTION: Improve the documentation to facilitate the colaboration of others. 
 :CREATED_BY: i02sopop
-:CREATION_DATE: [2012-03-09 vie]
+:CREATION_DATE: [2012-03-09 fri]
 :NOTES: -
 :END:
 * TODO Create a graphical interface.
@@ -71,7 +72,7 @@ CLOSED: [2012-03-05 lun 01:31]
 :HOURS: ?
 :DESCRIPTION: Create a graphical interface to enhace the interacion with the program.
 :CREATED_BY: i02sopop
-:CREATION_DATE: [2012-03-09 vie]
+:CREATION_DATE: [2012-03-09 fri]
 :NOTES: -
 :END:
 * TODO Create the web of the project.
@@ -86,7 +87,7 @@ CLOSED: [2012-03-05 lun 01:31]
 :HOURS: ?
 :DESCRIPTION: Design and develop the web of the project in github. 
 :CREATED_BY: i02sopop
-:CREATION_DATE: [2012-03-09 vie]
+:CREATION_DATE: [2012-03-09 fri]
 :NOTES: -
 :END: 
 * TODO Finish the INSTALL file.
@@ -101,7 +102,7 @@ CLOSED: [2012-03-05 lun 01:31]
 :HOURS: ?
 :DESCRIPTION: Adapt and finish the description of the INSTALL file both in english and in spanish.
 :CREATED_BY: i02sopop
-:CREATION_DATE: [2012-03-09 vie]
+:CREATION_DATE: [2012-03-09 fri]
 :END_DATE: -
 :END:
 * TODO Compilation with autotools.
@@ -110,13 +111,13 @@ CLOSED: [2012-03-05 lun 01:31]
 :LOGGING: TODO(!) STARTED(!) WAITING(!) DELEGATED(!) APPT(!) DONE(!) DEFERRED(!) CANCELLED(!)
 :STYLE: habit
 :COOKIE_DATA: todo recursive
-:ASSIGNED: ?
+:ASSIGNED: i02sopop
 :DIFICULTY: EASY
 :HOURS_ESTIMATED: 2
 :HOURS: ?
 :DESCRIPTION: Create all the configuration files to be able to compile the project with automake/configure tools.
 :CREATED_BY: i02sopop
-:CREATION_DATE: <2012-03-19 lun>
+:CREATION_DATE: <2012-03-19 mon>
 :END_DATE: -
 :END:
 

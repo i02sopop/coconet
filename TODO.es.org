@@ -29,16 +29,17 @@ CLOSED: [2012-03-05 lun 01:31]
 :CREATION_DATE: [2012-03-09 vie]
 :NOTES: -
 :END:
-* TODO Traducir el código al inglés.
+* DONE [#B] Traducir el código al inglés.
+CLOSED: [2012-05-01 mar 15:38]
 :PROPERTIES:
 :ORDERED: t
 :LOGGING: TODO(!) STARTED(!) WAITING(!) DELEGATED(!) APPT(!) DONE(!) DEFERRED(!) CANCELLED(!)
 :STYLE: habit
 :COOKIE_DATA: todo recursive
-:ASSIGNED: i02sp[p[
+:ASSIGNED: i02sopop
 :DIFICULTY: Easy
 :HOURS_ESTIMATED: 10
-:HOURS: (2) ?
+:HOURS: 8
 :DESCRIPTION: Traducir el código al inglés para facilitar la colaboración de otras personas.
 :CREATED_BY: i02sopop
 :CREATION_DATE: [2012-03-09 vie]
@@ -109,7 +110,7 @@ CLOSED: [2012-03-05 lun 01:31]
 :LOGGING: TODO(!) STARTED(!) WAITING(!) DELEGATED(!) APPT(!) DONE(!) DEFERRED(!) CANCELLED(!)
 :STYLE: habit
 :COOKIE_DATA: todo recursive
-:ASSIGNED: ?
+:ASSIGNED: i02sopop
 :DIFICULTY: EASY
 :HOURS_ESTIMATED: 2
 :HOURS: ?
