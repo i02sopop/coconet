@@ -25,13 +25,13 @@
  Description: Measure the change in the average aptitude of the network
               population.
  Input Parameters:
-   aptitudRedes: Float. Previois average aptitude of the network population.
-   iteracion: Integer. Number of evolutions of the network population.
+   networkAptitude: Float. Previois average aptitude of the network population.
+   iter: Integer. Number of evolutions of the network population.
  Local Variables:
    i: Integer. Counter.
    j: Integer. Counter.
    aptitudTemp: Float. New average aptitude of the network population.
-   dif: Float. Difference between the two average aptitudes.
+   diff: Float. Difference between the two average aptitudes.
  Return Value: True if the difference between average aptitudes is smaller than
                the evolution limit.
  Calling Functions:
@@ -43,57 +43,57 @@
    normalizarAptitudNodulos(): Normalize the minimal aptitude to 0.
 ******************************************************************************/
 
-bool medirCambio(double *aptitudRedes, int iteracion)
+bool medirCambio(double *networkAptitude, int iter)
 {
 	int i, j;
-	double aptitudTemp, dif;
+	double tmpAptitude, diff;
 
-	aptitudTemp = 0;
+	tmpAptitude = 0;
 	/* We measure the networks to check its aptitude. */
-	if(iteracion > 0) {
+	if(iter > 0) {
 		fprintf(stderr,"Training\n");
 
 		/* We first train the networks to have an initial value of the networks
 		   and nodules aptitude. */
-		for(i = 0; i < n_entrenamiento; i++) {
+		for(i = 0; i < numTrain; i++) {
 			/* We generate the nodule output. */
-			for(j = nodulePopulation.n_nodulos - numNodules; j < nodulePopulation.n_nodulos; j++)
-				generarSalidaNodulo(entrada[i], j, i, NULL);
+			for(j = cNodulePopulation.numNodules - numNodules; j < cNodulePopulation.numNodules; j++)
+				generarSalidaNodulo(inputData[i], j, i, NULL);
 
 			/* We measure the network aptitude. */
-			for(j = 0; j < netPopulation.n_redes; j++) {
+			for(j = 0; j < cNetPopulation.numNets; j++) {
 				generarSalidaRed(j, i);
-				medirAptitudRed(salida[i], j);
+				medirAptitudRed(outputData[i], j);
 			}
 		}
 
 		/* We normalize the networks aptitude. */
-		for(i = 0; i < netPopulation.n_redes; i++)
-			netPopulation.redes[i]->aptitud /= n_entrenamiento;
+		for(i = 0; i < cNetPopulation.numNets; i++)
+			cNetPopulation.nets[i]->aptitude /= numTrain;
 
 		/* We measure the nodules aptitude. */
-		for(i = 0; i < nodulePopulation.n_nodulos; i++)
+		for(i = 0; i < cNodulePopulation.numNodules; i++)
 			medirAptitudNodulos(i);
 
 		/* We normalize the nodules aptitude. */
 		normalizarAptitudNodulos();
-		aptitudTemp = 0.0;
+		tmpAptitude = 0.0;
 
 		/* We measure the average aptitude of all the networks. */
-		for(i = 0; i < netPopulation.n_redes; i++)
-			aptitudTemp += netPopulation.redes[i]->aptitud;
-		aptitudTemp /= netPopulation.n_redes;
+		for(i = 0; i < cNetPopulation.numNets; i++)
+			tmpAptitude += cNetPopulation.nets[i]->aptitude;
+		tmpAptitude /= cNetPopulation.numNets;
 	}
 
 	/* If it's the first iteration or the difference between the previous ant the
 	   current average aptitude exceed a limit the evolution continues. */
-	if(iteracion == 0) {
-		*aptitudRedes = 0.0;
+	if(iter == 0) {
+		*networkAptitude = 0.0;
 		return false;
 	} else {
-		dif = aptitudTemp - *aptitudRedes;
-		*aptitudRedes = aptitudTemp;
-		if(dif > evolim)
+		diff = tmpAptitude - *networkAptitude;
+		*networkAptitude = tmpAptitude;
+		if(diff > evolim)
 			return false;
 		return true;
 	}
@@ -123,20 +123,20 @@ void medirCambioNodulo(int nodule)
 {
 	int i, j;
 
-	for(i = 0; i < netPopulation.n_redes; i++) {
+	for(i = 0; i < cNetPopulation.numNets; i++) {
 		/* We train the networks of the modified nodule. */
-		if(netPopulation.redes[i]->nodulos[nodulePopulation.n_subpobl - 1] == nodulePopulation.nodulos[nodule]) {
-			netPopulation.redes[i]->aptitud = 0;
+		if(cNetPopulation.nets[i]->nodules[cNodulePopulation.numSubpops - 1] == cNodulePopulation.nodules[nodule]) {
+			cNetPopulation.nets[i]->aptitude = 0;
 
 			/* We calculate the networks aptitude. */
-			for(j = 0; j < n_entrenamiento; j++) {
-				generarSalidaNodulo(entrada[j], nodule, j, NULL);
+			for(j = 0; j < numTrain; j++) {
+				generarSalidaNodulo(inputData[j], nodule, j, NULL);
 				generarSalidaRed(i, j);
-				medirAptitudRed(salida[j], i);
+				medirAptitudRed(outputData[j], i);
 			}
 
 			/* We normalize the networks aptitude. */
-			netPopulation.redes[i]->aptitud /= n_entrenamiento;
+			cNetPopulation.nets[i]->aptitude /= numTrain;
 		}
 	}
 

@@ -46,7 +46,7 @@ void imprimirNodulo(nodule *imp, int iter)
 	*/
 	fOutput = fopen("nodules.txt", "a");
 	fprintf(fOutput, "id: %d\nNumber of nodes: %d\naptitude: %lf\n\nInput connections matrix:", imp->id, imp->nodes, imp->aptitude);
-	for(i = 0; i < netPopulation.n_nodos_entrada; i++) {
+	for(i = 0; i < cNetPopulation.numInputNodes; i++) {
 		fprintf(fOutput, "\n");
 		for(j = 0; j < imp->nodes; j++)
 			fprintf(fOutput, "%d ", imp->inConn[i][j]);
@@ -55,12 +55,12 @@ void imprimirNodulo(nodule *imp, int iter)
 	fprintf(fOutput, "\nOutput connections matrix:");
 	for(i = 0; i < imp->nodes; i++) {
 		fprintf(fOutput, "\n");
-		for(j = 0; j < netPopulation.n_nodos_salida; j++)
+		for(j = 0; j < cNetPopulation.numOutputNodes; j++)
 			fprintf(fOutput, "%d ", imp->outConn[i][j]);
 	}
 
 	fprintf(fOutput, "\nInput weights matrix:");
-	for(i = 0; i < netPopulation.n_nodos_entrada; i++) {
+	for(i = 0; i < cNetPopulation.numInputNodes; i++) {
 		fprintf(fOutput, "\n");
 		for(j = 0; j < imp->nodes; j++)
 			fprintf(fOutput, "%lf ", imp->inWeights[i][j]);
@@ -69,13 +69,13 @@ void imprimirNodulo(nodule *imp, int iter)
 	fprintf(fOutput, "\nOutput weights matrix:");
 	for(i = 0; i < imp->nodes; i++) {
 		fprintf(fOutput, "\n");
-		for(j = 0; j < netPopulation.n_nodos_salida; j++)
+		for(j = 0; j < cNetPopulation.numOutputNodes; j++)
 			fprintf(fOutput, "%lf ", imp->outWeights[i][j]);
 	}
 
 	fprintf(fOutput, "\nPartial outputs\n");
 	for(i = 0; i < iter; i++)
-		for(j = 0; j < netPopulation.n_nodos_salida; j++)
+		for(j = 0; j < cNetPopulation.numOutputNodes; j++)
 			fprintf(fOutput, "%lf ", imp->partialOutputs[i][j]);
 	fprintf(fOutput, "\n\n");
 
@@ -89,7 +89,7 @@ void imprimirNodulo(nodule *imp, int iter)
  Author: Pablo Alvarez de Sotomayor Posadillo
  Description: Print the network data into an output file.
  Input Parameters:
-   network: Red. Network to print.
+   net: Red. Network to print.
  Local Variables:
    i: Integer. Counter.
    fOutput: Pointer to file. Output file.
@@ -97,7 +97,7 @@ void imprimirNodulo(nodule *imp, int iter)
  Calling Functions: None
 ******************************************************************************/
 
-void imprimirRed(red *network)
+void imprimirRed(network *net)
 {
 	int i;
 	FILE *fOutput;
@@ -106,20 +106,20 @@ void imprimirRed(red *network)
 	  We open the output file.
 	  TODO: Get the output file from somewhere in the config.
 	*/
-	fOutput = fopen("network.txt", "a");
+	fOutput = fopen("net.txt", "a");
 
-	/* We print the network data. */
+	/* We print the net data. */
 	fprintf(fOutput, "nodules: ");
-	for(i = 0; i < nodulePopulation.n_subpobl; i++)
-		fprintf(fOutput, "%d ", network->nodulos[i]->id);
+	for(i = 0; i < cNodulePopulation.numSubpops; i++)
+		fprintf(fOutput, "%d ", net->nodules[i]->id);
 
-	fprintf(fOutput, "\naptitude: %lf\n", network->aptitud);
+	fprintf(fOutput, "\naptitude: %lf\n", net->aptitude);
 	fprintf(fOutput, "Output values:\n");
-	for(i = 0; i < netPopulation.n_nodos_salida; i++)
-		fprintf(fOutput, "%lf ", network->valores_salida[i]);
+	for(i = 0; i < cNetPopulation.numOutputNodes; i++)
+		fprintf(fOutput, "%lf ", net->outValues[i]);
 	fprintf(fOutput, "\n");
 
-	if(net_transf == (func)&Logistic)
+	if(netTransf == (func)&Logistic)
 		fprintf(fOutput, "Logistic\n");
 	else
 		fprintf(fOutput, "HyperbolicTangent\n");

@@ -29,6 +29,8 @@
    i: Integer. Counter.
    j: Integer. Counter.
    k: Integer. Counter.
+   noduleOrig: Integer. Nodule to copy.
+   initialNodule: Integer. Initial nodule of the descendant.
  Return Value: None
  Calling Functions:
    error(): Function to show an error message depending on an error number.
@@ -39,72 +41,72 @@ void copiarDescendencia()
 	int i, j, k, noduleOrig, initialNodule;
 
 	/* Initialization of variables. */
-	initialNodule = numNodules * (nodulePopulation.n_subpobl - 1);
-	descendencia = (nodule **)malloc(numNodules * sizeof(nodule));
-	if(descendencia == NULL)
+	initialNodule = numNodules * (cNodulePopulation.numSubpops - 1);
+	descend = (nodule **)malloc(numNodules * sizeof(nodule));
+	if(descend == NULL)
 		error(RES_MEM);
 
 	/* We copy the nodules to the new population. */
 	for(i = 0; i < numNodules; i++) {
-		descendencia[i] = (nodule *)malloc(sizeof(nodule));
-		if(descendencia[i] == NULL)
+		descend[i] = (nodule *)malloc(sizeof(nodule));
+		if(descend[i] == NULL)
 			error(RES_MEM);
 
 		/* We copy the nodule from the old to the new population. */
 		noduleOrig = initialNodule + i;
-		descendencia[i]->id = nodulePopulation.nodulos[noduleOrig]->id;
-		descendencia[i]->nodes = nodulePopulation.nodulos[noduleOrig]->nodes;
-		descendencia[i]->aptitude = nodulePopulation.nodulos[noduleOrig]->aptitude;
+		descend[i]->id = cNodulePopulation.nodules[noduleOrig]->id;
+		descend[i]->nodes = cNodulePopulation.nodules[noduleOrig]->nodes;
+		descend[i]->aptitude = cNodulePopulation.nodules[noduleOrig]->aptitude;
 
-		descendencia[i]->inConn = (int **)malloc(netPopulation.n_nodos_entrada * sizeof(int));
-		descendencia[i]->inWeights = (double **)malloc(netPopulation.n_nodos_entrada * sizeof(double));
-		descendencia[i]->outConn = (int **)malloc(maxNodes * sizeof(int));
-		descendencia[i]->outWeights = (double **)malloc(maxNodes * sizeof(double));
-		descendencia[i]->transf = (func *)malloc(maxNodes * sizeof(func));
-		descendencia[i]->partialOutputs = (double **)malloc(n_entrenamiento * sizeof(double));
-		if(descendencia[i]->inConn == NULL ||
-		   descendencia[i]->inWeights == NULL ||
-		   descendencia[i]->outConn == NULL ||
-		   descendencia[i]->outWeights == NULL ||
-		   descendencia[i]->transf == NULL ||
-		   descendencia[i]->partialOutputs == NULL)
+		descend[i]->inConn = (int **)malloc(cNetPopulation.numInputNodes * sizeof(int));
+		descend[i]->inWeights = (double **)malloc(cNetPopulation.numInputNodes * sizeof(double));
+		descend[i]->outConn = (int **)malloc(maxNodes * sizeof(int));
+		descend[i]->outWeights = (double **)malloc(maxNodes * sizeof(double));
+		descend[i]->transf = (func *)malloc(maxNodes * sizeof(func));
+		descend[i]->partialOutputs = (double **)malloc(numTrain * sizeof(double));
+		if(descend[i]->inConn == NULL ||
+		   descend[i]->inWeights == NULL ||
+		   descend[i]->outConn == NULL ||
+		   descend[i]->outWeights == NULL ||
+		   descend[i]->transf == NULL ||
+		   descend[i]->partialOutputs == NULL)
 			error(RES_MEM);
 
-		for(j = 0; j < netPopulation.n_nodos_entrada; j++) {
-			descendencia[i]->inConn[j] = (int *)malloc(maxNodes * sizeof(int));
-			descendencia[i]->inWeights[j] = (double *)malloc(maxNodes * sizeof(double));
-			if(descendencia[i]->inConn[j] == NULL ||
-				descendencia[i]->inWeights[j] == NULL)
+		for(j = 0; j < cNetPopulation.numInputNodes; j++) {
+			descend[i]->inConn[j] = (int *)malloc(maxNodes * sizeof(int));
+			descend[i]->inWeights[j] = (double *)malloc(maxNodes * sizeof(double));
+			if(descend[i]->inConn[j] == NULL ||
+			   descend[i]->inWeights[j] == NULL)
 				error(RES_MEM);
 
 			for(k = 0; k < maxNodes; k++) {
-				descendencia[i]->inConn[j][k] = nodulePopulation.nodulos[noduleOrig]->inConn[j][k];
-				descendencia[i]->inWeights[j][k] = nodulePopulation.nodulos[noduleOrig]->inWeights[j][k];
+				descend[i]->inConn[j][k] = cNodulePopulation.nodules[noduleOrig]->inConn[j][k];
+				descend[i]->inWeights[j][k] = cNodulePopulation.nodules[noduleOrig]->inWeights[j][k];
 			} /* end for */
 		} /* end for */
 
 		for(j = 0; j < maxNodes; j++) {
-			descendencia[i]->outConn[j] = (int *)malloc(netPopulation.n_nodos_salida * sizeof(int));
-			descendencia[i]->outWeights[j] = (double *)malloc(netPopulation.n_nodos_salida * sizeof(double));
-			if(descendencia[i]->outConn[j] == NULL ||
-				descendencia[i]->outWeights[j] == NULL)
+			descend[i]->outConn[j] = (int *)malloc(cNetPopulation.numOutputNodes * sizeof(int));
+			descend[i]->outWeights[j] = (double *)malloc(cNetPopulation.numOutputNodes * sizeof(double));
+			if(descend[i]->outConn[j] == NULL ||
+				descend[i]->outWeights[j] == NULL)
 				error(RES_MEM);
 
-			descendencia[i]->transf[j] = nodulePopulation.nodulos[noduleOrig]->transf[j];
+			descend[i]->transf[j] = cNodulePopulation.nodules[noduleOrig]->transf[j];
 
-			for(k = 0; k < netPopulation.n_nodos_salida; k++) {
-				descendencia[i]->outConn[j][k] = nodulePopulation.nodulos[noduleOrig]->outConn[j][k];
-				descendencia[i]->outWeights[j][k] = nodulePopulation.nodulos[noduleOrig]->outWeights[j][k];
+			for(k = 0; k < cNetPopulation.numOutputNodes; k++) {
+				descend[i]->outConn[j][k] = cNodulePopulation.nodules[noduleOrig]->outConn[j][k];
+				descend[i]->outWeights[j][k] = cNodulePopulation.nodules[noduleOrig]->outWeights[j][k];
 			} /* end for */
 		} /* end for */
 
-		for(j = 0; j < n_entrenamiento; j++) {
-			descendencia[i]->partialOutputs[j] = (double *)malloc(netPopulation.n_nodos_salida * sizeof(double));
-			if(descendencia[i]->partialOutputs[j] == NULL)
+		for(j = 0; j < numTrain; j++) {
+			descend[i]->partialOutputs[j] = (double *)malloc(cNetPopulation.numOutputNodes * sizeof(double));
+			if(descend[i]->partialOutputs[j] == NULL)
 				error(RES_MEM);
 
-			for(k = 0; k < netPopulation.n_nodos_salida; k++)
-				descendencia[i]->partialOutputs[j][k] = nodulePopulation.nodulos[noduleOrig]->partialOutputs[j][k];
+			for(k = 0; k < cNetPopulation.numOutputNodes; k++)
+				descend[i]->partialOutputs[j][k] = cNodulePopulation.nodules[noduleOrig]->partialOutputs[j][k];
 		} /* end for */
 	} /* end for */
 }
@@ -137,43 +139,41 @@ void mutarNodulos(int nodule)
 
 	/* We made the estructural mutation. */
 	/* Deletion of nodes. */
-	num = (int)(delta_min + doubleRandom() * (1 - nodulePopulation.nodulos[nodule]->aptitude)
-				* (delta_min - delta_max));
+	num = (int)(delta_min + doubleRandom() *
+				(1 - cNodulePopulation.nodules[nodule]->aptitude) *
+				(delta_min - delta_max));
 	if(num < 0)
 		num = 0;
-	else if(nodulePopulation.nodulos[nodule]->nodes < num)
-		num = nodulePopulation.nodulos[nodule]->nodes;
+	else if(cNodulePopulation.nodules[nodule]->nodes < num)
+		num = cNodulePopulation.nodules[nodule]->nodes;
 	else if(num > 0)
 		borrarNodo(nodule, num);
 
 	/* Add nodes. */
-	num = (int)(delta_min + doubleRandom() * (1 - nodulePopulation.nodulos[nodule]->aptitude)
-				* (delta_min - delta_max));
+	num = (int)(delta_min + doubleRandom() *
+				(1 - cNodulePopulation.nodules[nodule]->aptitude) *
+				(delta_min - delta_max));
 	if(num < 0)
 		num = 0;
-	else if((nodulePopulation.nodulos[nodule]->nodes + num) > maxNodes)
-		num = maxNodes - nodulePopulation.nodulos[nodule]->nodes;
+	else if((cNodulePopulation.nodules[nodule]->nodes + num) > maxNodes)
+		num = maxNodes - cNodulePopulation.nodules[nodule]->nodes;
 	else if(num > 0)
 		anadirNodo(nodule, num); /* We add a new node,*/
 
 	/* Delete connections. */
-	num = (int)(delta_min + doubleRandom() * (1 - nodulePopulation.nodulos[nodule]->aptitude)
-				* (delta_min - delta_max));
-	if(num < 0)
-		num = 0;
-
-	for(i = 0; i < num && nodulePopulation.nodulos[nodule]->nodes > 0; i++) {
-		j = random() % (netPopulation.n_nodos_entrada + netPopulation.n_nodos_salida);
+	num = (int)(delta_min + doubleRandom() *
+				(1 - cNodulePopulation.nodules[nodule]->aptitude) *
+				(delta_min - delta_max));
+	for(i = 0; i < num && cNodulePopulation.nodules[nodule]->nodes > 0; i++) {
+		j = random() % (cNetPopulation.numInputNodes + cNetPopulation.numOutputNodes);
 		borrarConexion(nodule, j);
 	}
 
 	/* Add connections. */
-	num = (int)(delta_min + doubleRandom() * (1 - nodulePopulation.nodulos[nodule]->aptitude)
-				* (delta_min - delta_max));
-	if(num < 0)
-		num = 0;
-
-	for(i = 0; i < num && nodulePopulation.nodulos[nodule]->nodes > 0; i++)
+	num = (int)(delta_min + doubleRandom() *
+				(1 - cNodulePopulation.nodules[nodule]->aptitude) *
+				(delta_min - delta_max));
+	for(i = 0; i < num && cNodulePopulation.nodules[nodule]->nodes > 0; i++)
 		anadirConexion(nodule);
 
 	/*
@@ -217,9 +217,9 @@ void anadirConexion(int nodule)
 
 	if(sel == 0) {
 		/* We add an input connection. */
-		for(i = 0; i < netPopulation.n_nodos_entrada; i++)
-			for(j = 0; j < nodulePopulation.nodulos[nodule]->nodes; j++)
-				if(nodulePopulation.nodulos[nodule]->inConn[i][j] == 0) {
+		for(i = 0; i < cNetPopulation.numInputNodes; i++)
+			for(j = 0; j < cNodulePopulation.nodules[nodule]->nodes; j++)
+				if(cNodulePopulation.nodules[nodule]->inConn[i][j] == 0) {
 					origin = (int *)realloc(origin, (num + 1) * sizeof(int));
 					destination = (int *)realloc(destination, (num + 1) * sizeof(int));
 					origin[num] = i;
@@ -229,8 +229,8 @@ void anadirConexion(int nodule)
 
 		if(num != 0){
 			pos = random() % num;
-			nodulePopulation.nodulos[nodule]->inConn[origin[pos]][destination[pos]] = 1;
-			nodulePopulation.nodulos[nodule]->inWeights[origin[pos]][destination[pos]] = doubleRandom() / 2;
+			cNodulePopulation.nodules[nodule]->inConn[origin[pos]][destination[pos]] = 1;
+			cNodulePopulation.nodules[nodule]->inWeights[origin[pos]][destination[pos]] = doubleRandom() / 2;
 			free(origin);
 			free(destination);
 		} /* end if */
@@ -238,9 +238,9 @@ void anadirConexion(int nodule)
 
 	if((sel == 1 && num == 0) || num == 0) {
 		/* We add an output connection. */
-		for(i = 0; i < nodulePopulation.nodulos[nodule]->nodes; i++)
-			for(j = 0; j < netPopulation.n_nodos_salida; j++)
-				if(nodulePopulation.nodulos[nodule]->outConn[i][j] == 0) {
+		for(i = 0; i < cNodulePopulation.nodules[nodule]->nodes; i++)
+			for(j = 0; j < cNetPopulation.numOutputNodes; j++)
+				if(cNodulePopulation.nodules[nodule]->outConn[i][j] == 0) {
 					origin = (int *)realloc(origin, (num + 1) * sizeof(int));
 					destination = (int *)realloc(destination, (num + 1) * sizeof(int));
 					origin[num] = i;
@@ -250,8 +250,8 @@ void anadirConexion(int nodule)
 
 		if(num != 0) {
 			pos = random() % num;
-			nodulePopulation.nodulos[nodule]->outConn[origin[pos]][destination[pos]] = 1;
-			nodulePopulation.nodulos[nodule]->outWeights[origin[pos]][destination[pos]] = doubleRandom() / 2;
+			cNodulePopulation.nodules[nodule]->outConn[origin[pos]][destination[pos]] = 1;
+			cNodulePopulation.nodules[nodule]->outWeights[origin[pos]][destination[pos]] = doubleRandom() / 2;
 			free(origin);
 			free(destination);
 		} /* end if */
@@ -284,15 +284,13 @@ void anadirNodo(int nodule, int nodes)
 	for(i = 0; i < nodes; i++) {
 		/* We assign the transfer function to the node. */
 		if((random() % 2) == 0)
-			nodulePopulation.nodulos[nodule]->transf[nodulePopulation.nodulos[nodule]->nodes + i]
-				= (func)&HyperbolicTangent;
+			cNodulePopulation.nodules[nodule]->transf[cNodulePopulation.nodules[nodule]->nodes + i] = (func)&HyperbolicTangent;
 		else
-			nodulePopulation.nodulos[nodule]->transf[nodulePopulation.nodulos[nodule]->nodes + i]
-				= (func)&Logistic;
+			cNodulePopulation.nodules[nodule]->transf[cNodulePopulation.nodules[nodule]->nodes + i] = (func)&Logistic;
 	}
 
 	/* We update the number of nodes. */
-	nodulePopulation.nodulos[nodule]->nodes += nodes;
+	cNodulePopulation.nodules[nodule]->nodes += nodes;
 }
 
 /*******************************************************************************
@@ -314,30 +312,30 @@ void borrarConexion(int nodule, int node)
 {
 	int i, sel;
 
-	if(node < netPopulation.n_nodos_entrada){
+	if(node < cNetPopulation.numInputNodes){
 		/* We delete an input connection. */
-		for(i = 0; i < nodulePopulation.nodulos[nodule]->nodes &&
-				nodulePopulation.nodulos[nodule]->inConn[node][i] != 1; i++);
+		for(i = 0; i < cNodulePopulation.nodules[nodule]->nodes &&
+				cNodulePopulation.nodules[nodule]->inConn[node][i] != 1; i++);
 
-		if(i < nodulePopulation.nodulos[nodule]->nodes){
-			sel = random() % nodulePopulation.nodulos[nodule]->nodes;
-			for(; nodulePopulation.nodulos[nodule]->inConn[node][sel] != 1;
-				sel = random() % nodulePopulation.nodulos[nodule]->nodes);
-			nodulePopulation.nodulos[nodule]->inConn[node][sel] = 0;
-			nodulePopulation.nodulos[nodule]->inWeights[node][sel] = 0;
+		if(i < cNodulePopulation.nodules[nodule]->nodes){
+			sel = random() % cNodulePopulation.nodules[nodule]->nodes;
+			for(; cNodulePopulation.nodules[nodule]->inConn[node][sel] != 1;
+				sel = random() % cNodulePopulation.nodules[nodule]->nodes);
+			cNodulePopulation.nodules[nodule]->inConn[node][sel] = 0;
+			cNodulePopulation.nodules[nodule]->inWeights[node][sel] = 0;
 		} /* end if */
 	} else {
 		/* We delete an output connection. */
-		node -= netPopulation.n_nodos_entrada;
-		for(i = 0; i < nodulePopulation.nodulos[nodule]->nodes &&
-				nodulePopulation.nodulos[nodule]->outConn[i][node] != 1; i++);
+		node -= cNetPopulation.numInputNodes;
+		for(i = 0; i < cNodulePopulation.nodules[nodule]->nodes &&
+				cNodulePopulation.nodules[nodule]->outConn[i][node] != 1; i++);
 
-		if(i < nodulePopulation.nodulos[nodule]->nodes) {
-			sel = random() % nodulePopulation.nodulos[nodule]->nodes;
-			for(; nodulePopulation.nodulos[nodule]->outConn[sel][node] != 1;
-				sel = random() % nodulePopulation.nodulos[nodule]->nodes);
-			nodulePopulation.nodulos[nodule]->outConn[sel][node] = 0;
-			nodulePopulation.nodulos[nodule]->outWeights[sel][node] = 0;
+		if(i < cNodulePopulation.nodules[nodule]->nodes) {
+			sel = random() % cNodulePopulation.nodules[nodule]->nodes;
+			for(; cNodulePopulation.nodules[nodule]->outConn[sel][node] != 1;
+				sel = random() % cNodulePopulation.nodules[nodule]->nodes);
+			cNodulePopulation.nodules[nodule]->outConn[sel][node] = 0;
+			cNodulePopulation.nodules[nodule]->outWeights[sel][node] = 0;
 		} /* end if */
 	} /* end if */
 }
@@ -365,42 +363,42 @@ void borrarNodo(int nodule, int nodes)
 	int i, j, k, node;
   
 	for(k = 0; k < nodes; k++) {
-		node = random() % nodulePopulation.nodulos[nodule]->nodes;
+		node = random() % cNodulePopulation.nodules[nodule]->nodes;
 
 		/* All the nodes after the node to delete have to go back a position. */
-		for(i = node + 1; i < nodulePopulation.nodulos[nodule]->nodes; i++) {
-			nodulePopulation.nodulos[nodule]->transf[i - 1] =
-				nodulePopulation.nodulos[nodule]->transf[i];
-			for(j = 0; j < netPopulation.n_nodos_salida; j++) {
-				nodulePopulation.nodulos[nodule]->outConn[i - 1][j] =
-					nodulePopulation.nodulos[nodule]->outConn[i][j];
-				nodulePopulation.nodulos[nodule]->outWeights[i - 1][j] =
-					nodulePopulation.nodulos[nodule]->outWeights[i][j];
-				nodulePopulation.nodulos[nodule]->outConn[i][j] = 0;
-				nodulePopulation.nodulos[nodule]->outWeights[i][j] = 0;
+		for(i = node + 1; i < cNodulePopulation.nodules[nodule]->nodes; i++) {
+			cNodulePopulation.nodules[nodule]->transf[i - 1] =
+				cNodulePopulation.nodules[nodule]->transf[i];
+			for(j = 0; j < cNetPopulation.numOutputNodes; j++) {
+				cNodulePopulation.nodules[nodule]->outConn[i - 1][j] =
+					cNodulePopulation.nodules[nodule]->outConn[i][j];
+				cNodulePopulation.nodules[nodule]->outWeights[i - 1][j] =
+					cNodulePopulation.nodules[nodule]->outWeights[i][j];
+				cNodulePopulation.nodules[nodule]->outConn[i][j] = 0;
+				cNodulePopulation.nodules[nodule]->outWeights[i][j] = 0;
 			} /* end for */
 		} /* end for */
 
-		for(j = 0; j < netPopulation.n_nodos_salida; j++) {
-			nodulePopulation.nodulos[nodule]->outConn[i - 1][j] = 0;
-			nodulePopulation.nodulos[nodule]->outWeights[i - 1][j] = 0;
+		for(j = 0; j < cNetPopulation.numOutputNodes; j++) {
+			cNodulePopulation.nodules[nodule]->outConn[i - 1][j] = 0;
+			cNodulePopulation.nodules[nodule]->outWeights[i - 1][j] = 0;
 		} /* end for */
 
-		for(i = 0; i < netPopulation.n_nodos_entrada; i++) {
-			for(j = node + 1; j < nodulePopulation.nodulos[nodule]->nodes; j++) {
-				nodulePopulation.nodulos[nodule]->inConn[i][j - 1] =
-					nodulePopulation.nodulos[nodule]->inConn[i][j];
-				nodulePopulation.nodulos[nodule]->inWeights[i][j - 1] =
-					nodulePopulation.nodulos[nodule]->inWeights[i][j];
-				nodulePopulation.nodulos[nodule]->inConn[i][j] = 0;
-				nodulePopulation.nodulos[nodule]->inWeights[i][j] = 0;
+		for(i = 0; i < cNetPopulation.numInputNodes; i++) {
+			for(j = node + 1; j < cNodulePopulation.nodules[nodule]->nodes; j++) {
+				cNodulePopulation.nodules[nodule]->inConn[i][j - 1] =
+					cNodulePopulation.nodules[nodule]->inConn[i][j];
+				cNodulePopulation.nodules[nodule]->inWeights[i][j - 1] =
+					cNodulePopulation.nodules[nodule]->inWeights[i][j];
+				cNodulePopulation.nodules[nodule]->inConn[i][j] = 0;
+				cNodulePopulation.nodules[nodule]->inWeights[i][j] = 0;
 			} /* end for */
 
-			nodulePopulation.nodulos[nodule]->inConn[i][j-1] = 0;
-			nodulePopulation.nodulos[nodule]->inWeights[i][j-1] = 0;
+			cNodulePopulation.nodules[nodule]->inConn[i][j-1] = 0;
+			cNodulePopulation.nodules[nodule]->inWeights[i][j-1] = 0;
 		} /* end for */
   
-		nodulePopulation.nodulos[nodule]->nodes--;
+		cNodulePopulation.nodules[nodule]->nodes--;
 	} /* end for */
 }
 
@@ -436,40 +434,41 @@ void sustituirNodulos()
 		error(RES_MEM);
 
 	for(i = 0; i < numNodules; i++) {
-		id[i] = ((nodulePopulation.n_subpobl - 1) * numNodules) + i;
+		id[i] = ((cNodulePopulation.numSubpops - 1) * numNodules) + i;
 		order[i] =
-			nodulePopulation.nodulos[(nodulePopulation.n_subpobl - 1) * numNodules + i]->aptitude;
+			cNodulePopulation.nodules[(cNodulePopulation.numSubpops - 1) * numNodules + i]->aptitude;
 	}
 
 	for(i = 0; i < numNodules; i++)
 		for(j = i; j < numNodules; j++)
 			if(order[i] < order[j]) {
-				id[i] = ((nodulePopulation.n_subpobl - 1) * numNodules) + j;
-				id[j] = ((nodulePopulation.n_subpobl-1) * numNodules) + i;
-				order[i] = nodulePopulation.nodulos[((nodulePopulation.n_subpobl - 1) * numNodules) + j]->aptitude;
-				order[j] = nodulePopulation.nodulos[((nodulePopulation.n_subpobl - 1) * numNodules) + i]->aptitude;
+				id[i] = ((cNodulePopulation.numSubpops - 1) * numNodules) + j;
+				id[j] = ((cNodulePopulation.numSubpops - 1) * numNodules) + i;
+				order[i] = cNodulePopulation.nodules[((cNodulePopulation.numSubpops - 1) * numNodules) + j]->aptitude;
+				order[j] = cNodulePopulation.nodules[((cNodulePopulation.numSubpops - 1) * numNodules) + i]->aptitude;
 			}
 
 	/*
 	  We substitude the best nodules of the descendant subpopulation by the worst
 	  nodules of the original subpopulation. 
 	*/
-	for(i = numNodules; i > nodsel; i--){
-		for(j = 0; j < netPopulation.n_redes; j++)
-			if(netPopulation.redes[j]->nodulos[nodulePopulation.n_subpobl - 1] ==
-			   nodulePopulation.nodulos[id[i - 1]])
-				netPopulation.redes[j]->nodulos[nodulePopulation.n_subpobl - 1] =
-					descendencia[i - nodsel - 1];
-		liberarNodulo(nodulePopulation.nodulos[id[i - 1]]);
-		free(nodulePopulation.nodulos[id[i - 1]]);
-		nodulePopulation.nodulos[id[i - 1]] = descendencia[i - nodsel - 1];
-		descendencia[i - nodsel - 1] = NULL;
+
+	for(i = numNodules; i > nodSel; i--){
+		for(j = 0; j < cNetPopulation.numNets; j++)
+			if(cNetPopulation.nets[j]->nodules[cNodulePopulation.numSubpops - 1] ==
+			   cNodulePopulation.nodules[id[i - 1]])
+				cNetPopulation.nets[j]->nodules[cNodulePopulation.numSubpops - 1] =
+					descend[i - nodSel - 1];
+		liberarNodulo(cNodulePopulation.nodules[id[i - 1]]);
+		free(cNodulePopulation.nodules[id[i - 1]]);
+		cNodulePopulation.nodules[id[i - 1]] = descend[i - nodSel - 1];
+		descend[i - nodSel - 1] = NULL;
 	}
 
-	for(i = numNodules - nodsel; i < numNodules; i++)
-		liberarNodulo(descendencia[i]);
-	free(descendencia);
-	descendencia = NULL;
+	for(i = numNodules - nodSel; i < numNodules; i++)
+		liberarNodulo(descend[i]);
+	free(descend);
+	descend = NULL;
 	ordenarNodulos();
 	free(id);
 	free(order);

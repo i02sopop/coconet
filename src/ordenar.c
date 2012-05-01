@@ -38,15 +38,15 @@ void ordenarNodulos()
 	nodule *aux;
 
 	/* We order the nodules and copy them to the new population. */
-	for(i = numNodules * (nodulePopulation.n_subpobl - 1); i < nodulePopulation.n_nodulos; i++) {
-		for(j = i; j < nodulePopulation.n_nodulos; j++) {
-			if(nodulePopulation.nodulos[i]->aptitude < nodulePopulation.nodulos[j]->aptitude) {
-				aux = nodulePopulation.nodulos[i];
-				nodulePopulation.nodulos[i] = nodulePopulation.nodulos[j];
-				nodulePopulation.nodulos[j] = aux;
+	for(i = numNodules * (cNodulePopulation.numSubpops - 1); i < cNodulePopulation.numNodules; i++) {
+		for(j = i; j < cNodulePopulation.numNodules; j++) {
+			if(cNodulePopulation.nodules[i]->aptitude < cNodulePopulation.nodules[j]->aptitude) {
+				aux = cNodulePopulation.nodules[i];
+				cNodulePopulation.nodules[i] = cNodulePopulation.nodules[j];
+				cNodulePopulation.nodules[j] = aux;
 			} /* end if */
 
-			nodulePopulation.nodulos[i]->id = i;
+			cNodulePopulation.nodules[i]->id = i;
 		} /* end for */
 	} /* end for */
 }
@@ -68,15 +68,15 @@ void ordenarNodulos()
 void ordenarRedes()
 {
 	int i,j;
-	red *aux;
+	network *aux;
 
 	/* We order the networks from higher to lower aptitude. */
-	for(i = 0; i < netPopulation.n_redes; i++) {
-		for(j = i; j < netPopulation.n_redes; j++) {
-			if(netPopulation.redes[i]->aptitud < netPopulation.redes[j]->aptitud) {
-				aux = netPopulation.redes[i];
-				netPopulation.redes[i] = netPopulation.redes[j];
-				netPopulation.redes[j] = aux;
+	for(i = 0; i < cNetPopulation.numNets; i++) {
+		for(j = i; j < cNetPopulation.numNets; j++) {
+			if(cNetPopulation.nets[i]->aptitude < cNetPopulation.nets[j]->aptitude) {
+				aux = cNetPopulation.nets[i];
+				cNetPopulation.nets[i] = cNetPopulation.nets[j];
+				cNetPopulation.nets[j] = aux;
 			} /* end if */
 		} /* end for */
 	} /* end for */

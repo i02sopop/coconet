@@ -34,7 +34,7 @@
 double Logistic(double x)
 {
 	/* y = a / (1 + e(-b * x)). */
-	return (double)(ptransferencia.logistic_a / (1 + exp((double)(-ptransferencia.logistic_b * x))));
+	return (double)(pTransfer.logistic_a / (1 + exp((double)(-pTransfer.logistic_b * x))));
 }
 
 /******************************************************************************
@@ -52,7 +52,7 @@ double Logistic(double x)
 double HyperbolicTangent(double x)
 {
 	/* y = a * tanh(b * x). */
-	return (double)(ptransferencia.htan_a * tanh(ptransferencia.htan_b * x));
+	return (double)(pTransfer.htan_a * tanh(pTransfer.htan_b * x));
 }
 
 /******************************************************************************
@@ -82,7 +82,7 @@ double Normal(double media, double sigma)
 	static int gliset = 0;
 	double fac, r, v1, v2, gasdev;
 
-	if(gliset == 0) {
+	if(!gliset) {
 		do {
 			v1 = 2 * doubleRandom() -1;
 			v2 = 2 * doubleRandom() - 1;
@@ -98,7 +98,7 @@ double Normal(double media, double sigma)
 		gliset = 0;
 	}
 
-	return (double)((gasdev*sigma)+media);
+	return (double)((gasdev * sigma) + media);
 }
 
 /*******************************************************************************
@@ -125,14 +125,14 @@ void escalarDatosEntrada(int iterations)
 	double max, min, a, b;
 
 	/* We scale the input data. */
-	for(i = 0; i < netPopulation.n_nodos_entrada; i++) {
+	for(i = 0; i < cNetPopulation.numInputNodes; i++) {
 		/* We obtain the max and min values of the column. */
-		min = max = entrada[0][i];
+		min = max = inputData[0][i];
 		for(j = 0; j < iterations; j++) {
-			if(max < entrada[j][i])
-				max = entrada[j][i];
-			else if(min > entrada[j][i])
-				min = entrada[j][i];
+			if(max < inputData[j][i])
+				max = inputData[j][i];
+			else if(min > inputData[j][i])
+				min = inputData[j][i];
 		}
 
 		/* We calculate a & b coeficients. */
@@ -144,7 +144,7 @@ void escalarDatosEntrada(int iterations)
       
 			/* We scale the column. */
 			for(j = 0; j < iterations; j++)
-				entrada[j][i] = a * entrada[j][i] + b;
+				inputData[j][i] = a * inputData[j][i] + b;
 		}
 	}
 }
@@ -176,7 +176,7 @@ void escalarDatosSalida(double **data, int iterations, double lbound, double ubo
 	double max, min, a, b;
 
 	/* We scale the output. */
-	for(i = 0; i < netPopulation.n_nodos_salida; i++) {
+	for(i = 0; i < cNetPopulation.numOutputNodes; i++) {
 		/* We calculate the min and max values of the column. */
 		min = max = data[0][i];
 		for(j = 0; j < iterations; j++) {

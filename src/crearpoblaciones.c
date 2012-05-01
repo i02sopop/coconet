@@ -37,10 +37,10 @@
 void anadirNodulosRedes()
 {
 	/* If it's the first nodes population we create a network per node. */
-	if(nodulePopulation.n_subpobl == 1) {
-		netPopulation.n_redes = numNodules;
-		netPopulation.redes = (red **)malloc(numNodules * sizeof(red));
-		if(netPopulation.redes == NULL)
+	if(cNodulePopulation.numSubpops == 1) {
+		cNetPopulation.numNets = numNodules;
+		cNetPopulation.nets = (network **)malloc(numNodules * sizeof(network));
+		if(cNetPopulation.nets == NULL)
 			error(RES_MEM);
 		crearRedes();
 	} else {
@@ -70,44 +70,44 @@ void anadirNodulosRedes()
 
 void crearDescendencia()
 {
-	int i, j, netsel, nodsel;
-	red **dnet; /* New network population. Descend of the actual population. */
+	int i, j, net, node;
+	network **dnet; /* New network population. Descend of the actual population. */
 
 	/* Creation of the new network. */
-	dnet = (red **)malloc(maxNetworks * sizeof(red));
+	dnet = (network **)malloc(maxNetworks * sizeof(network));
 	if(dnet == NULL)
 		error(RES_MEM);
 
 	for(i = 0; i < maxNetworks; i++) {
-		dnet[i] = (red *)malloc(sizeof(red));
+		dnet[i] = (network *)malloc(sizeof(network));
 		if(dnet[i] == NULL)
 			error(RES_MEM);
 
-		dnet[i]->aptitud = 0;
-		dnet[i]->valores_salida = (double *)malloc(netPopulation.n_nodos_salida * sizeof(double));
-		dnet[i]->nodulos = (nodule **)malloc(nodulePopulation.n_subpobl * sizeof(nodule));
-		if(dnet[i]->valores_salida == NULL || dnet[i]->nodulos == NULL)
+		dnet[i]->aptitude = 0;
+		dnet[i]->outValues = (double *)malloc(cNetPopulation.numOutputNodes * sizeof(double));
+		dnet[i]->nodules = (nodule **)malloc(cNodulePopulation.numSubpops * sizeof(nodule));
+		if(dnet[i]->outValues == NULL || dnet[i]->nodules == NULL)
 			error(RES_MEM);
 
 		/* Select a new network randomly. */
-		netsel = random() % netPopulation.n_redes;
+		net = random() % cNetPopulation.numNets;
 
 		/* Random selection of the node to add. */
-		nodsel = random() % numNodules;
+		node = random() % numNodules;
 
 		/* Creation of the new network. */
-		for(j = 0; j < nodulePopulation.n_subpobl - 1; j++)
-			dnet[i]->nodulos[j] = netPopulation.redes[netsel]->nodulos[j];
+		for(j = 0; j < cNodulePopulation.numSubpops - 1; j++)
+			dnet[i]->nodules[j] = cNetPopulation.nets[net]->nodules[j];
 
-		dnet[i]->nodulos[nodulePopulation.n_subpobl - 1] = nodulePopulation.nodulos[(nodulePopulation.n_subpobl - 1) * numNodules + nodsel];
+		dnet[i]->nodules[cNodulePopulation.numSubpops - 1] = cNodulePopulation.nodules[(cNodulePopulation.numSubpops - 1) * numNodules + node];
 	}
 
 	/* We fix the new network. */
-	for(i = 0; i < netPopulation.n_redes; i++)
-		liberarRed(netPopulation.redes[i]);
+	for(i = 0; i < cNetPopulation.numNets; i++)
+		liberarRed(cNetPopulation.nets[i]);
 
-	free(netPopulation.redes);
-	netPopulation.redes = dnet;
+	free(cNetPopulation.nets);
+	cNetPopulation.nets = dnet;
 	dnet = NULL;
 }
 
@@ -124,17 +124,17 @@ void crearDescendencia()
  Calling Functions: None
 *****************************************************************************/
 
-void liberarRed(red *network)
+void liberarRed(network *net)
 {
 	int i;
 
 	/* We delete all the network. */
-	for(i = 0; i < nodulePopulation.n_subpobl; i++)
-		network->nodulos[i] = NULL;
+	for(i = 0; i < cNodulePopulation.numSubpops; i++)
+		net->nodules[i] = NULL;
 
-	free(network->nodulos);
-	free(network->valores_salida);
-	free(network);
+	free(net->nodules);
+	free(net->outValues);
+	free(net);
 }
 
 /******************************************************************************
@@ -158,97 +158,93 @@ void crearNodulos()
 	int i, j, k;
 
 	/* We create the nodule subpopulation. */
-	for(i = nodulePopulation.n_nodulos - numNodules; i < nodulePopulation.n_nodulos; i++) {
-		nodulePopulation.nodulos[i] = (nodule *)malloc(sizeof(nodule));
-		if(nodulePopulation.nodulos[i] == NULL)
+	for(i = cNodulePopulation.numNodules - numNodules; i < cNodulePopulation.numNodules; i++) {
+		cNodulePopulation.nodules[i] = (nodule *)malloc(sizeof(nodule));
+		if(cNodulePopulation.nodules[i] == NULL)
 			error(RES_MEM);
 
 		/* Nodule id. */
-		nodulePopulation.nodulos[i]->id = i;
+		cNodulePopulation.nodules[i]->id = i;
 
 		/* Number of hidden nodes of the nodule. */
-		nodulePopulation.nodulos[i]->nodes = random() % maxNodes;
+		cNodulePopulation.nodules[i]->nodes = random() % maxNodes;
 
 		/* Initial aptitude. */
-		nodulePopulation.nodulos[i]->aptitude = 0;
+		cNodulePopulation.nodules[i]->aptitude = 0;
 
-		if(nodulePopulation.nodulos[i]->nodes == 0)
-			nodulePopulation.nodulos[i]->nodes++;
+		if(cNodulePopulation.nodules[i]->nodes == 0)
+			cNodulePopulation.nodules[i]->nodes++;
 
 		/* Memory allocation for the creation of connections and weights. */
 		/* Connections from input to hidden nodes. */
-		nodulePopulation.nodulos[i]->inConn = (int **)malloc(netPopulation.n_nodos_entrada * sizeof(int));
+		cNodulePopulation.nodules[i]->inConn = (int **)malloc(cNetPopulation.numInputNodes * sizeof(int));
 
 		/* Connections from hidden to output nodes. */
-		nodulePopulation.nodulos[i]->outConn = (int **)malloc(maxNodes * sizeof(int));
+		cNodulePopulation.nodules[i]->outConn = (int **)malloc(maxNodes * sizeof(int));
 
 		/* Weights of connections between input and hidden nodes. */
-		nodulePopulation.nodulos[i]->inWeights = (double **)malloc(netPopulation.n_nodos_entrada * sizeof(double));
+		cNodulePopulation.nodules[i]->inWeights = (double **)malloc(cNetPopulation.numInputNodes * sizeof(double));
 
 		/* Weights of connections between hidden and output nodes. */
-		nodulePopulation.nodulos[i]->outWeights = (double **)malloc(maxNodes * sizeof(double));
-		nodulePopulation.nodulos[i]->partialOutputs = (double **)malloc(n_entrenamiento * sizeof(double));
-		nodulePopulation.nodulos[i]->transf = (func *)malloc(maxNodes * sizeof(func));
+		cNodulePopulation.nodules[i]->outWeights = (double **)malloc(maxNodes * sizeof(double));
+		cNodulePopulation.nodules[i]->partialOutputs = (double **)malloc(numTrain * sizeof(double));
+		cNodulePopulation.nodules[i]->transf = (func *)malloc(maxNodes * sizeof(func));
 
-		if(nodulePopulation.nodulos[i]->inConn == NULL || nodulePopulation.nodulos[i]->outConn == NULL ||
-		   nodulePopulation.nodulos[i]->inWeights == NULL || nodulePopulation.nodulos[i]->outWeights == NULL ||
-		   nodulePopulation.nodulos[i]->partialOutputs == NULL || nodulePopulation.nodulos[i]->transf == NULL)
+		if(cNodulePopulation.nodules[i]->inConn == NULL || cNodulePopulation.nodules[i]->outConn == NULL ||
+		   cNodulePopulation.nodules[i]->inWeights == NULL || cNodulePopulation.nodules[i]->outWeights == NULL ||
+		   cNodulePopulation.nodules[i]->partialOutputs == NULL || cNodulePopulation.nodules[i]->transf == NULL)
 			error(RES_MEM);
 
 		/* Creation of connections and weigths. */
 		/* Entry connections and weights. */
-		for(j = 0; j < netPopulation.n_nodos_entrada; j++) {
-			nodulePopulation.nodulos[i]->inConn[j] = (int *)malloc(maxNodes * sizeof(int));
-			nodulePopulation.nodulos[i]->inWeights[j] = (double *)malloc(maxNodes * sizeof(double));
-			if(nodulePopulation.nodulos[i]->inConn[j] == NULL || nodulePopulation.nodulos[i]->inWeights[j] == NULL)
+		for(j = 0; j < cNetPopulation.numInputNodes; j++) {
+			cNodulePopulation.nodules[i]->inConn[j] = (int *)malloc(maxNodes * sizeof(int));
+			cNodulePopulation.nodules[i]->inWeights[j] = (double *)malloc(maxNodes * sizeof(double));
+			if(cNodulePopulation.nodules[i]->inConn[j] == NULL || cNodulePopulation.nodules[i]->inWeights[j] == NULL)
 				error(RES_MEM);
 
 			for(k = 0; k < maxNodes; k++) {
-				if(random() % 2 == 1 && k < nodulePopulation.nodulos[i]->nodes) {
-					nodulePopulation.nodulos[i]->inConn[j][k] = 1;
-					nodulePopulation.nodulos[i]->inWeights[j][k] = doubleRandom() / 2;
+				if(random() % 2 == 1 && k < cNodulePopulation.nodules[i]->nodes) {
+					cNodulePopulation.nodules[i]->inConn[j][k] = 1;
+					cNodulePopulation.nodules[i]->inWeights[j][k] = doubleRandom() / 2;
 				} else {
-					nodulePopulation.nodulos[i]->inConn[j][k] = 0;
-					nodulePopulation.nodulos[i]->inWeights[j][k] = 0.0;
+					cNodulePopulation.nodules[i]->inConn[j][k] = 0;
+					cNodulePopulation.nodules[i]->inWeights[j][k] = 0.0;
 				}
 			}
 		}
 
 		/* Output connections and weights. */
 		for(j = 0; j < maxNodes; j++) {
-			nodulePopulation.nodulos[i]->outConn[j] = (int *)malloc(netPopulation.n_nodos_salida * sizeof(int));
-			nodulePopulation.nodulos[i]->outWeights[j] = (double *)malloc(netPopulation.n_nodos_salida * sizeof(double));
-			if(nodulePopulation.nodulos[i]->outConn[j] == NULL || nodulePopulation.nodulos[i]->outWeights[j] == NULL)
+			cNodulePopulation.nodules[i]->outConn[j] = (int *)malloc(cNetPopulation.numOutputNodes * sizeof(int));
+			cNodulePopulation.nodules[i]->outWeights[j] = (double *)malloc(cNetPopulation.numOutputNodes * sizeof(double));
+			if(cNodulePopulation.nodules[i]->outConn[j] == NULL || cNodulePopulation.nodules[i]->outWeights[j] == NULL)
 				error(RES_MEM);
 
-			for(k = 0; k < netPopulation.n_nodos_salida; k++) {
-				if(random() % 2 == 1 && j < nodulePopulation.nodulos[i]->nodes) {
-					nodulePopulation.nodulos[i]->outConn[j][k] = 1;
-					nodulePopulation.nodulos[i]->outWeights[j][k] = doubleRandom() / 2;
+			for(k = 0; k < cNetPopulation.numOutputNodes; k++) {
+				if(random() % 2 == 1 && j < cNodulePopulation.nodules[i]->nodes) {
+					cNodulePopulation.nodules[i]->outConn[j][k] = 1;
+					cNodulePopulation.nodules[i]->outWeights[j][k] = doubleRandom() / 2;
 				} else {
-					nodulePopulation.nodulos[i]->outConn[j][k] = 0;
-					nodulePopulation.nodulos[i]->outWeights[j][k] = 0.0;
+					cNodulePopulation.nodules[i]->outConn[j][k] = 0;
+					cNodulePopulation.nodules[i]->outWeights[j][k] = 0.0;
 				}
 			}
 		}
 
 		/* Partial outputs. */
-		for(j = 0; j < n_entrenamiento; j++) {
-			nodulePopulation.nodulos[i]->partialOutputs[j] = (double *)malloc(netPopulation.n_nodos_salida * sizeof(double));
-			if(nodulePopulation.nodulos[i]->partialOutputs[j] == NULL)
+		for(j = 0; j < numTrain; j++) {
+			cNodulePopulation.nodules[i]->partialOutputs[j] = (double *)malloc(cNetPopulation.numOutputNodes * sizeof(double));
+			if(cNodulePopulation.nodules[i]->partialOutputs[j] == NULL)
 				error(RES_MEM);
 
-			for(k = 0; k < netPopulation.n_nodos_salida; k++)
-				nodulePopulation.nodulos[i]->partialOutputs[j][k] = 0.0;
+			for(k = 0; k < cNetPopulation.numOutputNodes; k++)
+				cNodulePopulation.nodules[i]->partialOutputs[j][k] = 0.0;
 		}
 
 		/* Assign the transfer function to each node. */
-		for(j = 0; j < nodulePopulation.nodulos[i]->nodes; j++) {
-			if(random() % 2 == 0)
-				nodulePopulation.nodulos[i]->transf[j] = (func)&HyperbolicTangent;
-			else
-				nodulePopulation.nodulos[i]->transf[j] = (func)&Logistic;
-		}
+		for(j = 0; j < cNodulePopulation.nodules[i]->nodes; j++)
+			cNodulePopulation.nodules[i]->transf[j] = (random() % 2 == 0) ? (func)&HyperbolicTangent : (func)&Logistic;
 	}
 }
 
@@ -271,12 +267,14 @@ void crearPoblacionNodulos()
 	  We update the number of subpopulations and nodules of the nodule
 	  population.
 	*/
-	nodulePopulation.n_subpobl++;
-	nodulePopulation.n_nodulos = nodulePopulation.n_subpobl * numNodules;
+	cNodulePopulation.numSubpops++;
+	cNodulePopulation.numNodules = cNodulePopulation.numSubpops * numNodules;
 
 	/* Memory allocation for the new subpopulation. */
-	nodulePopulation.nodulos = (nodulePopulation.n_subpobl == 1) ? (nodule **)malloc(numNodules * sizeof(nodule)) : (nodule **)realloc(nodulePopulation.nodulos, nodulePopulation.n_nodulos * sizeof(nodule));
-	if(nodulePopulation.nodulos == NULL)
+	cNodulePopulation.nodules = (cNodulePopulation.numSubpops == 1) ?
+		(nodule **)malloc(numNodules * sizeof(nodule)) :
+		(nodule **)realloc(cNodulePopulation.nodules, cNodulePopulation.numNodules * sizeof(nodule));
+	if(cNodulePopulation.nodules == NULL)
 		error(RES_MEM);
 
 	/* We create the nodules of the new subpopulation. */
@@ -302,19 +300,19 @@ void crearRedes()
 	int i, j;
 
 	for(i = 0; i < numNodules; i++) {
-		if((netPopulation.redes[i] = (red *)malloc(sizeof(red))) == NULL)
+		if((cNetPopulation.nets[i] = (network *)malloc(sizeof(network))) == NULL)
 			error(RES_MEM);
 
 		/* Allocation of memory. */
-		netPopulation.redes[i]->nodulos = (nodule **)malloc(sizeof(nodule));
-		netPopulation.redes[i]->valores_salida = (double *)malloc(netPopulation.n_nodos_salida * sizeof(double));
-		if(netPopulation.redes[i]->nodulos == NULL || netPopulation.redes[i]->valores_salida == NULL)
+		cNetPopulation.nets[i]->nodules = (nodule **)malloc(sizeof(nodule));
+		cNetPopulation.nets[i]->outValues = (double *)malloc(cNetPopulation.numOutputNodes * sizeof(double));
+		if(cNetPopulation.nets[i]->nodules == NULL || cNetPopulation.nets[i]->outValues == NULL)
 			error(RES_MEM);
 
 		/* Initialization of variables. */
-		netPopulation.redes[i]->aptitud = 0.0;
-		netPopulation.redes[i]->nodulos[0] = nodulePopulation.nodulos[i];
-		for(j = 0; j < netPopulation.n_nodos_salida; j++)
-			netPopulation.redes[i]->valores_salida[j] = 0.0;
+		cNetPopulation.nets[i]->aptitude = 0.0;
+		cNetPopulation.nets[i]->nodules[0] = cNodulePopulation.nodules[i];
+		for(j = 0; j < cNetPopulation.numOutputNodes; j++)
+			cNetPopulation.nets[i]->outValues[j] = 0.0;
 	}
 }

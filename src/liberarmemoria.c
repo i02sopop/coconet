@@ -42,12 +42,12 @@ void liberarNodulo(nodule *nodule)
 	for(i = 0; i < maxNodes; i++) {
 		free(nodule->outConn[i]);
 		free(nodule->outWeights[i]);
-	} for(i = 0; i < netPopulation.n_nodos_entrada; i++) {
+	} for(i = 0; i < cNetPopulation.numInputNodes; i++) {
 		free(nodule->inConn[i]);
 		free(nodule->inWeights[i]);
-	} for(i = 0; i < netPopulation.n_nodos_salida; i++)
+	} for(i = 0; i < cNetPopulation.numOutputNodes; i++)
 		  nodule->transf = NULL;
-	for(i = 0; i < n_entrenamiento; i++)
+	for(i = 0; i < numTrain; i++)
 		free(nodule->partialOutputs[i]);
 
 	free(nodule->inConn);
@@ -76,14 +76,14 @@ void ajustarMatrices()
 	int i, j;
 
 	/* We adjust the matriz size of the last nodule subpopulation. */
-	for(i = numNodules * (nodulePopulation.n_subpobl - 1); i < nodulePopulation.n_nodulos; i++) {
-		for(j = 0; j < netPopulation.n_nodos_entrada; j++) {
-			nodulePopulation.nodulos[i]->inConn[j] = (int *)realloc(nodulePopulation.nodulos[i]->inConn[j], nodulePopulation.nodulos[i]->nodes * sizeof(int));
-			nodulePopulation.nodulos[i]->inWeights[j] = (double *)realloc(nodulePopulation.nodulos[i]->inWeights[j], nodulePopulation.nodulos[i]->nodes * sizeof(double));
+	for(i = numNodules * (cNodulePopulation.numSubpops - 1); i < cNodulePopulation.numNodules; i++) {
+		for(j = 0; j < cNetPopulation.numInputNodes; j++) {
+			cNodulePopulation.nodules[i]->inConn[j] = (int *)realloc(cNodulePopulation.nodules[i]->inConn[j], cNodulePopulation.nodules[i]->nodes * sizeof(int));
+			cNodulePopulation.nodules[i]->inWeights[j] = (double *)realloc(cNodulePopulation.nodules[i]->inWeights[j], cNodulePopulation.nodules[i]->nodes * sizeof(double));
 		}
 
-		nodulePopulation.nodulos[i]->outConn = (int **)realloc(nodulePopulation.nodulos[i]->outConn, nodulePopulation.nodulos[i]->nodes * sizeof(int));
-		nodulePopulation.nodulos[i]->outWeights = (double **)realloc(nodulePopulation.nodulos[i]->outWeights, nodulePopulation.nodulos[i]->nodes * sizeof(double));
-		nodulePopulation.nodulos[i]->transf = (func *)realloc(nodulePopulation.nodulos[i]->transf, nodulePopulation.nodulos[i]->nodes * sizeof(func));
+		cNodulePopulation.nodules[i]->outConn = (int **)realloc(cNodulePopulation.nodules[i]->outConn, cNodulePopulation.nodules[i]->nodes * sizeof(int));
+		cNodulePopulation.nodules[i]->outWeights = (double **)realloc(cNodulePopulation.nodules[i]->outWeights, cNodulePopulation.nodules[i]->nodes * sizeof(double));
+		cNodulePopulation.nodules[i]->transf = (func *)realloc(cNodulePopulation.nodules[i]->transf, cNodulePopulation.nodules[i]->nodes * sizeof(func));
 	}
 }

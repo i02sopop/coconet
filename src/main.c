@@ -60,31 +60,31 @@ int main(int argc, char **argv)
 
 	/* We load the config and training files. */
 	cargarFichero(argv[1], argv[2]);
-	if(nodsel > numNodules)
-		nodsel = numNodules;
+	if(nodSel > numNodules)
+		nodSel = numNodules;
 
 	/* Initialization of the average flair of the networks. */
 	netAptitude = 0.0;
 
 	/* Scaling of input and output data from the training file. */
 	fprintf(stderr, "Scaling the input data.\n");
-	escalarDatosEntrada(n_entrenamiento);
+	escalarDatosEntrada(numTrain);
 	fprintf(stderr, "Scaling the output data.\n");
-	if(net_transf == (func)&Logistic)
-		escalarDatosSalida(salida,
-						   n_entrenamiento,
-						   0.0 + ptransferencia.epsilon,
-						   ptransferencia.logistic_a - ptransferencia.epsilon);
+	if(netTransf == (func)&Logistic)
+		escalarDatosSalida(outputData,
+						   numTrain,
+						   0.0 + pTransfer.epsilon,
+						   pTransfer.logistic_a - pTransfer.epsilon);
 	else
-		escalarDatosSalida(salida,
-						   n_entrenamiento,
-						   ptransferencia.epsilon - ptransferencia.htan_a,
-						   ptransferencia.htan_a - ptransferencia.epsilon);
+		escalarDatosSalida(outputData,
+						   numTrain,
+						   pTransfer.epsilon - pTransfer.htan_a,
+						   pTransfer.htan_a - pTransfer.epsilon);
 
 	/* We evolve the networks and nodes ppulations. */
 	for(i = 0; medirCambio(&netAptitude, i) == false; i++) {
 		/* We create a new population of nodes. */
-		fprintf(stderr, "Especie %d\n",i+1);
+		fprintf(stderr, "Especie %d\n", i + 1);
 		crearPoblacionNodulos();
 
 		/*
@@ -104,7 +104,7 @@ int main(int argc, char **argv)
 	}
 
 	/* We order the networks by its flair. */
-	fprintf(stderr, "Ordering networks.\n");
+	fprintf(stderr, "Sorting networks.\n");
 	ordenarRedes();
 
 	/* We read the data of the generalization file. */
@@ -113,22 +113,21 @@ int main(int argc, char **argv)
 
 	/* We scale the input and output data from the generalization file. */
 	fprintf(stderr, "Scaling input data.\n");
-	escalarDatosEntrada(n_generalizacion);
+	escalarDatosEntrada(numGeneral);
 	fprintf(stderr,"Scaling output data.\n");
-	if(net_transf == (func)&Logistic)
-		escalarDatosSalida(salida,
-						   n_generalizacion,
-						   0.0 + ptransferencia.epsilon,
-						   ptransferencia.logistic_a - ptransferencia.epsilon);
+	if(netTransf == (func)&Logistic)
+		escalarDatosSalida(outputData,
+						   numGeneral,
+						   0.0 + pTransfer.epsilon,
+						   pTransfer.logistic_a - pTransfer.epsilon);
 	else
-		escalarDatosSalida(salida,
-						   n_generalizacion,
-						   -ptransferencia.
-						   htan_a + ptransferencia.epsilon,
-						   ptransferencia.htan_a - ptransferencia.epsilon);
+		escalarDatosSalida(outputData,
+						   numGeneral,
+						   -pTransfer.htan_a + pTransfer.epsilon,
+						   pTransfer.htan_a - pTransfer.epsilon);
 
 	/* We export the best network found. */
-	fprintf(stderr,"Exporting the best network.\n");
+	fprintf(stderr, "Exporting the best network.\n");
 	if(argc == 6)
 		exportarMejorRed(argv[5]);
 	else

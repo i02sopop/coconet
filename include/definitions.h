@@ -30,7 +30,7 @@ typedef struct {
     double htan_a;
     double htan_b;
     double epsilon;
-} transf_param;
+} transfParam;
 
 typedef struct {
 	int id; /* Id of the nodule. */
@@ -45,53 +45,53 @@ typedef struct {
 } nodule;
 
 typedef struct {
-	nodule **nodulos; /* Nodules of the network. */
-	double aptitud; /* Network aptitude. */
-	double *valores_salida; /* Output values of the output nodes. */
-} red;
+	nodule **nodules; /* Nodules of the network. */
+	double aptitude; /* Network aptitude. */
+	double *outValues; /* Output values of the output nodes. */
+} network;
 
 typedef struct {
-	int n_redes; /* Number of tetworks at the population. */
-	int n_nodos_entrada; /* Number of input nodes of each network. */
-	int n_nodos_salida; /* Number of output networks of each network. */
-	red **redes; /* Networks of the population. */
-} pobl_redes;
+	int numNets; /* Number of networks at the population. */
+	int numInputNodes; /* Number of input nodes of each network. */
+	int numOutputNodes; /* Number of output networks of each network. */
+	network **nets; /* Networks of the population. */
+} netPopulation;
 
 typedef struct {
-	int n_subpobl; /* Number of subpopulations. */
-	int n_nodulos; /* Total number of nodules at the population. */
-	nodule **nodulos; /* Nodules of the population. */
-} pobl_nodulos;
+	int numSubpops; /* Number of subpopulations. */
+	int numNodules; /* Total number of nodules at the population. */
+	nodule **nodules; /* Nodules of the population. */
+} nodulePopulation;
 
 /* Ponderation for the nodule population. */
 typedef struct {
 	double sust;
 	double dif;
 	double best;
-} ponderacion;
+} adjustment;
 
-pobl_redes netPopulation;      /* Network population. */
-pobl_nodulos nodulePopulation; /* Nodule population. */
-int numNodules;                /* Max number of nodules in a subpopulation. */
-int maxNodes;	               /* Max number of nodes in a nodule. */
-int maxNetworks;               /* Max number of networks in the population. */
-transf_param ptransferencia;   /* Parameters of the transfer functions. */
-int n_entrenamiento;           /* Number of entries at the training file, */
-int n_generalizacion;          /* Number of entries at the generalization file. */
-double **entrada;              /* Input data. */
-double **salida;               /* Output data. */
-ponderacion pond;              /* Parameters ponderation values for the nodule aptitude. */
-int redsel;                    /* Number of networks selected to perform some operations. */
-double ToSA;                   /* Initial temperatire for the simulated annealing. */
-double alphasa;                /* Change factor in the weight mutation for the simulated annealing. */
-int iteraciones_sa;            /* Number of iterations of the simulated annealing. */
-int nodsel;                    /* Number of nodes selected to perform some operations. */
-int delta_min;                 /* Min value of delta for the structural mutation. */
-int delta_max;                 /* Max value of delta for the structural mutation. */
-nodule **descendencia;         /* Descendant of the last nodules subpopulation. */
-double evolim;                 /* Modification limit for the stop criteria. */
-func net_transf;               /* Transfer function for the networks. */
-double alpharet;               /* Ponderation in the changing of weights during the backpropagation. */
+netPopulation cNetPopulation;       /* Network population. */
+nodulePopulation cNodulePopulation; /* Nodule population. */
+int numNodules;                     /* Max number of nodules in a subpopulation. */
+int maxNodes;	                    /* Max number of nodes in a nodule. */
+int maxNetworks;                    /* Max number of networks in the population. */
+transfParam pTransfer;              /* Parameters of the transfer functions. */
+int numTrain;                       /* Number of entries at the training file, */
+int numGeneral;                     /* Number of entries at the generalization file. */
+double **inputData;                 /* Input data. */
+double **outputData;                /* Output data. */
+adjustment adj;                     /* Parameters ponderation values for the nodule aptitude. */
+int selNets;                        /* Number of networks selected to perform some operations. */
+double ToSA;                        /* Initial temperatire for the simulated annealing. */
+double alphasa;                     /* Change factor in the weight mutation for the simulated annealing. */
+int numSAIterantions;               /* Number of iterations of the simulated annealing. */
+int nodSel;                         /* Number of nodes selected to perform some operations. */
+int delta_min;                      /* Min value of delta for the structural mutation. */
+int delta_max;                      /* Max value of delta for the structural mutation. */
+nodule **descend;                   /* Descendant of the last nodules subpopulation. */
+double evolim;                      /* Modification limit for the stop criteria. */
+func netTransf;                     /* Transfer function for the networks. */
+double alpharet;                    /* Ponderation in the changing of weights during the backpropagation. */
 
 #include <functions.h>
 

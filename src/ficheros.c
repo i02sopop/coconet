@@ -42,7 +42,7 @@ void cargarFichero(char *config, char *training)
 	int i, j;
 	FILE *configFile, *trainingFile;
 
-	nodulePopulation.n_subpobl = 0;
+	cNodulePopulation.numSubpops = 0;
 
 	/* We open the configuration and training files. */
 	configFile = fopen(config, "r");
@@ -50,29 +50,29 @@ void cargarFichero(char *config, char *training)
 	if(configFile == NULL || trainingFile == NULL)
 		error(IO);
 
-	if(fscanf(trainingFile, "$ %d\n", &n_entrenamiento) == EOF ||
-	   fscanf(trainingFile, "$ %d\n", &netPopulation.n_nodos_entrada) == EOF ||
-	   fscanf(trainingFile,"$ %d\n",&netPopulation.n_nodos_salida) == EOF)
+	if(fscanf(trainingFile, "$ %d\n", &numTrain) == EOF ||
+	   fscanf(trainingFile, "$ %d\n", &cNetPopulation.numInputNodes) == EOF ||
+	   fscanf(trainingFile,"$ %d\n",&cNetPopulation.numOutputNodes) == EOF)
 		error(IO);
 
 	/* Loading the training data. */
-	entrada = (double **)malloc(n_entrenamiento * sizeof(double));
-	salida = (double **)malloc(n_entrenamiento * sizeof(double));
-	if(entrada == NULL || salida == NULL)
+	inputData = (double **)malloc(numTrain * sizeof(double));
+	outputData = (double **)malloc(numTrain * sizeof(double));
+	if(inputData == NULL || outputData == NULL)
 		error(RES_MEM);
 
-	for(i = 0; i < n_entrenamiento; i++) {
-		entrada[i] = (double *)malloc(netPopulation.n_nodos_entrada * sizeof(double));
-		salida[i] = (double *)malloc(netPopulation.n_nodos_salida * sizeof(double));
-		if(entrada[i] == NULL || salida[i] == NULL)
+	for(i = 0; i < numTrain; i++) {
+		inputData[i] = (double *)malloc(cNetPopulation.numInputNodes * sizeof(double));
+		outputData[i] = (double *)malloc(cNetPopulation.numOutputNodes * sizeof(double));
+		if(inputData[i] == NULL || outputData[i] == NULL)
 			error(RES_MEM);
 
-		for(j = 0; j < netPopulation.n_nodos_entrada; j++)
-			if(fscanf(trainingFile, "%lf", &entrada[i][j]) == EOF)
+		for(j = 0; j < cNetPopulation.numInputNodes; j++)
+			if(fscanf(trainingFile, "%lf", &inputData[i][j]) == EOF)
 				error(IO);
 
-		for(j = 0; j < netPopulation.n_nodos_salida; j++)
-			if(fscanf(trainingFile, "%lf", &salida[i][j]) == EOF)
+		for(j = 0; j < cNetPopulation.numOutputNodes; j++)
+			if(fscanf(trainingFile, "%lf", &outputData[i][j]) == EOF)
 				error(IO);
 	}
 
@@ -82,24 +82,24 @@ void cargarFichero(char *config, char *training)
 		error(IO);
 
 	/* Parameters of the transfer functions. */
-	if(fscanf(configFile, "Htan a: %lf\n", &ptransferencia.htan_a) == EOF ||
-	   fscanf(configFile, "Htan b: %lf\n", &ptransferencia.htan_b) == EOF ||
-	   fscanf(configFile, "Logistic a: %lf\n", &ptransferencia.logistic_a) == EOF ||
-	   fscanf(configFile, "Logistic b: %lf\n", &ptransferencia.logistic_b) == EOF ||
-	   fscanf(configFile, "Epsilon: %lf\n", &ptransferencia.epsilon) == EOF)
+	if(fscanf(configFile, "Htan a: %lf\n", &pTransfer.htan_a) == EOF ||
+	   fscanf(configFile, "Htan b: %lf\n", &pTransfer.htan_b) == EOF ||
+	   fscanf(configFile, "Logistic a: %lf\n", &pTransfer.logistic_a) == EOF ||
+	   fscanf(configFile, "Logistic b: %lf\n", &pTransfer.logistic_b) == EOF ||
+	   fscanf(configFile, "Epsilon: %lf\n", &pTransfer.epsilon) == EOF)
 		error(IO);
 
-	/* Ponderation for nodule aptitude. */
-	if(fscanf(configFile, "Sustitucion: %lf\n", &pond.sust) == EOF ||
-	   fscanf(configFile, "Diferencia: %lf\n", &pond.dif) == EOF ||
-	   fscanf(configFile, "Mejores: %lf\n", &pond.best) == EOF)
+	/* Adjustment for nodule aptitude. */
+	if(fscanf(configFile, "Sustitucion: %lf\n", &adj.sust) == EOF ||
+	   fscanf(configFile, "Diferencia: %lf\n", &adj.dif) == EOF ||
+	   fscanf(configFile, "Mejores: %lf\n", &adj.best) == EOF)
 		error(IO);
 
-	if(fscanf(configFile, "Redes Seleccionadas: %d\n", &redsel) == EOF ||
-	   fscanf(configFile, "Nodulos Seleccionados: %d\n", &nodsel) == EOF)
+	if(fscanf(configFile, "Redes Seleccionadas: %d\n", &selNets) == EOF ||
+	   fscanf(configFile, "Nodulos Seleccionados: %d\n", &nodSel) == EOF)
 		error(IO);
 
-	if(fscanf(configFile, "Iteraciones SA: %d\n", &iteraciones_sa) == EOF ||
+	if(fscanf(configFile, "Iteraciones SA: %d\n", &numSAIterantions) == EOF ||
 	   fscanf(configFile, "To SA: %lf\n", &ToSA) == EOF ||
 	   fscanf(configFile, "alpha SA: %lf\n", &alphasa) == EOF)
 		error(IO);
@@ -116,17 +116,14 @@ void cargarFichero(char *config, char *training)
 		error(IO);
 
 	srandom(time(NULL));
-	if(random() % 2 == 0)
-		net_transf=(func)&HyperbolicTangent;
-	else
-		net_transf = (func)&Logistic;
+	netTransf = (random() % 2 == 0) ? (func)&HyperbolicTangent : (func)&Logistic;
 
 	/* The max number of networks is as the max number of nodules per subpopulation. */
 	if(maxNetworks < numNodules)
 		maxNetworks = numNodules;
 
-	if(nodsel > numNodules)
-		nodsel = numNodules;
+	if(nodSel > numNodules)
+		nodSel = numNodules;
 }
 
 /******************************************************************************
@@ -155,35 +152,35 @@ void leerGeneralizacion(char *filename)
 		error(IO);
 
 	/* We load the generalization data. */
-	if(fscanf(file, "$ %d\n", &n_generalizacion) == EOF ||
-	   fscanf(file, "$ %d\n", &netPopulation.n_nodos_entrada) == EOF ||
-	   fscanf(file, "$ %d\n", &netPopulation.n_nodos_salida) == EOF)
+	if(fscanf(file, "$ %d\n", &numGeneral) == EOF ||
+	   fscanf(file, "$ %d\n", &cNetPopulation.numInputNodes) == EOF ||
+	   fscanf(file, "$ %d\n", &cNetPopulation.numOutputNodes) == EOF)
 		error(IO);
 
-	for(i = 0; i < n_entrenamiento; i++) {
-		free(entrada[i]);
-		free(salida[i]);
+	for(i = 0; i < numTrain; i++) {
+		free(inputData[i]);
+		free(outputData[i]);
 	}
-	free(entrada);
-	free(salida);
+	free(inputData);
+	free(outputData);
 
-	entrada = (double **)malloc(n_generalizacion * sizeof(double));
-	salida = (double **)malloc(n_generalizacion * sizeof(double));
-	if(entrada == NULL || salida == NULL)
+	inputData = (double **)malloc(numGeneral * sizeof(double));
+	outputData = (double **)malloc(numGeneral * sizeof(double));
+	if(inputData == NULL || outputData == NULL)
 		error(RES_MEM);
 
-	for(i = 0; i < n_generalizacion; i++) {
-		entrada[i] = (double *)malloc(netPopulation.n_nodos_entrada * sizeof(double));
-		salida[i] = (double *)malloc(netPopulation.n_nodos_salida * sizeof(double));
-		if(entrada[i] == NULL || salida[i] == NULL)
+	for(i = 0; i < numGeneral; i++) {
+		inputData[i] = (double *)malloc(cNetPopulation.numInputNodes * sizeof(double));
+		outputData[i] = (double *)malloc(cNetPopulation.numOutputNodes * sizeof(double));
+		if(inputData[i] == NULL || outputData[i] == NULL)
 			error(RES_MEM);
 
-		for(j = 0; j < netPopulation.n_nodos_entrada; j++)
-			if(fscanf(file, "%lf", &entrada[i][j]) == EOF)
+		for(j = 0; j < cNetPopulation.numInputNodes; j++)
+			if(fscanf(file, "%lf", &inputData[i][j]) == EOF)
 				error(IO);
 
-		for(j = 0; j < netPopulation.n_nodos_salida; j++)
-			if(fscanf(file, "%lf", &salida[i][j]) == EOF)
+		for(j = 0; j < cNetPopulation.numOutputNodes; j++)
+			if(fscanf(file, "%lf", &outputData[i][j]) == EOF)
 				error(IO);
 	}
 
@@ -222,28 +219,28 @@ void leerGeneralizacion(char *filename)
 void exportarMejorRed(char *filename)
 {
 	int i, j, k, l, nodes, idmax, connections;
-	double *aptitud, max;
+	double *aptitude, max;
 	FILE *out;
 
-	if((aptitud = (double *)malloc(5 * sizeof(double))) == NULL)
+	if((aptitude = (double *)malloc(5 * sizeof(double))) == NULL)
 		error(RES_MEM);
 
-	for(i = 0; i < nodulePopulation.n_nodulos; i++) {
-		for(j = 0; j < n_entrenamiento; j++)
-			free(nodulePopulation.nodulos[i]->partialOutputs[j]);
-		free(nodulePopulation.nodulos[i]->partialOutputs);
+	for(i = 0; i < cNodulePopulation.numNodules; i++) {
+		for(j = 0; j < numTrain; j++)
+			free(cNodulePopulation.nodules[i]->partialOutputs[j]);
+		free(cNodulePopulation.nodules[i]->partialOutputs);
 
-		nodulePopulation.nodulos[i]->partialOutputs = (double **)malloc(n_generalizacion * sizeof(double));
-		if(nodulePopulation.nodulos[i]->partialOutputs == NULL)
+		cNodulePopulation.nodules[i]->partialOutputs = (double **)malloc(numGeneral * sizeof(double));
+		if(cNodulePopulation.nodules[i]->partialOutputs == NULL)
 			error(RES_MEM);
 
-		for(j = 0; j < n_generalizacion; j++){
-			nodulePopulation.nodulos[i]->partialOutputs[j] = (double *)malloc(netPopulation.n_nodos_salida * sizeof(double));
-			if(nodulePopulation.nodulos[i]->partialOutputs[j] == NULL)
+		for(j = 0; j < numGeneral; j++){
+			cNodulePopulation.nodules[i]->partialOutputs[j] = (double *)malloc(cNetPopulation.numOutputNodes * sizeof(double));
+			if(cNodulePopulation.nodules[i]->partialOutputs[j] == NULL)
 				error(RES_MEM);
 
-			for(k = 0; k < netPopulation.n_nodos_salida; k++)
-				nodulePopulation.nodulos[i]->partialOutputs[j][k] = 0.0;
+			for(k = 0; k < cNetPopulation.numOutputNodes; k++)
+				cNodulePopulation.nodules[i]->partialOutputs[j][k] = 0.0;
 		}
 	}
 
@@ -253,28 +250,28 @@ void exportarMejorRed(char *filename)
 
 	/* We store the aptitude of the selected networks. */
 	for(i = 0; i < 5; i++){
-		aptitud[i] = netPopulation.redes[i]->aptitud;
-		netPopulation.redes[i]->aptitud = 0.0;
+		aptitude[i] = cNetPopulation.nets[i]->aptitude;
+		cNetPopulation.nets[i]->aptitude = 0.0;
 	}
 
 	/* We calculate the network generalization. */
-	for(i = 0; i < n_generalizacion; i++) {
+	for(i = 0; i < numGeneral; i++) {
 		/* We generate the nodule partial outputs from the generaliation data. */
-		for(j = 0; j < nodulePopulation.n_nodulos; j++)
-			generarSalidaNodulo(entrada[i], j, i, NULL);
+		for(j = 0; j < cNodulePopulation.numNodules; j++)
+			generarSalidaNodulo(inputData[i], j, i, NULL);
 
 		for(j = 0; j < 5; j++) {
 			/* We generate the network outputs from the nodules outputs. */
 			generarSalidaRed(j, i);
 
 			/* We measure the network aptitude from the generated outputs. */
-			medirAptitudRed(salida[i], j);
+			medirAptitudRed(outputData[i], j);
 		}
 	}
 
 	/* We normalize the generalization aptitude. */
 	for(i = 0; i < 5; i++)
-		netPopulation.redes[i]->aptitud /= n_generalizacion;
+		cNetPopulation.nets[i]->aptitude /= numGeneral;
 
 	/*
 	  We pick the network with best generalization from the 5 best by
@@ -285,45 +282,45 @@ void exportarMejorRed(char *filename)
 	max = 0.0;
 	idmax = 0;
 	for(i = 0; i < 5; i++) {
-		if(netPopulation.redes[i]->aptitud > max) {
-			max = netPopulation.redes[i]->aptitud;
+		if(cNetPopulation.nets[i]->aptitude > max) {
+			max = cNetPopulation.nets[i]->aptitude;
 			idmax = i;
-		} else if(netPopulation.redes[i]->aptitud == max) {
-			if(aptitud[idmax] < aptitud[i]) {
-				max = netPopulation.redes[i]->aptitud;
+		} else if(cNetPopulation.nets[i]->aptitude == max) {
+			if(aptitude[idmax] < aptitude[i]) {
+				max = cNetPopulation.nets[i]->aptitude;
 				idmax = i;
-			} else if(aptitud[idmax] == aptitud[i]) {
+			} else if(aptitude[idmax] == aptitude[i]) {
 				nodes = 0;
-				for(j = 0; j < nodulePopulation.n_subpobl; j++)
-					nodes += (netPopulation.redes[idmax]->nodulos[j]->nodes -
-							  netPopulation.redes[i]->nodulos[j]->nodes);
+				for(j = 0; j < cNodulePopulation.numSubpops; j++)
+					nodes += (cNetPopulation.nets[idmax]->nodules[j]->nodes -
+							  cNetPopulation.nets[i]->nodules[j]->nodes);
 
 				if(nodes > 0) {
-					max = netPopulation.redes[i]->aptitud;
+					max = cNetPopulation.nets[i]->aptitude;
 					idmax = i;
 				} else if(nodes == 0) {
 					connections = 0;
-					for(l = 0; l < nodulePopulation.n_subpobl; l++) {
-						for(j = 0; j < netPopulation.n_nodos_entrada; j++)
-							for(k = 0; k < netPopulation.redes[idmax]->nodulos[l]->nodes; k++)
-								if(netPopulation.redes[idmax]->nodulos[l]->inConn[j][k] == 1)
+					for(l = 0; l < cNodulePopulation.numSubpops; l++) {
+						for(j = 0; j < cNetPopulation.numInputNodes; j++)
+							for(k = 0; k < cNetPopulation.nets[idmax]->nodules[l]->nodes; k++)
+								if(cNetPopulation.nets[idmax]->nodules[l]->inConn[j][k] == 1)
 									connections++;
-						for(j = 0; j < netPopulation.redes[idmax]->nodulos[l]->nodes; j++)
-							for(k = 0; k < netPopulation.n_nodos_salida; k++)
-								if(netPopulation.redes[idmax]->nodulos[l]->outConn[j][k] == 1)
+						for(j = 0; j < cNetPopulation.nets[idmax]->nodules[l]->nodes; j++)
+							for(k = 0; k < cNetPopulation.numOutputNodes; k++)
+								if(cNetPopulation.nets[idmax]->nodules[l]->outConn[j][k] == 1)
 									connections++;
-						for(j = 0; j < netPopulation.n_nodos_entrada; j++)
-							for(k = 0; k < netPopulation.redes[i]->nodulos[l]->nodes; k++)
-								if(netPopulation.redes[i]->nodulos[l]->inConn[j][k] == 1)
+						for(j = 0; j < cNetPopulation.numInputNodes; j++)
+							for(k = 0; k < cNetPopulation.nets[i]->nodules[l]->nodes; k++)
+								if(cNetPopulation.nets[i]->nodules[l]->inConn[j][k] == 1)
 									connections--;
-						for(j = 0; j < netPopulation.redes[i]->nodulos[l]->nodes; j++)
-							for(k = 0; k < netPopulation.n_nodos_salida; k++)
-								if(netPopulation.redes[i]->nodulos[l]->outConn[j][k] == 1)
+						for(j = 0; j < cNetPopulation.nets[i]->nodules[l]->nodes; j++)
+							for(k = 0; k < cNetPopulation.numOutputNodes; k++)
+								if(cNetPopulation.nets[i]->nodules[l]->outConn[j][k] == 1)
 									connections--;
 					}
 
 					if(connections > 0) {
-						max = netPopulation.redes[i]->aptitud;
+						max = cNetPopulation.nets[i]->aptitude;
 						idmax = i;
 					}
 				}
@@ -336,35 +333,35 @@ void exportarMejorRed(char *filename)
 	  input, hidden and output nodes of the best network and its number of
 	  input and output connections.
 	*/
-	if(fprintf(out, "Aptitude: %lf\n", aptitud[idmax]) == EOF ||
-	   fprintf(out, "Generalization: %lf\n", netPopulation.redes[idmax]->aptitud) == EOF ||
-	   fprintf(out, "Number of Nodules: %d\n", nodulePopulation.n_subpobl) == EOF ||
-	   fprintf(out, "Number of Input Nodes: %d\n", netPopulation.n_nodos_entrada) == EOF)
+	if(fprintf(out, "Aptitude: %lf\n", aptitude[idmax]) == EOF ||
+	   fprintf(out, "Generalization: %lf\n", cNetPopulation.nets[idmax]->aptitude) == EOF ||
+	   fprintf(out, "Number of Nodules: %d\n", cNodulePopulation.numSubpops) == EOF ||
+	   fprintf(out, "Number of Input Nodes: %d\n", cNetPopulation.numInputNodes) == EOF)
 		error(IO);
 
 	nodes = 0;
-	for(i = 0; i < nodulePopulation.n_subpobl; i++)
-		nodes += netPopulation.redes[idmax]->nodulos[i]->nodes;
+	for(i = 0; i < cNodulePopulation.numSubpops; i++)
+		nodes += cNetPopulation.nets[idmax]->nodules[i]->nodes;
 
 	if(fprintf(out, "Number of Hidden Nodes: %d\n", nodes) == EOF ||
-	   fprintf(out, "Number of Output Nodes: %d\n", netPopulation.n_nodos_salida) == EOF)
+	   fprintf(out, "Number of Output Nodes: %d\n", cNetPopulation.numOutputNodes) == EOF)
 		error(IO);
 
 	connections = 0;
-	for(i = 0; i < nodulePopulation.n_subpobl; i++)
-		for(j = 0; j < netPopulation.n_nodos_entrada; j++)
-			for(k = 0; k < netPopulation.redes[idmax]->nodulos[i]->nodes; k++)
-				if(netPopulation.redes[idmax]->nodulos[i]->inConn[j][k] == 1)
+	for(i = 0; i < cNodulePopulation.numSubpops; i++)
+		for(j = 0; j < cNetPopulation.numInputNodes; j++)
+			for(k = 0; k < cNetPopulation.nets[idmax]->nodules[i]->nodes; k++)
+				if(cNetPopulation.nets[idmax]->nodules[i]->inConn[j][k] == 1)
 					connections++;
 
 	if(fprintf(out, "Number of Input Connections: %d\n", connections) == EOF)
 		error(IO);
 
 	connections = 0;
-	for(i = 0; i < nodulePopulation.n_subpobl; i++)
-		for(j = 0; j < netPopulation.redes[idmax]->nodulos[i]->nodes; j++)
-			for(k = 0; k < netPopulation.n_nodos_salida; k++)
-				if(netPopulation.redes[idmax]->nodulos[i]->outConn[j][k] == 1)
+	for(i = 0; i < cNodulePopulation.numSubpops; i++)
+		for(j = 0; j < cNetPopulation.nets[idmax]->nodules[i]->nodes; j++)
+			for(k = 0; k < cNetPopulation.numOutputNodes; k++)
+				if(cNetPopulation.nets[idmax]->nodules[i]->outConn[j][k] == 1)
 					connections++;
 
 	if(fprintf(out, "Number of Output Connections: %d\n", connections) == EOF)
@@ -373,5 +370,5 @@ void exportarMejorRed(char *filename)
 	/* We close the output file. */
 	if(fclose(out) == EOF)
 		error(IO);
-	free(aptitud);
+	free(aptitude);
 }
