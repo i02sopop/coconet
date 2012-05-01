@@ -19,7 +19,7 @@
 #include <definitions.h>
 
 /******************************************************************************
- File: crearPoblaciones.c
+ File: createPopulations.c
  Function: anadirNoduloRedes()
  Author: Pablo Alvarez de Sotomayor Posadillo
  Description: Add a new nodule subpopulation to the network population.
@@ -50,7 +50,7 @@ void addNodulesNetworks()
 }
 
 /******************************************************************************
- File: crearPoblaciones.c
+ File: createPopulations.c
  Function: createDescendant()
  Author: Pablo Álvarez de Sotomayor Posadillo
  Description: Create a new network population from a new nodule population
@@ -112,7 +112,7 @@ void createDescendant()
 }
 
 /******************************************************************************
- File: crearPoblaciones.c
+ File: createPopulations.c
  Function: freeNetwork()
  Author: Pablo Álvarez de Sotomayor Posadillo
  Description: Function to free a given network.
@@ -138,7 +138,7 @@ void freeNetwork(network *net)
 }
 
 /******************************************************************************
- File: crearPoblaciones.c
+ File: createPopulations.c
  Function: createNodules()
  Author: Pablo Álvarez de Sotomayor Posadillo
  Description: Create a new nodule subpopulation.
@@ -249,7 +249,7 @@ void createNodules()
 }
 
 /******************************************************************************
- File: crearPoblaciones.c
+ File: createPopulations.c
  Function: createNodulePopulation()
  Author: Pablo Álvarez de Sotomayor Posadillo
  Description: Create or expand the nodule population.
@@ -282,7 +282,7 @@ void createNodulePopulation()
 }
 
 /******************************************************************************
- File: crearPoblaciones.c
+ File: createPopulations.c
  Function: createNetworks()
  Author: Pablo Alvarez de Sotomayor Posadillo
  Description: Create a new network population.

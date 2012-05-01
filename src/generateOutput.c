@@ -19,7 +19,7 @@
 #include <definitions.h>
 
 /******************************************************************************
- File: generarSalida.c
+ File: generateOutput.c
  Function: generateNoduleOutput()
  Author: Pablo Alvarez de Sotomayor Posadillo
  Description: Generate the nodule output from an input data.
@@ -96,7 +96,7 @@ void generateNoduleOutput(double *in, int numNodule, int numInput, double *nodOu
 }
 
 /******************************************************************************
- File: generarSalida.c
+ File: generateOutput.c
  Function: generateNetOutput()
  Author: Pablo Alvarez de Sotomayor Posadillo
  Description: Generate a network output from its nodules outputs.

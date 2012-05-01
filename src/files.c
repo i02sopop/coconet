@@ -20,7 +20,7 @@
 #include <time.h>
 
 /******************************************************************************
- File: ficheros.c
+ File: files.c
  Function: loadFile()
  Author: Pablo Alvarez de Sotomayor Posadillo
  Description: Load the input data from training and configuration files.
@@ -127,7 +127,7 @@ void loadFile(char *config, char *training)
 }
 
 /******************************************************************************
- File: ficheros.c
+ File: files.c
  Function: readGeneralization()
  Author: Pablo Alvarez de Sotomayor Posadillo
  Description: Read the input data to measure the generalization.
@@ -190,7 +190,7 @@ void readGeneralization(char *filename)
 }
 
 /******************************************************************************
- File: ficheros.c
+ File: files.c
  Function: exportBestNetwork()
  Author: Pablo Alvarez de Sotomayor Posadillo
  Description: Export the network who fits best to the problem to an output

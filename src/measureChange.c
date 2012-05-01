@@ -115,7 +115,7 @@ bool measureChange(double *networkAptitude, int iter)
  	generateNoduleOutput(): Generate the nodule output from its input data.
  	generateNetOutput(): Generate the network output from its nodule output.
  	measureNetworkAptitude(): Measure the network aptitude from the generated outputs.
- 	medirAptitudNodulo(): Measure the nodule aptitude from several parameters.
+ 	measureAptitudeNodulo(): Measure the nodule aptitude from several parameters.
 	normalizeNoduleAptitude(): Normalize the nodule aptitude.
 ******************************************************************************/
 

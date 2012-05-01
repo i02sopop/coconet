@@ -19,7 +19,7 @@
 #include <definitions.h>
 
 /******************************************************************************
- File: mutacionEstructural.c
+ File: mutation.c
  Function: copyDescendant()
  Author: Pablo Álvarez de Sotomayor Posadillo
  Description: Copy the actual nodule population into a new descendant
@@ -112,7 +112,7 @@ void copyDescendant()
 }
 
 /******************************************************************************
- File: mutacionEstructural.c
+ File: mutation.c
  Function: mutasteNodules()
  Author: Pablo Álvarez de Sotomayor Posadillo
  Description: Make an estructural mutation in a given nodule.
@@ -184,7 +184,7 @@ void mutasteNodules(int nodule)
 }
 
 /******************************************************************************
- File: mutacionEstructural.c
+ File: mutation.c
  Function: addConnection()
  Author: Pablo Álvarez de Sotomayor Posadillo
  Description: Add a connection to a given nodule.
@@ -264,7 +264,7 @@ void addConnection(int nodule)
 }
 
 /********************************************************************************
- File: mutacionEstructural.c
+ File: mutation.c
  Function: addNode()
  Author: Pablo Álvarez de Sotomayor Posadillo
  Description: Add some nodes to a nodule.
@@ -294,7 +294,7 @@ void addNode(int nodule, int nodes)
 }
 
 /*******************************************************************************
- File: mutacionEstructural.c
+ File: mutation.c
  Function: deleteConnection()
  Author: Pablo Álvarez de Sotomayor Posadillo
  Description: Delete a connection of a given node.
@@ -341,7 +341,7 @@ void deleteConnection(int nodule, int node)
 }
 
 /********************************************************************************
- File: mutacionEstructural.c
+ File: mutation.c
  Function: deleteNode()
  Author: Pablo Álvarez de Sotomayor Posadillo
  Description: Delete a given number of nodes from a nodule.
@@ -403,7 +403,7 @@ void deleteNode(int nodule, int nodes)
 }
 
 /********************************************************************************
- File: mutacionEstructural.c
+ File: mutation.c
  Function: replaceNodules()
  Author: Pablo Álvarez de Sotomayor Posadillo
  Description: Substitude the worst nodules of a population with the bset nodules

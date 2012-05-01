@@ -19,7 +19,7 @@
 #include <definitions.h>
 
 /******************************************************************************
- File: imprimir.c
+ File: print.c
  Function: printNodule()
  Author: Pablo Alvarez de Sotomayor Posadillo
  Description: Print the information related with a given nodule to an output
@@ -84,7 +84,7 @@ void printNodule(nodule *imp, int iter)
 }
 
 /******************************************************************************
- File: imprimir.c
+ File: print.c
  Function: printNetwork()
  Author: Pablo Alvarez de Sotomayor Posadillo
  Description: Print the network data into an output file.

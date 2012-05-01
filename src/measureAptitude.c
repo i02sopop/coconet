@@ -19,7 +19,7 @@
 #include <definitions.h>
 
 /******************************************************************************
- File: medirAptitud.c
+ File: measureAptitude.c
  Function: measureNetworkAptitude()
  Author: Pablo Álvarez de Sotomayor Posadillo
  Description: Measure the network aptitude from its outputs.
@@ -63,7 +63,7 @@ void measureNetworkAptitude(double *output, int netNumber)
 }
 
 /******************************************************************************
- File: medirAptitud.c
+ File: measureAptitude.c
  Function: measureNoduleAptitude()
  Author: Pablo Álvarez de Sotomayor Posadillo
  Description: Measure the nodule aptitude from several parameters.
@@ -132,7 +132,7 @@ void measureNoduleAptitude(int nodule)
 }
 
 /******************************************************************************
- File: medirAptitud.c
+ File: measureAptitude.c
  Function: copyNetwork()
  Author: Pablo Álvarez de Sotomayor Posadillo
  Description: Make a copy of the network population.
@@ -171,7 +171,7 @@ void copyNetwork(network **origin, network **destination)
 }
 
 /*******************************************************************************
- File: medirAptitud.c
+ File: measureAptitude.c
  Function: differ()
  Author: Pablo Álvarez de Sotomayor Posadillo
  Description: Measure the partial output of a nodule by difference.
@@ -240,7 +240,7 @@ double differ(int nodule, network **population)
 }
 
 /******************************************************************************
- File: medirAptitud.c
+ File: measureAptitude.c
  Function: best()
  Author: Pablo Álvarez de Sotomayor Posadillo
  Description: Measure the aptitude of a given nodule by the best networks it
@@ -276,7 +276,7 @@ double best(int nodule)
 }
 
 /******************************************************************************
- File: medirAptitud.c
+ File: measureAptitude.c
  Function: replace()
  Author: Pablo Álvarez de Sotomayor Posadillo
  Description: Mide la aptitud parcial del nódulo por sustitción.
@@ -334,7 +334,7 @@ double replace(int nodule, network **population)
 }
 
 /******************************************************************************
- File: medirAptitud.c
+ File: measureAptitude.c
  Function: normalizeNoduleAptitude()
  Author: Pablo Álvarez de Sotomayor Posadillo
  Description: Normalize the nodule aptitude by setting the minimal aptitude to

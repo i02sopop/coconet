@@ -19,7 +19,7 @@
 #include <definitions.h>
 
 /******************************************************************************
- File: liberarMemoria.c
+ File: freeMemory.c
  Function: freeNodule()
  Author: Pablo Alvarez de Sotomayor Posadillo
  Description: Free the memory allocated by a nodule.
@@ -59,7 +59,7 @@ void freeNodule(nodule *nodule)
 }
 
 /******************************************************************************
- File: liberarMemoria.c
+ File: freeMemory.c
  Function: adjustMatrix()
  Author: Pablo Alvarez de Sotomayor Posadillo
  Description: Adjust the matriz size of the last nodule subpopulation.

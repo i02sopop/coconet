@@ -19,7 +19,7 @@
 #include <definitions.h>
 
 /******************************************************************************
- File: ordenar.c
+ File: sort.c
  Funtion: sortNodules()
  Author: Pablo Álvarez de Sotomayor Posadillo
  Description: Order the nodules by aptitude.
@@ -52,7 +52,7 @@ void sortNodules()
 }
 
 /******************************************************************************
- File: ordenar.c
+ File: sort.c
  Function: sortNetworks()
  Author: Pablo Álvarez de Sotomayor Posadillo
  Description: Order the networks by aptitude.
