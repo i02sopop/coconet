@@ -1,6 +1,8 @@
 .objs/
+*.o
 autom4te.cache/
 Makefile
+Makefile.in
 config.log
 configure
 coconet

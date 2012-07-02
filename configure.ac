@@ -2,6 +2,7 @@ AC_INIT([coconet],[1.0.2],[palvarez@ritho.net])
 AC_PREREQ([2.69])
 AC_CONFIG_SRCDIR([src/main.c])
 AC_CONFIG_AUX_DIR([.build-aux])
+#AC_CONFIG_SUBDIRS([subdir])
 AM_INIT_AUTOMAKE([foreign -Wall -Werror dist-bzip2])
 
 dnl Gettext

@@ -72,9 +72,9 @@ int main(int argc, char **argv)
 	netAptitude = 0.0;
 
 	/* Scaling of input and output data from the training file. */
-	fprintf(stderr, "Scaling the input data.\n");
+	fprintf(stderr, _("Scaling the input data.\n"));
 	scaleInputData(numTrain);
-	fprintf(stderr, "Scaling the output data.\n");
+	fprintf(stderr, _("Scaling the output data.\n"));
 	if(netTransf == (func)&Logistic)
 		scaleOutputData(outputData,
 						   numTrain,
