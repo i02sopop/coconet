@@ -23,7 +23,7 @@
 #define doubleRandom() (double)((double)random() / (double)RAND_MAX)
 #define doubleRandomSigned() (random() % 2) == 1 ? doubleRandom() : -doubleRandom()
 
-/*macros de errores*/
+/* Error macros. */
 #define	RES_MEM	0
 #define	IO 1
 #define	PARAMETERS 2
@@ -37,5 +37,8 @@
 
 typedef int bool;
 typedef double (*func)(double);
+
+/* Gettext. */
+#define _(string) gettext(string)
 
 #endif /* MACROS_H */

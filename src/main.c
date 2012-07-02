@@ -54,6 +54,11 @@ int main(int argc, char **argv)
 	int i;
 	double netAptitude;
 
+	/* Set gettext configuration. */
+	setlocale(LC_ALL, "");
+	bindtextdomain(PACKAGE, LOCALEDIR);
+	textdomain(PACKAGE);
+
 	/* Checking the number of arguments. */
 	if(argc < 4 || (argc > 4 && (argc != 6 || strcmp(argv[4], "-o") != 0)))
 		error(COMMAND);

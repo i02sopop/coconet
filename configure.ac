@@ -4,6 +4,10 @@ AC_CONFIG_SRCDIR([src/main.c])
 AC_CONFIG_AUX_DIR([.build-aux])
 AM_INIT_AUTOMAKE([foreign -Wall -Werror dist-bzip2])
 
+dnl Gettext
+AM_GNU_GETTEXT_VERSION([0.18.1])
+AM_GNU_GETTEXT([external])
+
 dnl Check programs
 dnl Find and test de C compiler
 AC_PROG_CC
@@ -30,7 +34,7 @@ AC_FUNC_REALLOC
 
 dnl Output files
 AC_CONFIG_HEADERS([config.h])
-AC_CONFIG_FILES([Makefile src/Makefile])
+AC_CONFIG_FILES([Makefile src/Makefile po/Makefile.in])
 
 dnl Generate output
 AC_OUTPUT

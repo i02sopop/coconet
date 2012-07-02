@@ -19,8 +19,16 @@
 #ifndef DEFINITIONS_H
 #define DEFINITIONS_H
 
+/* General headers. */
 #include <stdio.h>
 #include <stdlib.h>
+
+/* Gettext headers. */
+#include <config.h>
+#include <locale.h>
+#include <gettext.h>
+
+/* Local headers. */
 #include <macros.h>
 
 /* Parameters for the transfer function. */

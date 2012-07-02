@@ -1,0 +1,14 @@
+# List of source files which contain translatable strings.
+src/createPopulations.c
+src/evolvePopulations.c
+src/freeMemory.c
+src/main.c
+src/measureAptitude.c
+src/mutation.c
+src/sort.c
+src/error.c
+src/files.c
+src/generateOutput.c
+src/math.c
+src/measureChange.c
+src/print.c
