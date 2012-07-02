@@ -1,3 +1,4 @@
 #!/bin/sh
 
-exec autoreconf -fvi
+make -k maintainer-clean
+autoreconf -fvi
