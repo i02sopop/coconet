@@ -1,130 +1,189 @@
-* DONE [#B] Create the project info structure.
-CLOSED: [2012-03-05 mon 01:31]
-:PROPERTIES:
-:ORDERED: t
-:LOGGING: TODO(!) STARTED(!) WAITING(!) DELEGATED(!) APPT(!) DONE(!) DEFERRED(!) CANCELLED(!)
-:STYLE: habit
-:COOKIE_DATA: todo recursive
-:ASSIGNED: i02sopop
-:DIFICULTY: Easy
-:HOURS_ESTIMATED: 2
-:HOURS: 2
-:DESCRIPTION: Create the project info structure (AUTHORS, TRANSLATORS, ...). 
-:CREATED_BY: i02sopop
-:CREATION_DATE: [2012-03-05 mon]
-:NOTES: -
-:END:
-* DONE [#B] Translate Code to english
-CLOSED: [2012-05-01 tue 15:38]
-:PROPERTIES:
-:ORDERED: t
-:LOGGING: TODO(!) STARTED(!) WAITING(!) DELEGATED(!) APPT(!) DONE(!) DEFERRED(!) CANCELLED(!)
-:STYLE: habit
-:COOKIE_DATA: todo recursive
-:ASSIGNED: i02sopop
-:DIFICULTY: Easy
-:HOURS_ESTIMATED: 10
-:HOURS: 8
-:DESCRIPTION: Traslate the code to english to facilitate the colaboration of others. 
-:CREATED_BY: i02sopop
-:CREATION_DATE: [2012-03-09 fri]
-:NOTES: -
-:END:
 * DONE [#B] Compilation with autotools.
 :LOGBOOK:
-- State "DONE"       from "APPT"       [2012-07-03 mar 00:16]
-- State "APPT"       from "DELEGATED"  [2012-07-03 mar 00:16]
-- State "DELEGATED"  from "WAITING"    [2012-07-03 mar 00:16]
-- State "WAITING"    from "STARTED"    [2012-07-03 mar 00:16]
-- State "STARTED"    from "TODO"       [2012-07-03 mar 00:16]
+- State "DONE"       from "STARTED"    [2012-07-03 mar 00:00]
+CLOCK: [2012-07-02 lun 23:38]--[2012-07-03 mar 00:00] =>  0:22
+CLOCK: [2012-07-02 lun 21:36]--[2012-07-02 lun 23:36] =>  2:00
+- State "STARTED"    from "NEXT"       [2012-07-02 lun 20:28]
+CLOCK: [2012-07-02 lun 20:28]--[2012-07-02 lun 21:26] =>  0:58
+- State "NEXT"       from "TODO"       [2012-06-23 sáb 14:33]
 :END:
 :PROPERTIES:
 :ORDERED: t
-:LOGGING: TODO(!) STARTED(!) WAITING(!) DELEGATED(!) APPT(!) DONE(!) DEFERRED(!) CANCELLED(!)
-:STYLE: habit
-:COOKIE_DATA: todo recursive
+:LOGGING: TODO(!) NEXT(!) STARTED(!) WAITING(!) DELEGATED(!) HOLD(!) DONE(!) DEFERRED(!) CANCELLED(!) PHONE(!)
+:DESCRIPTION: Create all the configuration files to be able to compile the project with automake/configure tools.
 :ASSIGNED: i02sopop
 :DIFICULTY: EASY
 :HOURS_ESTIMATED: 2
-:HOURS: ?
-:DESCRIPTION: Create all the configuration files to be able to compile the project with automake/configure tools.
 :CREATED_BY: i02sopop
-:CREATION_DATE: <2012-03-19 mon>
-:END_DATE: -
+:CREATION_DATE: [2012-03-09 fri]
+:NOTES: -
 :END:
-
-* TODO Finish the INSTALL file.
+* DONE [#B] Add multilang.
+:LOGBOOK:
+- State "DONE"       from "TODO"       [2012-07-03 mar 01:03]
+CLOCK: [2012-06-24 dom 21:55]--[2012-06-24 dom 21:56] =>  0:01
+:END:
 :PROPERTIES:
 :ORDERED: t
-:LOGGING: TODO(!) STARTED(!) WAITING(!) DELEGATED(!) APPT(!) DONE(!) DEFERRED(!) CANCELLED(!)
-:STYLE: habit
-:COOKIE_DATA: todo recursive
+:LOGGING: TODO(!) NEXT(!) STARTED(!) WAITING(!) DELEGATED(!) HOLD(!) DONE(!) DEFERRED(!) CANCELLED(!) PHONE(!) PROJECT(!) FINISHED(!)
+:DESCRIPTION: Add multilang to coconet in order to be able to translate it to other languages.
+:ASSIGNED: i02sopop
+:DIFICULTY: easy
+:HOURS_ESTIMATED: 1
+:CREATED_BY: i02sopop
+:CREATION_DATE: [2012-06-24 dom 21:55]
+:NOTES: -
+:END:
+* NEXT [#A] Put the project dir and the include dir into the configure.ac file instead of the makefile.am.
+:LOGBOOK:
+- State "NEXT"       from "TODO"       [2012-07-03 mar 01:02]
+CLOCK: [2012-07-03 mar 00:57]--[2012-07-03 mar 00:58] =>  0:01
+:END:
+:PROPERTIES:
+:ORDERED: t
+:LOGGING: TODO(!) NEXT(!) STARTED(!) WAITING(!) DELEGATED(!) HOLD(!) DONE(!) DEFERRED(!) CANCELLED(!) PHONE(!) PROJECT(!) FINISHED(!)
+:DESCRIPTION: Put the project dir and the include dir into the configure.ac file instead of the makefile.am.
+:ASSIGNED: i02sopop
+:DIFICULTY: easy
+:HOURS_ESTIMATED: 1
+:CREATED_BY: i02sopop
+:CREATION_DATE: [2012-07-03 mar 00:57]
+:NOTES: -
+:END:
+* NEXT [#B] Create a shell .in script to update the gettext files.
+:LOGBOOK:
+- State "NEXT"       from "TODO"       [2012-07-03 mar 01:01]
+CLOCK: [2012-07-03 mar 00:56]--[2012-07-03 mar 00:57] =>  0:01
+:END:
+:PROPERTIES:
+:ORDERED: t
+:LOGGING: TODO(!) NEXT(!) STARTED(!) WAITING(!) DELEGATED(!) HOLD(!) DONE(!) DEFERRED(!) CANCELLED(!) PHONE(!) PROJECT(!) FINISHED(!)
+:DESCRIPTION: Create a shell .in script to update the gettext files (make update-po)
+:ASSIGNED: i02sopop
+:DIFICULTY: easy
+:HOURS_ESTIMATED: 1
+:CREATED_BY: i02sopop
+:CREATION_DATE: [2012-07-03 mar 00:56]
+:NOTES: -
+:END:
+* NEXT [#B] Enhace the autotools compilation to avoid the coconet_* files and to use a .obj dir.
+:LOGBOOK:
+- State "NEXT"       from "TODO"       [2012-07-03 mar 01:03]
+CLOCK: [2012-07-03 mar 00:58]--[2012-07-03 mar 00:59] =>  0:01
+:END:
+:PROPERTIES:
+:ORDERED: t
+:LOGGING: TODO(!) NEXT(!) STARTED(!) WAITING(!) DELEGATED(!) HOLD(!) DONE(!) DEFERRED(!) CANCELLED(!) PHONE(!) PROJECT(!) FINISHED(!)
+:DESCRIPTION: Enhace the autotools compilation to avoid the coconet_* files and to use a .obj dir.
 :ASSIGNED: ?
+:DIFICULTY: Medium
+:HOURS_ESTIMATED: 2
+:CREATED_BY: i02sopop
+:CREATION_DATE: [2012-07-03 mar 00:58]
+:NOTES: -
+:END:
+* NEXT [#C] Put all the strings into the pot file.
+:LOGBOOK:
+- State "NEXT"       from "TODO"       [2012-07-03 mar 01:07]
+CLOCK: [2012-07-03 mar 01:05]--[2012-07-03 mar 01:06] =>  0:01
+:END:
+:PROPERTIES:
+:ORDERED: t
+:LOGGING: TODO(!) NEXT(!) STARTED(!) WAITING(!) DELEGATED(!) HOLD(!) DONE(!) DEFERRED(!) CANCELLED(!) PHONE(!) PROJECT(!) FINISHED(!)
+:DESCRIPTION: Put all the strings into the pot file and be able to translate them.
+:ASSIGNED: ?
+:DIFICULTY: easy
+:HOURS_ESTIMATED: 2
+:CREATED_BY: i02sopop
+:CREATION_DATE: [2012-07-03 mar 01:05]
+:NOTES: -
+:END:
+* NEXT [#C] Translate into spanish.
+:LOGBOOK:
+- State "NEXT"       from "TODO"       [2012-07-03 mar 01:07]
+:END:
+:PROPERTIES:
+:ORDERED: t
+:LOGGING: TODO(!) NEXT(!) STARTED(!) WAITING(!) DELEGATED(!) HOLD(!) DONE(!) DEFERRED(!) CANCELLED(!) PHONE(!) PROJECT(!) FINISHED(!)
+:DESCRIPTION: Translate the pot file into spanish.
+:ASSIGNED: ?
+:DIFICULTY: easy
+:HOURS_ESTIMATED: 1
+:CREATED_BY: i02sopop
+:CREATION_DATE: [2012-07-03 mar 01:06]
+:NOTES: -
+:END:
+* NEXT [#C] Finish the INSTALL file.
+:LOGBOOK:
+- State "NEXT"       from "TODO"       [2012-06-23 sáb 14:35]
+:END:
+:PROPERTIES:
+:ORDERED: t
+:LOGGING: TODO(!) NEXT(!) STARTED(!) WAITING(!) DELEGATED(!) HOLD(!) DONE(!) DEFERRED(!) CANCELLED(!) PHONE(!)
+:DESCRIPTION: Adapt and finish the description of the INSTALL file both in english and spanish.
+:ASSIGNED: i02sopop
 :DIFICULTY: EASY
 :HOURS_ESTIMATED: 1
-:HOURS: ?
-:DESCRIPTION: Adapt and finish the description of the INSTALL file both in english and in spanish.
 :CREATED_BY: i02sopop
 :CREATION_DATE: [2012-03-09 fri]
-:END_DATE: -
+:NOTES: -
 :END:
-
-* TODO Refactorize the source to optimize it and correct bugs.
+* TODO [#B] Refactorize the source to optimize it and correct bugs.
 :PROPERTIES:
 :ORDERED: t
-:LOGGING: TODO(!) STARTED(!) WAITING(!) DELEGATED(!) APPT(!) DONE(!) DEFERRED(!) CANCELLED(!)
-:STYLE: habit
-:COOKIE_DATA: todo recursive
-:ASSIGNED: ?
-:DIFICULTY: Medium
-:HOURS_ESTIMATED: ?
-:HOURS: ?
+:LOGGING: TODO(!) NEXT(!) STARTED(!) WAITING(!) DELEGATED(!) HOLD(!) DONE(!) DEFERRED(!) CANCELLED(!) PHONE(!)
 :DESCRIPTION: Refactorize the source code to optimize the timing of the program and to correct bugs. 
-:CREATED_BY: i02sopop
-:CREATION_DATE: [2012-03-09 fri]
-:NOTES: -
-:END:
-* TODO Improve the documentation
-:PROPERTIES:
-:ORDERED: t
-:LOGGING: TODO(!) STARTED(!) WAITING(!) DELEGATED(!) APPT(!) DONE(!) DEFERRED(!) CANCELLED(!)
-:STYLE: habit
-:COOKIE_DATA: todo recursive
 :ASSIGNED: ?
 :DIFICULTY: Medium
 :HOURS_ESTIMATED: ?
-:HOURS: ?
-:DESCRIPTION: Improve the documentation to facilitate the colaboration of others. 
 :CREATED_BY: i02sopop
 :CREATION_DATE: [2012-03-09 fri]
 :NOTES: -
 :END:
-* TODO Create a graphical interface.
+* TODO [#B] Improve the documentation
 :PROPERTIES:
 :ORDERED: t
-:LOGGING: TODO(!) STARTED(!) WAITING(!) DELEGATED(!) APPT(!) DONE(!) DEFERRED(!) CANCELLED(!)
-:STYLE: habit
-:COOKIE_DATA: todo recursive
+:LOGGING: TODO(!) NEXT(!) STARTED(!) WAITING(!) DELEGATED(!) HOLD(!) DONE(!) DEFERRED(!) CANCELLED(!) PHONE(!)
+:DESCRIPTION: Improve the documentation to facilitate the colaboration of third parties
+:ASSIGNED: ?
+:DIFICULTY: Medium
+:HOURS_ESTIMATED: ?
+:CREATED_BY: i02sopop
+:CREATION_DATE: [2012-03-09 fri]
+:NOTES: -
+:END:
+** TODO [#B] Create the man files
+:PROPERTIES:
+:ORDERED: t
+:LOGGING: TODO(!) NEXT(!) STARTED(!) WAITING(!) DELEGATED(!) HOLD(!) DONE(!) DEFERRED(!) CANCELLED(!) PHONE(!) PROJECT(!) FINISHED(!)
+:DESCRIPTION: Create the man files of the program and configuration files.
+:ASSIGNED: ?
+:DIFICULTY: medium
+:HOURS_ESTIMATED: ?
+:CREATED_BY: i02sopop
+:CREATION_DATE: [2012-07-03 mar 01:34]
+:NOTES: -
+:END:
+* TODO [#B] Create a graphical interface.
+:PROPERTIES:
+:ORDERED: t
+:LOGGING: TODO(!) NEXT(!) STARTED(!) WAITING(!) DELEGATED(!) HOLD(!) DONE(!) DEFERRED(!) CANCELLED(!) PHONE(!)
+:DESCRIPTION: Create a graphical interface to enhace the interacion with the program.
 :ASSIGNED: ?
 :DIFICULTY: Hard
 :HOURS_ESTIMATED: ?
-:HOURS: ?
-:DESCRIPTION: Create a graphical interface to enhace the interacion with the program.
 :CREATED_BY: i02sopop
 :CREATION_DATE: [2012-03-09 fri]
 :NOTES: -
 :END:
-* TODO Create the web of the project.
+* TODO [#B] Create the web of the project.
 :PROPERTIES:
 :ORDERED: t
-:LOGGING: TODO(!) STARTED(!) WAITING(!) DELEGATED(!) APPT(!) DONE(!) DEFERRED(!) CANCELLED(!)
-:STYLE: habit
-:COOKIE_DATA: todo recursive
+:LOGGING: TODO(!) NEXT(!) STARTED(!) WAITING(!) DELEGATED(!) HOLD(!) DONE(!) DEFERRED(!) CANCELLED(!) PHONE(!)
+:DESCRIPTION: Design and develop the web of the project in github and in ritho.net.
 :ASSIGNED: ?
 :DIFICULTY: Medium
 :HOURS_ESTIMATED: ?
-:HOURS: ?
-:DESCRIPTION: Design and develop the web of the project in github. 
 :CREATED_BY: i02sopop
 :CREATION_DATE: [2012-03-09 fri]
 :NOTES: -

@@ -1,125 +1,193 @@
-* DONE [#B] Crear la infraestructura de información del proyecto.
-CLOSED: [2012-03-05 lun 01:31]
+* DONE [#B] Compilar con autotools.
+:LOGBOOK:
+- State "DONE"       from "STARTED"    [2012-07-03 mar 00:00]
+CLOCK: [2012-07-02 lun 23:38]--[2012-07-03 mar 00:00] =>  0:22
+CLOCK: [2012-07-02 lun 21:36]--[2012-07-02 lun 23:36] =>  2:00
+- State "STARTED"    from "NEXT"       [2012-07-02 lun 20:28]
+CLOCK: [2012-07-02 lun 20:28]--[2012-07-02 lun 21:26] =>  0:58
+- State "NEXT"       from "TODO"       [2012-06-23 sáb 14:33]
+:END:
 :PROPERTIES:
 :ORDERED: t
-:LOGGING: TODO(!) STARTED(!) WAITING(!) DELEGATED(!) APPT(!) DONE(!) DEFERRED(!) CANCELLED(!)
-:STYLE: habit
-:COOKIE_DATA: todo recursive
+:LOGGING: TODO(!) NEXT(!) STARTED(!) WAITING(!) DELEGATED(!) HOLD(!) DONE(!) DEFERRED(!) CANCELLED(!) PHONE(!)
+:DESCRIPTION: Crear todos los ficheros de configuración para pode compilar el proyecto con autotools.
 :ASSIGNED: i02sopop
-:DIFICULTY: Easy
+:DIFICULTY: Fácil
 :HOURS_ESTIMATED: 2
-:HOURS: 2
-:DESCRIPTION: Crer la infraestructura de información del proyecto (AUTHORS, TRANSLATORS, ...).
 :CREATED_BY: i02sopop
-:CREATION_DATE: [2012-03-05 lun]
+:CREATION_DATE: [2012-03-09 fri]
 :NOTES: -
 :END:
-* TODO Refactorizar el código para optimizarlo y corregir fallos.
-:PROPERTIES:
-:ORDERED: t
-:LOGGING: TODO(!) STARTED(!) WAITING(!) DELEGATED(!) APPT(!) DONE(!) DEFERRED(!) CANCELLED(!)
-:STYLE: habit
-:COOKIE_DATA: todo recursive
-:ASSIGNED: ?
-:DIFICULTY: Medium
-:HOURS_ESTIMATED: ?
-:HOURS: ?
-:DESCRIPTION: Refactorizar el código fuente para optimizar los tiempos del programa y para solucionar errores.
-:CREATED_BY: i02sopop
-:CREATION_DATE: [2012-03-09 vie]
-:NOTES: -
+* DONE [#B] Incluir multi-idioma
+:LOGBOOK:
+- State "DONE"       from "TODO"       [2012-07-03 mar 01:03]
+CLOCK: [2012-06-24 dom 21:55]--[2012-06-24 dom 21:56] =>  0:01
 :END:
-* DONE [#B] Traducir el código al inglés.
-CLOSED: [2012-05-01 mar 15:38]
 :PROPERTIES:
 :ORDERED: t
-:LOGGING: TODO(!) STARTED(!) WAITING(!) DELEGATED(!) APPT(!) DONE(!) DEFERRED(!) CANCELLED(!)
-:STYLE: habit
-:COOKIE_DATA: todo recursive
+:LOGGING: TODO(!) NEXT(!) STARTED(!) WAITING(!) DELEGATED(!) HOLD(!) DONE(!) DEFERRED(!) CANCELLED(!) PHONE(!) PROJECT(!) FINISHED(!)
+:DESCRIPTION: Añadir multi-idioma para facilitar la traducción de los textos del programa.
 :ASSIGNED: i02sopop
-:DIFICULTY: Easy
-:HOURS_ESTIMATED: 10
-:HOURS: 8
-:DESCRIPTION: Traducir el código al inglés para facilitar la colaboración de otras personas.
+:DIFICULTY: easy
+:HOURS_ESTIMATED: 1
 :CREATED_BY: i02sopop
-:CREATION_DATE: [2012-03-09 vie]
+:CREATION_DATE: [2012-06-24 dom 21:55]
 :NOTES: -
 :END:
-* TODO Ampliar la documentación
+* NEXT [#A] Incluir el directorio del proyecto y el de los ficheros de cabecera en configure.ac en vez de en makefile.am.
+:LOGBOOK:
+- State "NEXT"       from "TODO"       [2012-07-03 mar 01:02]
+CLOCK: [2012-07-03 mar 00:57]--[2012-07-03 mar 00:58] =>  0:01
+:END:
 :PROPERTIES:
 :ORDERED: t
-:LOGGING: TODO(!) STARTED(!) WAITING(!) DELEGATED(!) APPT(!) DONE(!) DEFERRED(!) CANCELLED(!)
-:STYLE: habit
-:COOKIE_DATA: todo recursive
+:LOGGING: TODO(!) NEXT(!) STARTED(!) WAITING(!) DELEGATED(!) HOLD(!) DONE(!) DEFERRED(!) CANCELLED(!) PHONE(!) PROJECT(!) FINISHED(!)
+:DESCRIPTION: Incluir el directorio del proyecto y el de los ficheros de cabecera en configure.ac en vez de en makefile.am.
+:ASSIGNED: i02sopop
+:DIFICULTY: easy
+:HOURS_ESTIMATED: 1
+:CREATED_BY: i02sopop
+:CREATION_DATE: [2012-07-03 mar 00:57]
+:NOTES: -
+:END:
+* NEXT [#B] Crear un script .in para actualizar los ficheros de gettext.
+:LOGBOOK:
+- State "NEXT"       from "TODO"       [2012-07-03 mar 01:01]
+CLOCK: [2012-07-03 mar 00:56]--[2012-07-03 mar 00:57] =>  0:01
+:END:
+:PROPERTIES:
+:ORDERED: t
+:LOGGING: TODO(!) NEXT(!) STARTED(!) WAITING(!) DELEGATED(!) HOLD(!) DONE(!) DEFERRED(!) CANCELLED(!) PHONE(!) PROJECT(!) FINISHED(!)
+:DESCRIPTION: Crear un script .in para actualizar los ficheros de gettext (make update-po).
+:ASSIGNED: i02sopop
+:DIFICULTY: easy
+:HOURS_ESTIMATED: 1
+:CREATED_BY: i02sopop
+:CREATION_DATE: [2012-07-03 mar 00:56]
+:NOTES: -
+:END:
+* NEXT [#B] Mejorar la compilación con autotools para evitar generar los ficheros coconet_* y usar el directorio .obj.
+:LOGBOOK:
+- State "NEXT"       from "TODO"       [2012-07-03 mar 01:03]
+CLOCK: [2012-07-03 mar 00:58]--[2012-07-03 mar 00:59] =>  0:01
+:END:
+:PROPERTIES:
+:ORDERED: t
+:LOGGING: TODO(!) NEXT(!) STARTED(!) WAITING(!) DELEGATED(!) HOLD(!) DONE(!) DEFERRED(!) CANCELLED(!) PHONE(!) PROJECT(!) FINISHED(!)
+:DESCRIPTION: Mejorar la compilación con autotools para evitar generar los ficheros coconet_* y usar el directorio .obj.
+:ASSIGNED: ?
+:DIFICULTY: Medium
+:HOURS_ESTIMATED: 2
+:CREATED_BY: i02sopop
+:CREATION_DATE: [2012-07-03 mar 00:58]
+:NOTES: -
+:END:
+* NEXT [#C] Incluir todas las cadenas en el fichero pot.
+:LOGBOOK:
+- State "NEXT"       from "TODO"       [2012-07-03 mar 01:07]
+CLOCK: [2012-07-03 mar 01:05]--[2012-07-03 mar 01:06] =>  0:01
+:END:
+:PROPERTIES:
+:ORDERED: t
+:LOGGING: TODO(!) NEXT(!) STARTED(!) WAITING(!) DELEGATED(!) HOLD(!) DONE(!) DEFERRED(!) CANCELLED(!) PHONE(!) PROJECT(!) FINISHED(!)
+:DESCRIPTION: Incluir todas las cadenas en el fichero pot.
+:ASSIGNED: ?
+:DIFICULTY: easy
+:HOURS_ESTIMATED: 2
+:CREATED_BY: i02sopop
+:CREATION_DATE: [2012-07-03 mar 01:05]
+:NOTES: -
+:END:
+* NEXT [#C] Traducir al español..
+:LOGBOOK:
+- State "NEXT"       from "TODO"       [2012-07-03 mar 01:07]
+:END:
+:PROPERTIES:
+:ORDERED: t
+:LOGGING: TODO(!) NEXT(!) STARTED(!) WAITING(!) DELEGATED(!) HOLD(!) DONE(!) DEFERRED(!) CANCELLED(!) PHONE(!) PROJECT(!) FINISHED(!)
+:DESCRIPTION: Traducir el fichero pot al español.
+:ASSIGNED: ?
+:DIFICULTY: easy
+:HOURS_ESTIMATED: 1
+:CREATED_BY: i02sopop
+:CREATION_DATE: [2012-07-03 mar 01:06]
+:NOTES: -
+:END:
+* NEXT [#C] Finalizar de escribir el fichero INSTALL.
+:LOGBOOK:
+- State "NEXT"       from "TODO"       [2012-06-23 sáb 14:35]
+:END:
+:PROPERTIES:
+:ORDERED: t
+:LOGGING: TODO(!) NEXT(!) STARTED(!) WAITING(!) DELEGATED(!) HOLD(!) DONE(!) DEFERRED(!) CANCELLED(!) PHONE(!)
+:DESCRIPTION: Adaptar y terminar de escribir la descripción del fichero INSTALL tanto en ingles como en español.
+:ASSIGNED: i02sopop
+:DIFICULTY: EASY
+:HOURS_ESTIMATED: 1
+:CREATED_BY: i02sopop
+:CREATION_DATE: [2012-03-09 fri]
+:NOTES: -
+:END:
+* TODO [#B] Refactorizar el código para hacerlo mas óptimo y resolver bugs.
+:PROPERTIES:
+:ORDERED: t
+:LOGGING: TODO(!) NEXT(!) STARTED(!) WAITING(!) DELEGATED(!) HOLD(!) DONE(!) DEFERRED(!) CANCELLED(!) PHONE(!)
+:DESCRIPTION: Refactorizar el código para hacerlo mas óptimo y resolver bugs.
 :ASSIGNED: ?
 :DIFICULTY: Medium
 :HOURS_ESTIMATED: ?
-:HOURS: ?
-:DESCRIPTION: Ampliar la documentación para facilitar la colaboración de otras personas.
 :CREATED_BY: i02sopop
-:CREATION_DATE: [2012-03-09 vie]
+:CREATION_DATE: [2012-03-09 fri]
 :NOTES: -
 :END:
-* TODO Crear un entorno gráfico.
+* TODO [#B] Mejorar la documentación.
 :PROPERTIES:
 :ORDERED: t
-:LOGGING: TODO(!) STARTED(!) WAITING(!) DELEGATED(!) APPT(!) DONE(!) DEFERRED(!) CANCELLED(!)
-:STYLE: habit
-:COOKIE_DATA: todo recursive
+:LOGGING: TODO(!) NEXT(!) STARTED(!) WAITING(!) DELEGATED(!) HOLD(!) DONE(!) DEFERRED(!) CANCELLED(!) PHONE(!)
+:DESCRIPTION: Mejorar la documentación para facilitar la colaboración de otras personas.
+:ASSIGNED: ?
+:DIFICULTY: Medium
+:HOURS_ESTIMATED: ?
+:CREATED_BY: i02sopop
+:CREATION_DATE: [2012-03-09 fri]
+:NOTES: -
+:END:
+** TODO [#B] Crear las paginas man.
+:PROPERTIES:
+:ORDERED: t
+:LOGGING: TODO(!) NEXT(!) STARTED(!) WAITING(!) DELEGATED(!) HOLD(!) DONE(!) DEFERRED(!) CANCELLED(!) PHONE(!) PROJECT(!) FINISHED(!)
+:DESCRIPTION: Crear las paginas man para el programa y los ficheros de configuración.
+:ASSIGNED: ?
+:DIFICULTY: medium
+:HOURS_ESTIMATED: ?
+:CREATED_BY: i02sopop
+:CREATION_DATE: [2012-07-03 mar 01:34]
+:NOTES: -
+:END:
+* TODO [#B] Crear un entorno gráfico.
+:PROPERTIES:
+:ORDERED: t
+:LOGGING: TODO(!) NEXT(!) STARTED(!) WAITING(!) DELEGATED(!) HOLD(!) DONE(!) DEFERRED(!) CANCELLED(!) PHONE(!)
+:DESCRIPTION: Crear un entorno gráfico para mejorar la interacción con el programa.
 :ASSIGNED: ?
 :DIFICULTY: Hard
 :HOURS_ESTIMATED: ?
-:HOURS: ?
-:DESCRIPTION: Crear un entorno gráfico para mejorar la interacción con el programa.
 :CREATED_BY: i02sopop
-:CREATION_DATE: [2012-03-09 vie]
+:CREATION_DATE: [2012-03-09 fri]
 :NOTES: -
 :END:
-* TODO Crear la web del proyecto.
+* TODO [#B] Crear la web del proyecto
 :PROPERTIES:
 :ORDERED: t
-:LOGGING: TODO(!) STARTED(!) WAITING(!) DELEGATED(!) APPT(!) DONE(!) DEFERRED(!) CANCELLED(!)
-:STYLE: habit
-:COOKIE_DATA: todo recursive
+:LOGGING: TODO(!) NEXT(!) STARTED(!) WAITING(!) DELEGATED(!) HOLD(!) DONE(!) DEFERRED(!) CANCELLED(!) PHONE(!)
+:DESCRIPTION: Diseñar y desarrollar la web del proyecto en github y en ritho.net.
 :ASSIGNED: ?
 :DIFICULTY: Medium
 :HOURS_ESTIMATED: ?
-:HOURS: ?
-:DESCRIPTION: Crear la web del proyecto en github.
 :CREATED_BY: i02sopop
-:CREATION_DATE: [2012-03-09 vie]
+:CREATION_DATE: [2012-03-09 fri]
 :NOTES: -
-:END:
-* TODO Finalizar el fichero INSTALL.
-:PROPERTIES:
-:LOGGING: TODO(!) STARTED(!) WAITING(!) DELEGATED(!) APPT(!) DONE(!) DEFERRED(!) CANCELLED(!)
-:STYLE: habit
-:COOKIE_DATA: todo recursive
-:ASSIGNED: ?
-:DIFICULTY: EASY
-:HOURS_ESTIMATED: 1
-:HOURS: ?
-:DESCRIPTION: Finalizar el fichero INSTALL tanto en castellano como en inglés.
-:CREATED_BY: i02sopop
-:CREATION_DATE: [2012-03-09 vie]
-:END_DATE: -
-:END:
-* TODO Compilar con autotools.
-:PROPERTIES:
-:ORDERED: t
-:LOGGING: TODO(!) STARTED(!) WAITING(!) DELEGATED(!) APPT(!) DONE(!) DEFERRED(!) CANCELLED(!)
-:STYLE: habit
-:COOKIE_DATA: todo recursive
-:ASSIGNED: i02sopop
-:DIFICULTY: EASY
-:HOURS_ESTIMATED: 2
-:HOURS: ?
-:DESCRIPTION: Crear los ficheros de configuracion para poder compilar con las herramientas automake/configure.
-:CREATED_BY: i02sopop
-:CREATION_DATE: <2012-03-19 lun>
-:END_DATE: -
-:END:
-
+:END: 
 
 * org-mode configuration
 #+STARTUP: content
