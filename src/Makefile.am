@@ -11,3 +11,7 @@ coconet_SOURCES=createPopulations.c evolvePopulations.c freeMemory.c main.c \
 	measureAptitude.c mutation.c sort.c error.c files.c generateOutput.c \
 	math.c measureChange.c print.c definitions.h functions.h macros.h \
 	gettext.h
+
+.PHONY: check-syntax
+check-syntax:
+	gcc -o nul -S ${CHK_SOURCES}

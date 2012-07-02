@@ -14,21 +14,6 @@ CLOSED: [2012-03-05 mon 01:31]
 :CREATION_DATE: [2012-03-05 mon]
 :NOTES: -
 :END:
-* TODO Refactorize the source to optimize it and correct bugs.
-:PROPERTIES:
-:ORDERED: t
-:LOGGING: TODO(!) STARTED(!) WAITING(!) DELEGATED(!) APPT(!) DONE(!) DEFERRED(!) CANCELLED(!)
-:STYLE: habit
-:COOKIE_DATA: todo recursive
-:ASSIGNED: ?
-:DIFICULTY: Medium
-:HOURS_ESTIMATED: ?
-:HOURS: ?
-:DESCRIPTION: Refactorize the source code to optimize the timing of the program and to correct bugs. 
-:CREATED_BY: i02sopop
-:CREATION_DATE: [2012-03-09 fri]
-:NOTES: -
-:END:
 * DONE [#B] Translate Code to english
 CLOSED: [2012-05-01 tue 15:38]
 :PROPERTIES:
@@ -41,6 +26,60 @@ CLOSED: [2012-05-01 tue 15:38]
 :HOURS_ESTIMATED: 10
 :HOURS: 8
 :DESCRIPTION: Traslate the code to english to facilitate the colaboration of others. 
+:CREATED_BY: i02sopop
+:CREATION_DATE: [2012-03-09 fri]
+:NOTES: -
+:END:
+* DONE [#B] Compilation with autotools.
+:LOGBOOK:
+- State "DONE"       from "APPT"       [2012-07-03 mar 00:16]
+- State "APPT"       from "DELEGATED"  [2012-07-03 mar 00:16]
+- State "DELEGATED"  from "WAITING"    [2012-07-03 mar 00:16]
+- State "WAITING"    from "STARTED"    [2012-07-03 mar 00:16]
+- State "STARTED"    from "TODO"       [2012-07-03 mar 00:16]
+:END:
+:PROPERTIES:
+:ORDERED: t
+:LOGGING: TODO(!) STARTED(!) WAITING(!) DELEGATED(!) APPT(!) DONE(!) DEFERRED(!) CANCELLED(!)
+:STYLE: habit
+:COOKIE_DATA: todo recursive
+:ASSIGNED: i02sopop
+:DIFICULTY: EASY
+:HOURS_ESTIMATED: 2
+:HOURS: ?
+:DESCRIPTION: Create all the configuration files to be able to compile the project with automake/configure tools.
+:CREATED_BY: i02sopop
+:CREATION_DATE: <2012-03-19 mon>
+:END_DATE: -
+:END:
+
+* TODO Finish the INSTALL file.
+:PROPERTIES:
+:ORDERED: t
+:LOGGING: TODO(!) STARTED(!) WAITING(!) DELEGATED(!) APPT(!) DONE(!) DEFERRED(!) CANCELLED(!)
+:STYLE: habit
+:COOKIE_DATA: todo recursive
+:ASSIGNED: ?
+:DIFICULTY: EASY
+:HOURS_ESTIMATED: 1
+:HOURS: ?
+:DESCRIPTION: Adapt and finish the description of the INSTALL file both in english and in spanish.
+:CREATED_BY: i02sopop
+:CREATION_DATE: [2012-03-09 fri]
+:END_DATE: -
+:END:
+
+* TODO Refactorize the source to optimize it and correct bugs.
+:PROPERTIES:
+:ORDERED: t
+:LOGGING: TODO(!) STARTED(!) WAITING(!) DELEGATED(!) APPT(!) DONE(!) DEFERRED(!) CANCELLED(!)
+:STYLE: habit
+:COOKIE_DATA: todo recursive
+:ASSIGNED: ?
+:DIFICULTY: Medium
+:HOURS_ESTIMATED: ?
+:HOURS: ?
+:DESCRIPTION: Refactorize the source code to optimize the timing of the program and to correct bugs. 
 :CREATED_BY: i02sopop
 :CREATION_DATE: [2012-03-09 fri]
 :NOTES: -
@@ -90,38 +129,6 @@ CLOSED: [2012-05-01 tue 15:38]
 :CREATION_DATE: [2012-03-09 fri]
 :NOTES: -
 :END: 
-* TODO Finish the INSTALL file.
-:PROPERTIES:
-:ORDERED: t
-:LOGGING: TODO(!) STARTED(!) WAITING(!) DELEGATED(!) APPT(!) DONE(!) DEFERRED(!) CANCELLED(!)
-:STYLE: habit
-:COOKIE_DATA: todo recursive
-:ASSIGNED: ?
-:DIFICULTY: EASY
-:HOURS_ESTIMATED: 1
-:HOURS: ?
-:DESCRIPTION: Adapt and finish the description of the INSTALL file both in english and in spanish.
-:CREATED_BY: i02sopop
-:CREATION_DATE: [2012-03-09 fri]
-:END_DATE: -
-:END:
-* TODO Compilation with autotools.
-:PROPERTIES:
-:ORDERED: t
-:LOGGING: TODO(!) STARTED(!) WAITING(!) DELEGATED(!) APPT(!) DONE(!) DEFERRED(!) CANCELLED(!)
-:STYLE: habit
-:COOKIE_DATA: todo recursive
-:ASSIGNED: i02sopop
-:DIFICULTY: EASY
-:HOURS_ESTIMATED: 2
-:HOURS: ?
-:DESCRIPTION: Create all the configuration files to be able to compile the project with automake/configure tools.
-:CREATED_BY: i02sopop
-:CREATION_DATE: <2012-03-19 mon>
-:END_DATE: -
-:END:
-
-
 
 * org-mode configuration
 #+STARTUP: content
