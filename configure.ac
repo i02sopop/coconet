@@ -9,6 +9,9 @@ dnl Gettext
 AM_GNU_GETTEXT_VERSION([0.18.1])
 AM_GNU_GETTEXT([external])
 
+dnl Maintainer mode
+# AM_MAINTAINER_MODE([default-mode])
+
 dnl Check programs
 dnl Find and test de C compiler
 AC_PROG_CC
@@ -32,6 +35,11 @@ AC_CHECK_FUNCS([strerror])
 AC_FUNC_ERROR_AT_LINE
 AC_FUNC_MALLOC
 AC_FUNC_REALLOC
+
+dnl Variables for Makefiles.
+AC_SUBST([PROJ_DIR], [`pwd`])
+
+AC_SUBST([INCLUDE_DIR], [${PROJ_DIR}/include])
 
 dnl Output files
 AC_CONFIG_HEADERS([config.h])
