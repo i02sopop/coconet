@@ -77,14 +77,14 @@ int main(int argc, char **argv)
 	fprintf(stderr, _("Scaling the output data.\n"));
 	if(netTransf == (func)&Logistic)
 		scaleOutputData(outputData,
-						   numTrain,
-						   0.0 + pTransfer.epsilon,
-						   pTransfer.logistic_a - pTransfer.epsilon);
+						numTrain,
+						0.0 + pTransfer.epsilon,
+						pTransfer.logistic_a - pTransfer.epsilon);
 	else
 		scaleOutputData(outputData,
-						   numTrain,
-						   pTransfer.epsilon - pTransfer.htan_a,
-						   pTransfer.htan_a - pTransfer.epsilon);
+						numTrain,
+						pTransfer.epsilon - pTransfer.htan_a,
+						pTransfer.htan_a - pTransfer.epsilon);
 
 	/* We evolve the networks and nodes ppulations. */
 	for(i = 0; measureChange(&netAptitude, i) == false; i++) {
@@ -122,14 +122,14 @@ int main(int argc, char **argv)
 	fprintf(stderr,"Scaling output data.\n");
 	if(netTransf == (func)&Logistic)
 		scaleOutputData(outputData,
-						   numGeneral,
-						   0.0 + pTransfer.epsilon,
-						   pTransfer.logistic_a - pTransfer.epsilon);
+						numGeneral,
+						0.0 + pTransfer.epsilon,
+						pTransfer.logistic_a - pTransfer.epsilon);
 	else
 		scaleOutputData(outputData,
-						   numGeneral,
-						   -pTransfer.htan_a + pTransfer.epsilon,
-						   pTransfer.htan_a - pTransfer.epsilon);
+						numGeneral,
+						-pTransfer.htan_a + pTransfer.epsilon,
+						pTransfer.htan_a - pTransfer.epsilon);
 
 	/* We export the best network found. */
 	fprintf(stderr, "Exporting the best network.\n");

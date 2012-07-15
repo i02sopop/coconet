@@ -11,4 +11,4 @@ coconet_SOURCES=createPopulations.c evolvePopulations.c freeMemory.c main.c \
 
 .PHONY: check-syntax
 check-syntax:
-	gcc -o nul -S ${CHK_SOURCES}
+	gcc -o nul ${AM_CFLAGS} ${coconet_CFLAGS} -S ${CHK_SOURCES}

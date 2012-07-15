@@ -10,4 +10,4 @@ update-po:
 
 .PHONY: check-syntax
 check-syntax:
-	gcc -o nul -S ${CHK_SOURCES}
+	gcc -o nul ${AM_CFLAGS} -S ${CHK_SOURCES}
