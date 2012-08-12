@@ -10,7 +10,7 @@ AM_GNU_GETTEXT_VERSION([0.18.1])
 AM_GNU_GETTEXT([external])
 
 dnl Maintainer mode
-# AM_MAINTAINER_MODE([default-mode])
+AM_MAINTAINER_MODE([default-mode])
 
 dnl Check programs
 dnl Find and test de C compiler
@@ -40,6 +40,8 @@ dnl Variables for Makefiles.
 AC_SUBST([PROJ_DIR], [`pwd`])
 
 AC_SUBST([INCLUDE_DIR], [${PROJ_DIR}/include])
+AC_SUBST([PO_DIR], [${PROJ_DIR}/po])
+AC_SUBST([MAKE], [make])
 
 dnl Output files
 AC_CONFIG_HEADERS([config.h])

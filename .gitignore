@@ -25,6 +25,5 @@ po/quot.sed
 po/remove-potcdate.sed
 po/remove-potcdate.sin
 po/stamp-po
-scripts/
 src/.deps/
 stamp-h1
