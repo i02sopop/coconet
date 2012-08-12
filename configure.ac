@@ -10,7 +10,7 @@ AM_GNU_GETTEXT_VERSION([0.18.1])
 AM_GNU_GETTEXT([external])
 
 dnl Maintainer mode
-AM_MAINTAINER_MODE([default-mode])
+AM_MAINTAINER_MODE()
 
 dnl Check programs
 dnl Find and test de C compiler
