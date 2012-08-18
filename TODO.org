@@ -1,0 +1,44 @@
+#+TODO: OPEN | CLOSED
+#+ !Title: Coconet bugs
+#+ 
+* Bugs of coconet
+:PROPERTIES:
+:url:      https://api.github.com/repos/i02sopop/coconet
+:since:    nil
+:END:
+** CLOSED Compilation with autotools
+:PROPERTIES:
+:assignee: "i02sopop"
+:author:   "i02sopop"
+:date-creation: 2012-08-18T13:57:38+0200
+:date-modification: 2012-08-18T14:02:11+0200
+:id:       1
+:END:
+: Create all the configuration files to be able to compile the project with automake/configure tools.
+** CLOSED Compilation with autotools
+:PROPERTIES:
+:assignee: "i02sopop"
+:author:   "i02sopop"
+:date-creation: 2012-08-18T14:00:25+0200
+:date-modification: 2012-08-18T14:02:11+0200
+:id:       4
+:END:
+: Create all the configuration files to be able to compile the project with automake/configure tools.
+** CLOSED Compilation with autotools
+:PROPERTIES:
+:assignee: "i02sopop"
+:author:   "i02sopop"
+:date-creation: 2012-08-18T13:57:55+0200
+:date-modification: 2012-08-18T14:01:52+0200
+:id:       2
+:END:
+: Create all the configuration files to be able to compile the project with automake/configure tools.
+** CLOSED Compilation with autotools
+:PROPERTIES:
+:assignee: "i02sopop"
+:author:   "i02sopop"
+:date-creation: 2012-08-18T13:58:45+0200
+:date-modification: 2012-08-18T14:00:13+0200
+:id:       3
+:END:
+: Create all the configuration files to be able to compile the project with automake/configure tools.
