@@ -72,9 +72,9 @@ int main(int argc, char **argv)
 	netAptitude = 0.0;
 
 	/* Scaling of input and output data from the training file. */
-	fprintf(stderr, _("Scaling the input data.\n"));
+	fprintf(stderr, _("SCALING_INPUT_DATA_INFO"));
 	scaleInputData(numTrain);
-	fprintf(stderr, _("Scaling the output data.\n"));
+	fprintf(stderr, _("SCALING_OUTPUT_DATA_INFO"));
 	if(netTransf == (func)&Logistic)
 		scaleOutputData(outputData,
 						numTrain,
@@ -89,37 +89,37 @@ int main(int argc, char **argv)
 	/* We evolve the networks and nodes ppulations. */
 	for(i = 0; measureChange(&netAptitude, i) == false; i++) {
 		/* We create a new population of nodes. */
-		fprintf(stderr, "Especie %d\n", i + 1);
+		fprintf(stderr, _("SPECIES_NUM_INFO"), i + 1);
 		createNodulePopulation();
 
 		/*
 		  We add the new population of nodes to the previous population of
 		  networks.
 		*/
-		fprintf(stderr,"Add nodes to networks.\n");
+		fprintf(stderr,_("ADDING_NODES_INFO"));
 		addNodulesNetworks();
 
 		/* We evolve the populations of networks and nodes. */
-		fprintf(stderr, "Evolve popularions.\n");
+		fprintf(stderr, _("EVOLVE_POPULATION_INFO"));
 		evolvePopulations();
 
 		/* We adjust the size of the last node's subpopulation matrix. */
-		fprintf(stderr, "Ajust matrix\n");
+		fprintf(stderr, _("ADJ_MATRIX_INFO"));
 		adjustMatrix();
 	}
 
 	/* We order the networks by its flair. */
-	fprintf(stderr, "Sorting networks.\n");
+	fprintf(stderr, _("SORTING_NETWORKS_INFO"));
 	sortNetworks();
 
 	/* We read the data of the generalization file. */
-	fprintf(stderr, "Read the generalization data.\n");
+	fprintf(stderr, _("READING_GENERALIZATION_DATA_INFO"));
 	readGeneralization(argv[3]);
 
 	/* We scale the input and output data from the generalization file. */
-	fprintf(stderr, "Scaling input data.\n");
+	fprintf(stderr, _("SCALING_INPUT_DATA_INFO"));
 	scaleInputData(numGeneral);
-	fprintf(stderr,"Scaling output data.\n");
+	fprintf(stderr, _("SCALING_OUTPUT_DATA_INFO"));
 	if(netTransf == (func)&Logistic)
 		scaleOutputData(outputData,
 						numGeneral,
@@ -132,12 +132,12 @@ int main(int argc, char **argv)
 						pTransfer.htan_a - pTransfer.epsilon);
 
 	/* We export the best network found. */
-	fprintf(stderr, "Exporting the best network.\n");
+	fprintf(stderr, _("EXPORTING_NETWORK_INFO"));
 	if(argc == 6)
 		exportBestNetwork(argv[5]);
 	else
 		exportBestNetwork("output.txt");
-	fprintf(stderr,"End\n");
+	fprintf(stderr, _("END_INFO"));
 
 	return 0;
 }

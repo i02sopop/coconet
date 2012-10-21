@@ -39,28 +39,19 @@ void error(int id)
 	/* Switch the number of error we show one message or other. */
 	switch(id) {
 	case RES_MEM:
-		fprintf(stderr, "Error reserving memory. %s\n", strerror(errno));
+		fprintf(stderr, _("RES_MEM_ERROR"), strerror(errno));
 		break;
 	case IO:
-		fprintf(stderr, "Input/output error. %s\n", strerror(errno));
+		fprintf(stderr, _("IO_ERROR"), strerror(errno));
 		break;
 	case PARAMETERS:
-		fprintf(stderr, "Error inserting the parameters into a function. "
-				"Either the parameters format is not rigth or is out of range."
-				"\n");
+		fprintf(stderr, _("PARAM_ERROR"));
 		break;
 	case COMMAND:
-		fprintf(stderr, "Error in the calling command. the format is:\n\t"
-				"coconet conf_file training_file generalization_file "
-				"[-o output_file]\n where conf_file is the configuration "
-				"file of the problem, training_file is the file that contains"
-				"the training data for the networks and generalization_file is"
-				" the file that contains the generalization data to measure "
-				"the networks. Output_file is the name of the output file, and"
-				" is optional\n");
+		fprintf(stderr, _("COMMAND_ERROR"));
 		break;
 	default:
-		fprintf(stderr, "Unknown error. %s\n", strerror(errno));
+		fprintf(stderr, _("UNKNOWN_ERROR"), strerror(errno));
 		break;
 	}
 

@@ -70,8 +70,7 @@ void evolvePopulations()
 			  If the subpopulation is new we run the backpropagation to reduce
 			  its error.
 			*/
-			fprintf(stderr, "Doing the backpropagation to a new nodule "
-					"subpopulation. \n");
+			fprintf(stderr, "Doing the backpropagation to a new nodule subpopulation.\n");
 			for(j = 0; j < numNodules; j++)
 				backpropagation(initNumNodules + j, numTrain, 5000);
 

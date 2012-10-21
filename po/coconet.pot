@@ -17,12 +17,77 @@ msgstr ""
 "Content-Type: text/plain; charset=CHARSET\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: src/main.c:75
+#: src/main.c
 #, c-format
-msgid "Scaling the input data.\n"
-msgstr ""
+msgid "SCALING_INPUT_DATA_INFO"
+msgstr "Scaling input data.\n"
 
-#: src/main.c:77
+#: src/main.c
 #, c-format
-msgid "Scaling the output data.\n"
-msgstr ""
+msgid "SCALING_OUTPUT_DATA_INFO"
+msgstr "Scaling output data.\n"
+
+#: src/main.c
+#, c-format
+msgid "SPECIES_NUM_INFO"
+msgstr "Species %d\n"
+
+#: src/main.c
+#, c-format
+msgid "ADDING_NODES_INFO"
+msgstr "Add nodes to networks.\n"
+
+#: src/main.c
+#, c-format
+msgid "EVOLVE_POPULATION_INFO"
+msgstr "Evolve popularions.\n"
+
+#: src/main.c
+#, c-format
+msgid "ADJ_MATRIX_INFO"
+msgstr "Ajust matrix\n"
+
+#: src/main.c
+#, c-format
+msgid "SORTING_NETWORKS_INFO"
+msgstr "Sorting networks.\n"
+
+#: src/main.c
+#, c-format
+msgid "READING_GENERALIZATION_DATA_INFO"
+msgstr "Read the generalization data.\n"
+
+#: src/main.c
+#, c-format
+msgid "EXPORTING_NETWORK_INFO"
+msgstr "Exporting the best network.\n"
+
+#: src/main.c
+#, c-format
+msgid "END_INFO"
+msgstr "End\n"
+
+#: src/error.c
+#, c-format
+msgid "RES_MEM_ERROR"
+msgstr "Error reserving memory. %s\n"
+
+#: src/error.c
+#, c-format
+msgid "IO_ERROR"
+msgstr "Input/output error. %s\n"
+
+#: src/error.c
+#, c-format
+msgid "PARAM_ERROR"
+msgstr "Error inserting the parameters into a function. Either the parameters format is not rigth or is out of range.\n"
+
+#: src/error.c
+#, c-format
+msgid "COMMAND_ERROR"
+msgstr "Error in the calling command. the format is:\n\tcoconet conf_file training_file generalization_file [-o output_file]\n where conf_file is the configuration file of the problem, training_file is the file that containsthe training data for the networks and generalization_file is the file that contains the generalization data to measure the networks. Output_file is the name of the output file, and is optional\n"
+
+#: src/error.c
+#, c-format
+msgid "UNKNOWN_ERROR"
+msgstr "Unknown error. %s\n"
