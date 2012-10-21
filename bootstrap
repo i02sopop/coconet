@@ -1,4 +1,20 @@
 #!/bin/sh
+# $Id: bootstrap,v 1.6 2007/11/08 02:19:09 jemarch Exp $
+# Created 2003-08-29, Karl Berry.  Public domain.
+
+if test "x$1" = x-n; then
+chicken=true
+echo "Ok, playing chicken; not actually running any commands."
+else
+chicken=
+fi
+
+echo "Bootstrapping coconet"
 
 make -k maintainer-clean
-autoreconf -fvi
+autoreconf -fvi --include=m4
+
+echo
+echo "Now run configure with your desired options, for instance:"
+echo "  ./configure CFLAGS=-g"
+echo

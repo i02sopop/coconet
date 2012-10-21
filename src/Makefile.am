@@ -1,13 +1,17 @@
 AM_CFLAGS=-O3
+AUTOMAKE_OPTIONS=std-options subdir-objects
+bin_PROGRAMS=coconet
+
+coconetdir=$(PROJ_DIR)
+coconet_SHORTNAME = cnet
 coconet_CFLAGS=-I$(INCLUDE_DIR) -DLOCALEDIR=\"$(localedir)\"
 coconet_LDADD=$(LIBMATH) $(LIBINTL)
 coconet_LDFLAG=
-
-bin_PROGRAMS=coconet
 coconet_SOURCES=createPopulations.c evolvePopulations.c freeMemory.c main.c \
 	measureAptitude.c mutation.c sort.c error.c files.c generateOutput.c \
-	math.c measureChange.c print.ci definitions.h functions.h macros.h \
-	gettext.h
+	math.c measureChange.c print.c
+coconet_HEADERS=$(INCLUDE_DIR)/definitions.h $(INCLUDE_DIR)/functions.h \
+	$(INCLUDE_DIR)/gettext.h $(INCLUDE_DIR)/macros.h
 
 .PHONY: check-syntax
 check-syntax:
