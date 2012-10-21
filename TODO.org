@@ -1,28 +1,35 @@
 #+TODO: OPEN | CLOSED
+#+TODO: OPEN | CLOSED
 #+ !TITLE: Coconet bugs
 #+ 
-* Bugs of coconet
+* Bugs of coconet 
 :PROPERTIES:
-:url:      https://api.github.com/repos/i02sopop/coconet
+:url:      https://api.github.com/repos/i02sopop/coconet 
 :since:    nil
 :END:
-** OPEN Create the web of the project.
+** OPEN Translate into spanish.
 :PROPERTIES:
-:assignee: ""
 :author:   "i02sopop"
-:date-creation: 2012-08-18T15:03:23+0200
-:date-modification: 2012-08-18T15:03:23+0200
-:id:       13
-:milestone: "Release 1.0.5"
-:tags:     ("TODO")
+:date-creation: 2012-08-18T14:48:35+0200
+:date-modification: 2012-10-21T20:02:24+0200
+:id:       7
+:tags:     ("TODO" "NEXT")
 :END:
-: Design and develop the web of the project in github.
+: Translate the pot file into spanish.
+** OPEN Put all the strings into the pot file.
+:PROPERTIES:
+:author:   "i02sopop"
+:date-creation: 2012-08-18T14:48:17+0200
+:date-modification: 2012-10-21T20:02:24+0200
+:id:       6
+:tags:     ("TODO" "NEXT")
+:END:
+: Put all the strings into the pot file and be able to translate them.
 ** OPEN Create a graphical interface.
 :PROPERTIES:
-:assignee: ""
 :author:   "i02sopop"
 :date-creation: 2012-08-18T15:02:56+0200
-:date-modification: 2012-08-18T15:02:56+0200
+:date-modification: 2012-08-18T15:06:26+0200
 :id:       12
 :milestone: "Release 1.1.0"
 :tags:     ("TODO")
@@ -30,10 +37,9 @@
 : Create a graphical interface to enhace the interacion with the program.
 ** OPEN Improve the documentation
 :PROPERTIES:
-:assignee: ""
 :author:   "i02sopop"
 :date-creation: 2012-08-18T15:02:23+0200
-:date-modification: 2012-08-18T15:02:23+0200
+:date-modification: 2012-08-18T15:05:47+0200
 :id:       11
 :milestone: "Release 1.0.5"
 :tags:     ("TODO")
@@ -41,76 +47,83 @@
 : Improve the documentation to facilitate the colaboration of third parties
 ** OPEN Create man files
 :PROPERTIES:
-:assignee: ""
 :author:   "i02sopop"
 :date-creation: 2012-08-18T15:01:53+0200
-:date-modification: 2012-08-18T15:01:53+0200
+:date-modification: 2012-08-18T15:05:15+0200
 :id:       10
 :milestone: "Release 1.0.5"
 :tags:     ("TODO")
 :END:
 : Create man files of the program and configuration files.
+** OPEN Create the web of the project.
+:PROPERTIES:
+:author:   "i02sopop"
+:date-creation: 2012-08-18T15:03:23+0200
+:date-modification: 2012-08-18T15:04:44+0200
+:id:       13
+:tags:     ("TODO")
+:END:
+: Design and develop the web of the project in github.
 ** OPEN Refactorize the source to optimize it and correct bugs.
 :PROPERTIES:
-:assignee: ""
 :author:   "i02sopop"
 :date-creation: 2012-08-18T14:59:20+0200
-:date-modification: 2012-08-18T14:59:20+0200
+:date-modification: 2012-08-18T15:00:24+0200
 :id:       9
 :milestone: "Release 1.0.4"
 :tags:     ("TODO")
 :END:
 : Refactorize the source to optimize it and correct bugs.
-** OPEN Finish the INSTALL file. DEADLINE: <2012-09-16 dom>
+** OPEN Finish the INSTALL file.
 :PROPERTIES:
-:assignee: ""
 :author:   "i02sopop"
 :date-creation: 2012-08-18T14:55:09+0200
-:date-modification: 2012-08-18T14:55:09+0200
+:date-modification: 2012-08-18T14:59:08+0200
 :id:       8
-:milestone: "Release 1.0.3"
 :tags:     ("TODO" "NEXT")
 :END:
 : Adapt and finish the description of the INSTALL file both in english and spanish.
-** OPEN Put all the strings into the pot file.  DEADLINE: <2012-09-16 dom>
-:PROPERTIES:
-:assignee: ""
-:author:   "i02sopop"
-:date-creation: 2012-08-18T14:48:17+0200
-:date-modification: 2012-08-18T14:50:18+0200
-:id:       6
-:milestone: "Release 1.0.3"
-:tags:     ("TODO" "NEXT")
-:END:
-: Put all the strings into the pot file and be able to translate them.
-** OPEN Enhace the autotools compilation to avoid the coconet DEADLINE: <2012-09-16 dom>
+** CLOSED Enhace the autotools compilation to avoid the coconet DEADLINE: <2012-09-16 dom>
 :PROPERTIES:
 :assignee: "i02sopop"
 :author:   "i02sopop"
 :date-creation: 2012-08-18T14:36:51+0200
-:date-modification: 2012-08-18T14:48:35+0200
+:date-modification: 2012-10-21T20:03:01+0200
 :id:       5
 :milestone: "Release 1.0.3"
 :tags:     ("TODO" "NEXT")
 :END:
 : Enhace the autotools compilation to avoid the coconet_* files and to use a .obj dir.
-** OPEN Translate into spanish.  DEADLINE: <2012-09-16 dom>
+** CLOSED Enhace the autotools compilation to avoid the coconet
 :PROPERTIES:
-:assignee: ""
 :author:   "i02sopop"
-:date-creation: 2012-08-18T14:48:35+0200
-:date-modification: 2012-08-18T14:48:35+0200
-:id:       7
-:milestone: "Release 1.0.3"
-:tags:     ("TODO" "NEXT")
+:date-creation: 2012-10-21T20:02:24+0200
+:date-modification: 2012-10-21T20:02:53+0200
+:id:       16
 :END:
-: Translate the pot file into spanish.
+: Enhace the autotools compilation to avoid the coconet_* files and to use a .obj dir.
+** CLOSED Enhace the autotools compilation to avoid the coconet
+:PROPERTIES:
+:author:   "i02sopop"
+:date-creation: 2012-10-21T20:00:11+0200
+:date-modification: 2012-10-21T20:00:55+0200
+:id:       15
+:END:
+: Enhace the autotools compilation to avoid the coconet_* files and to use a .obj dir.
+** CLOSED Enhace the autotools compilation to avoid the coconet
+:PROPERTIES:
+:author:   "i02sopop"
+:date-creation: 2012-10-21T19:58:42+0200
+:date-modification: 2012-10-21T19:59:53+0200
+:id:       14
+:END:
+: Enhace the autotools compilation to avoid the coconet_* files and to use a .obj dir.
 ** CLOSED Compilation with autotools DEADLINE: <2012-09-16 dom>
 :PROPERTIES:
 :assignee: "i02sopop"
 :author:   "i02sopop"
 :date-creation: 2012-08-18T13:57:38+0200
-:date-modification: 2012-08-18T14:48:36+0200
+:date-modification: 2012-08-18T14:53:55+0200
 :id:       1
 :milestone: "Release 1.0.3"
 :tags:     ("DONE")
