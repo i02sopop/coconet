@@ -91,3 +91,23 @@ msgstr "Error in the calling command. the format is:\n\tcoconet conf_file traini
 #, c-format
 msgid "UNKNOWN_ERROR"
 msgstr "Unknown error. %s\n"
+
+#: src/evolvePopulations.c
+#, c-format
+msgid "INIT_NODULE_BACKPROPAGATION_INFO"
+msgstr "Doing the backpropagation to a new nodule subpopulation.\n"
+
+#: src/evolvePopulations.c
+#, c-format
+msgid "NET_TRAIN_FIRST_INFO"
+msgstr "We train by first time the networks.\n"
+
+#: src/evolvePopulations.c
+#, c-format
+msgid "SORTING_NODULES_INFO"
+msgstr "Sorting nodules.\n"
+
+#: src/evolvePopulations.c
+#, c-format
+msgid ""
+msgstr ""

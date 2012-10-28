@@ -70,7 +70,7 @@ void evolvePopulations()
 			  If the subpopulation is new we run the backpropagation to reduce
 			  its error.
 			*/
-			fprintf(stderr, "Doing the backpropagation to a new nodule subpopulation.\n");
+			fprintf(stderr, _("INIT_NODULE_BACKPROPAGATION_INFO"));
 			for(j = 0; j < numNodules; j++)
 				backpropagation(initNumNodules + j, numTrain, 5000);
 
@@ -78,7 +78,7 @@ void evolvePopulations()
 			  We train by first time the networks to have an initial value of
 			  the nodules and networks aptitude.
 			*/
-			fprintf(stderr, "We train by first time the networks.\n");
+			fprintf(stderr, _("NET_TRAIN_FIRST_INFO"));
 			for(j = 0; j < numTrain; j++) {
 				/* We generate the nodules output. */
 				for(k = cNodulePopulation.numNodules - numNodules; k < cNodulePopulation.numNodules ;k++)
@@ -102,7 +102,7 @@ void evolvePopulations()
 		}
 
 		/* We sort the networks by aptitude. */
-		fprintf(stderr, "Sorting networks.\n");
+		fprintf(stderr, _("SORTING_NETWORKS_INFO"));
 		sortNetworks();
 
 		/* We train the networks by simulate annealing. */
@@ -115,7 +115,7 @@ void evolvePopulations()
 		normalizeNoduleAptitude();
 
 		/* We sort the nodules by aptitude. */
-		fprintf(stderr, "Sorting nodules.\n");
+		fprintf(stderr, _("SORTING_NODULES_INFO"));
 		sortNodules();
 
 		/* We create a new subpopulation descendant of the actual one. */
