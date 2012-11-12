@@ -1,7 +1,7 @@
-# SOME DESCRIPTIVE TITLE.
-# Copyright (C) YEAR Coconet project (see AUTHORS)
-# This file is distributed under the same license as the PACKAGE package.
-# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+# Gettext file for coconet project
+# Copyright (C) 2012 Coconet project (see AUTHORS)
+# This file is distributed under the same license as the coconet package.
+# Pablo Alvarez de Sotomayor Posadillo <palvarez@ritho.net>, 2012.
 #
 #, fuzzy
 msgid ""
@@ -17,97 +17,162 @@ msgstr ""
 "Content-Type: text/plain; charset=CHARSET\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: src/main.c
-#, c-format
-msgid "SCALING_INPUT_DATA_INFO"
-msgstr "Scaling input data.\n"
-
-#: src/main.c
-#, c-format
-msgid "SCALING_OUTPUT_DATA_INFO"
-msgstr "Scaling output data.\n"
-
-#: src/main.c
-#, c-format
-msgid "SPECIES_NUM_INFO"
-msgstr "Species %d\n"
-
-#: src/main.c
-#, c-format
-msgid "ADDING_NODES_INFO"
-msgstr "Add nodes to networks.\n"
-
-#: src/main.c
-#, c-format
-msgid "EVOLVE_POPULATION_INFO"
-msgstr "Evolve popularions.\n"
-
-#: src/main.c
-#, c-format
-msgid "ADJ_MATRIX_INFO"
-msgstr "Ajust matrix\n"
-
-#: src/main.c
-#, c-format
-msgid "SORTING_NETWORKS_INFO"
-msgstr "Sorting networks.\n"
-
-#: src/main.c
-#, c-format
-msgid "READING_GENERALIZATION_DATA_INFO"
-msgstr "Read the generalization data.\n"
-
-#: src/main.c
-#, c-format
-msgid "EXPORTING_NETWORK_INFO"
-msgstr "Exporting the best network.\n"
-
-#: src/main.c
-#, c-format
-msgid "END_INFO"
-msgstr "End\n"
-
-#: src/error.c
-#, c-format
-msgid "RES_MEM_ERROR"
-msgstr "Error reserving memory. %s\n"
-
-#: src/error.c
-#, c-format
-msgid "IO_ERROR"
-msgstr "Input/output error. %s\n"
-
-#: src/error.c
-#, c-format
-msgid "PARAM_ERROR"
-msgstr "Error inserting the parameters into a function. Either the parameters format is not rigth or is out of range.\n"
-
-#: src/error.c
-#, c-format
-msgid "COMMAND_ERROR"
-msgstr "Error in the calling command. the format is:\n\tcoconet conf_file training_file generalization_file [-o output_file]\n where conf_file is the configuration file of the problem, training_file is the file that containsthe training data for the networks and generalization_file is the file that contains the generalization data to measure the networks. Output_file is the name of the output file, and is optional\n"
-
-#: src/error.c
-#, c-format
-msgid "UNKNOWN_ERROR"
-msgstr "Unknown error. %s\n"
-
-#: src/evolvePopulations.c
+#: src/evolvePopulations.c:73
 #, c-format
 msgid "INIT_NODULE_BACKPROPAGATION_INFO"
 msgstr "Doing the backpropagation to a new nodule subpopulation.\n"
 
-#: src/evolvePopulations.c
+#: src/evolvePopulations.c:81
 #, c-format
 msgid "NET_TRAIN_FIRST_INFO"
 msgstr "We train by first time the networks.\n"
 
-#: src/evolvePopulations.c
+#: src/evolvePopulations.c:105 src/main.c:112
+#, c-format
+msgid "SORTING_NETWORKS_INFO"
+msgstr "Sorting networks.\n"
+
+#: src/evolvePopulations.c:109
+#, c-format
+msgid "TRAINING_NETS_INFO"
+msgstr "Training the networks by simulate annealing.\n"
+
+#: src/evolvePopulations.c:114
+#, c-format
+msgid "NODULE_NORM_INFO"
+msgstr "Normalize the nodules aptitude.\n"
+
+#: src/evolvePopulations.c:118
 #, c-format
 msgid "SORTING_NODULES_INFO"
 msgstr "Sorting nodules.\n"
 
-#: src/evolvePopulations.c
+#: src/evolvePopulations.c:122
 #, c-format
-msgid ""
-msgstr ""
+msgid "CREATE_SUBPOPULATION_INFO"
+msgstr "Creating new subpopulation.\n"
+
+#: src/evolvePopulations.c:126
+#, c-format
+msgid "NODULE_MUTATION_INFO"
+msgstr "Nodules mutation.\n"
+
+#: src/evolvePopulations.c:132
+#, c-format
+msgid "NODULE_SUBST_INFO"
+msgstr "Susbstitution of the worst nodules by the bes ones.\n"
+
+#: src/evolvePopulations.c:135
+#, c-format
+msgid "END_EVOLUTION_INFO"
+msgstr "End of the evolve.\n"
+
+#: src/main.c:75 src/main.c:120
+#, c-format
+msgid "SCALING_INPUT_DATA_INFO"
+msgstr "Scaling input data.\n"
+
+#: src/main.c:77 src/main.c:122
+#, c-format
+msgid "SCALING_OUTPUT_DATA_INFO"
+msgstr "Scaling output data.\n"
+
+#: src/main.c:92
+#, c-format
+msgid "SPECIES_NUM_INFO"
+msgstr "Species %d\n"
+
+#: src/main.c:99
+#, c-format
+msgid "ADDING_NODES_INFO"
+msgstr "Add nodes to networks.\n"
+
+#: src/main.c:103
+#, c-format
+msgid "EVOLVE_POPULATION_INFO"
+msgstr "Evolve popularions.\n"
+
+#: src/main.c:107
+#, c-format
+msgid "ADJ_MATRIX_INFO"
+msgstr "Ajust matrix\n"
+
+#: src/main.c:116
+#, c-format
+msgid "READING_GENERALIZATION_DATA_INFO"
+msgstr "Read the generalization data.\n"
+
+#: src/main.c:135
+#, c-format
+msgid "EXPORTING_NETWORK_INFO"
+msgstr "Exporting the best network.\n"
+
+#: src/main.c:140
+#, c-format
+msgid "END_INFO"
+msgstr "End\n"
+
+#: src/error.c:42
+#, c-format
+msgid "RES_MEM_ERROR"
+msgstr "Error reserving memory. %s\n"
+
+#: src/error.c:45
+#, c-format
+msgid "IO_ERROR"
+msgstr "Input/output error. %s\n"
+
+#: src/error.c:48
+#, c-format
+msgid "PARAM_ERROR"
+msgstr "Error inserting the parameters into a function. Either the parameters format is not rigth or is out of range.\n"
+
+#: src/error.c:51
+#, c-format
+msgid "COMMAND_ERROR"
+msgstr "Error in the calling command. the format is:\n\tcoconet conf_file training_file generalization_file [-o output_file]\n where conf_file is the configuration file of the problem, training_file is the file that containsthe training data for the networks and generalization_file is the file that contains the generalization data to measure the networks. Output_file is the name of the output file, and is optional\n"
+
+#: src/error.c:54
+#, c-format
+msgid "UNKNOWN_ERROR"
+msgstr "Unknown error. %s\n"
+
+#: src/files.c:334
+#, c-format
+msgid "PRINT_NET_APTITUDE"
+msgstr "Aptitude: %lf\n"
+
+#: src/files.c:335
+#, c-format
+msgid "PRINT_NET_GENERALIZATION"
+msgstr "Generalization: %lf\n"
+
+#: src/files.c:336
+#, c-format
+msgid "PRINT_NUM_NODULES"
+msgstr "Number of Nodules: %d\n"
+
+#: src/files.c:337
+#, c-format
+msgid "PRINT_NUM_INPUT_NODES"
+msgstr "Number of Input Nodes: %d\n"
+
+#: src/files.c:344
+#, c-format
+msgid "PRINT_NUM_HIDDEN_NODES"
+msgstr "Number of Hidden Nodes: %d\n"
+
+#: src/files.c:345
+#, c-format
+msgid "PRINT_NUM_OUTPUT_NODES"
+msgstr "Number of Output Nodes: %d\n"
+
+#: src/files.c:355
+#, c-format
+msgid "PRINT_NUM_INPUT_CONNECTIONS"
+msgstr "Number of Input Connections: %d\n"
+
+#: src/files.c:365
+#, c-format
+msgid "PRINT_NUM_OUTPUT_CONNECTIONS"
+msgstr "Number of Output Connections: %d\n"

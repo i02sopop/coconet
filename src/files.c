@@ -37,8 +37,7 @@
    error(): Function to print an error message.
 ******************************************************************************/
 
-void loadFile(char *config, char *training)
-{
+void loadFile(char *config, char *training) {
 	int i, j;
 	FILE *configFile, *trainingFile;
 
@@ -76,9 +75,9 @@ void loadFile(char *config, char *training)
 				error(IO);
 	}
 
-	if(fscanf(configFile, "Redes: %d\n", &maxNetworks) == EOF ||
-	   fscanf(configFile, "Nodos: %d\n", &maxNodes) == EOF ||
-	   fscanf(configFile, "Nodulos: %d\n", &numNodules) == EOF)
+	if(fscanf(configFile, "Networks: %d\n", &maxNetworks) == EOF ||
+	   fscanf(configFile, "Nodes: %d\n", &maxNodes) == EOF ||
+	   fscanf(configFile, "Nodules: %d\n", &numNodules) == EOF)
 		error(IO);
 
 	/* Parameters of the transfer functions. */
@@ -95,20 +94,20 @@ void loadFile(char *config, char *training)
 	   fscanf(configFile, "best: %lf\n", &adj.best) == EOF)
 		error(IO);
 
-	if(fscanf(configFile, "Redes Seleccionadas: %d\n", &selNets) == EOF ||
-	   fscanf(configFile, "Nodulos Seleccionados: %d\n", &nodSel) == EOF)
+	if(fscanf(configFile, "Networks to pick: %d\n", &selNets) == EOF ||
+	   fscanf(configFile, "Nodules to pick: %d\n", &nodSel) == EOF)
 		error(IO);
 
-	if(fscanf(configFile, "Iteraciones SA: %d\n", &numSAIterantions) == EOF ||
+	if(fscanf(configFile, "Iterations SA: %d\n", &numSAIterantions) == EOF ||
 	   fscanf(configFile, "To SA: %lf\n", &ToSA) == EOF ||
 	   fscanf(configFile, "alpha SA: %lf\n", &alphasa) == EOF)
 		error(IO);
 
-	if(fscanf(configFile, "Delta Minimo: %d\n", &delta_min) == EOF ||
-	   fscanf(configFile, "Delta Maximo: %d\n", &delta_max) == EOF)
+	if(fscanf(configFile, "Min Delta: %d\n", &delta_min) == EOF ||
+	   fscanf(configFile, "Max Delta: %d\n", &delta_max) == EOF)
 		error(IO);
 
-	if(fscanf(configFile, "Limite Evolucion: %lf\n", &evolim) == EOF ||
+	if(fscanf(configFile, "Evolution limit: %lf\n", &evolim) == EOF ||
 	   fscanf(configFile, "Alpha backpropagation: %lf\n", &alpharet) == EOF)
 		error(IO);
 
@@ -142,8 +141,7 @@ void loadFile(char *config, char *training)
    error(): Function to print an error message.
 ******************************************************************************/
 
-void readGeneralization(char *filename)
-{
+void readGeneralization(char *filename) {
 	int i, j;
 	FILE *file;
 
@@ -333,18 +331,18 @@ void exportBestNetwork(char *filename)
 	  input, hidden and output nodes of the best network and its number of
 	  input and output connections.
 	*/
-	if(fprintf(out, "Aptitude: %lf\n", aptitude[idmax]) == EOF ||
-	   fprintf(out, "Generalization: %lf\n", cNetPopulation.nets[idmax]->aptitude) == EOF ||
-	   fprintf(out, "Number of Nodules: %d\n", cNodulePopulation.numSubpops) == EOF ||
-	   fprintf(out, "Number of Input Nodes: %d\n", cNetPopulation.numInputNodes) == EOF)
+	if(fprintf(out, _("PRINT_NET_APTITUDE"), aptitude[idmax]) == EOF ||
+	   fprintf(out, _("PRINT_NET_GENERALIZATION"), cNetPopulation.nets[idmax]->aptitude) == EOF ||
+	   fprintf(out, _("PRINT_NUM_NODULES"), cNodulePopulation.numSubpops) == EOF ||
+	   fprintf(out, _("PRINT_NUM_INPUT_NODES"), cNetPopulation.numInputNodes) == EOF)
 		error(IO);
 
 	nodes = 0;
 	for(i = 0; i < cNodulePopulation.numSubpops; i++)
 		nodes += cNetPopulation.nets[idmax]->nodules[i]->nodes;
 
-	if(fprintf(out, "Number of Hidden Nodes: %d\n", nodes) == EOF ||
-	   fprintf(out, "Number of Output Nodes: %d\n", cNetPopulation.numOutputNodes) == EOF)
+	if(fprintf(out, _("PRINT_NUM_HIDDEN_NODES"), nodes) == EOF ||
+	   fprintf(out, _("PRINT_NUM_OUTPUT_NODES"), cNetPopulation.numOutputNodes) == EOF)
 		error(IO);
 
 	connections = 0;
@@ -354,7 +352,7 @@ void exportBestNetwork(char *filename)
 				if(cNetPopulation.nets[idmax]->nodules[i]->inConn[j][k] == 1)
 					connections++;
 
-	if(fprintf(out, "Number of Input Connections: %d\n", connections) == EOF)
+	if(fprintf(out, _("PRINT_NUM_INPUT_CONNECTIONS"), connections) == EOF)
 		error(IO);
 
 	connections = 0;
@@ -364,7 +362,7 @@ void exportBestNetwork(char *filename)
 				if(cNetPopulation.nets[idmax]->nodules[i]->outConn[j][k] == 1)
 					connections++;
 
-	if(fprintf(out, "Number of Output Connections: %d\n", connections) == EOF)
+	if(fprintf(out, _("PRINT_NUM_OUTPUT_CONNECTIONS"), connections) == EOF)
 		error(IO);
 
 	/* We close the output file. */

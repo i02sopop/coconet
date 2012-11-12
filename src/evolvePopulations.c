@@ -106,12 +106,12 @@ void evolvePopulations()
 		sortNetworks();
 
 		/* We train the networks by simulate annealing. */
-		fprintf(stderr, "Training the networks by simulate annealing.\n");
+		fprintf(stderr, _("TRAINING_NETS_INFO"));
 		for(j = initNumNodules; j < cNodulePopulation.numNodules; j++)
 			simulatedAnnealing(j);
 
 		/* We normalize the nodules aptitude. */
-		fprintf(stderr, "Normalize the nodules aptitude.\n");
+		fprintf(stderr, _("NODULE_NORM_INFO"));
 		normalizeNoduleAptitude();
 
 		/* We sort the nodules by aptitude. */
@@ -119,20 +119,20 @@ void evolvePopulations()
 		sortNodules();
 
 		/* We create a new subpopulation descendant of the actual one. */
-		fprintf(stderr, "Creating new subpopulation.\n");
+		fprintf(stderr, _("CREATE_SUBPOPULATION_INFO"));
 		copyDescendant();
 
 		/* We make the structural mutation of the nodules. */
-		fprintf(stderr, "Nodules mutation.\n");
+		fprintf(stderr, _("NODULE_MUTATION_INFO"));
 		for(j = initNumNodules; j < cNodulePopulation.numNodules; j++)
 			mutasteNodules(j);
 
 		/* We substitude the worst nodules by the best ones in the descendant
 		   population. */
-		fprintf(stderr, "Susbstitution of the worst nodules by the bes ones.\n");
+		fprintf(stderr, _("NODULE_SUBST_INFO"));
 		replaceNodules();
 
-		fprintf(stderr, "End of the evolve.\n");
+		fprintf(stderr, _("END_EVOLUTION_INFO"));
 	}
 }
 

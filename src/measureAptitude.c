@@ -279,7 +279,7 @@ double best(int nodule)
  File: measureAptitude.c
  Function: replace()
  Author: Pablo Álvarez de Sotomayor Posadillo
- Description: Mide la aptitud parcial del nódulo por sustitción.
+ Description: Measure the nodule partial aptitude by substitution.
  Input Parameters:
    nodule: Integer. Number of nodule to work with.
    population: Vector of networks. Copy of the network population.
