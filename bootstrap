@@ -2,17 +2,25 @@
 # $Id: bootstrap,v 1.6 2007/11/08 02:19:09 jemarch Exp $
 # Created 2003-08-29, Karl Berry.  Public domain.
 
-if test "x$1" = x-n; then
-chicken=true
-echo "Ok, playing chicken; not actually running any commands."
+if [ "x$1" = x-n ]; then
+	chicken=true
+	echo "Ok, playing chicken; not actually running any commands."
 else
-chicken=
+	chicken=
 fi
 
 echo "Bootstrapping coconet"
-
-make -k maintainer-clean
-autoreconf -fvi --include=m4
+if [ !chicken ]; then
+	if [ -f Makefile ]; then
+		make -k maintainer-clean
+	fi
+	autoreconf -fvi --include=m4
+else
+	echo "if [ -f Makefile ]; then
+		make -k maintainer-clean
+	fi
+	autoreconf -fvi --include=m4"
+fi
 
 echo
 echo "Now run configure with your desired options, for instance:"
