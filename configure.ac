@@ -7,7 +7,6 @@ AM_INIT_AUTOMAKE([foreign -Wall -Werror dist-bzip2])
 
 dnl Gettext
 AM_GNU_GETTEXT_VERSION([0.18.1])
-AM_GNU_GETTEXT([external])
 
 dnl Maintainer mode
 AM_MAINTAINER_MODE([enable])

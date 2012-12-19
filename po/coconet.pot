@@ -1,14 +1,14 @@
-# Gettext file for coconet project
-# Copyright (C) 2012 Coconet project (see AUTHORS)
-# This file is distributed under the same license as the coconet package.
-# Pablo Alvarez de Sotomayor Posadillo <palvarez@ritho.net>, 2012.
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 #
 #, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: coconet 1.0.2\n"
-"Report-Msgid-Bugs-To: palvarez@ritho.net\n"
-"POT-Creation-Date: 2012-07-02 23:44+0200\n"
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2012-12-19 01:13+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -125,12 +125,21 @@ msgstr "Input/output error. %s\n"
 #: src/error.c:48
 #, c-format
 msgid "PARAM_ERROR"
-msgstr "Error inserting the parameters into a function. Either the parameters format is not rigth or is out of range.\n"
+msgstr ""
+"Error inserting the parameters into a function. Either the parameters format "
+"is not rigth or is out of range.\n"
 
 #: src/error.c:51
 #, c-format
 msgid "COMMAND_ERROR"
-msgstr "Error in the calling command. the format is:\n\tcoconet conf_file training_file generalization_file [-o output_file]\n where conf_file is the configuration file of the problem, training_file is the file that containsthe training data for the networks and generalization_file is the file that contains the generalization data to measure the networks. Output_file is the name of the output file, and is optional\n"
+msgstr ""
+"Error in the calling command. the format is:\n"
+"\tcoconet conf_file training_file generalization_file [-o output_file]\n"
+" where conf_file is the configuration file of the problem, training_file is "
+"the file that containsthe training data for the networks and "
+"generalization_file is the file that contains the generalization data to "
+"measure the networks. Output_file is the name of the output file, and is "
+"optional\n"
 
 #: src/error.c:54
 #, c-format

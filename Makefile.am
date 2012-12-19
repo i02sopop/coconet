@@ -2,9 +2,9 @@ SUBDIRS=po src
 ACLOCAL_AMFLAGS=-I m4
 EXTRA_DIST = .build-aux/config.rpath
 
-.PHONY: update-po
-update-po:
-	$(MAKE) -C $(PO_DIR) update-po
+.PHONY: update-pot
+update-pot:
+	@xgettext -L C -j src/*.c include/*.h -o po/coconet.pot
 
 .PHONY: check-syntax
 check-syntax:
