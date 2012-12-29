@@ -44,12 +44,13 @@ dnl Variables for Makefiles.
 AC_SUBST([PROJ_DIR], [`pwd`])
 
 AC_SUBST([INCLUDE_DIR], [${PROJ_DIR}/include])
+AC_SUBST([SOURCE_DIR], [${PROJ_DIR}/src])
 AC_SUBST([PO_DIR], [${PROJ_DIR}/po])
 dnl AC_SUBST([MAKE], [make])
 
 dnl Output files
 AC_CONFIG_HEADERS([config.h])
-AC_CONFIG_FILES([Makefile src/Makefile po/Makefile.in])
+AC_CONFIG_FILES([Makefile src/Makefile po/Makefile])
 
 dnl Generate output
 AC_OUTPUT
