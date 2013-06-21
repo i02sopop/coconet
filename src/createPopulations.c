@@ -1,5 +1,5 @@
 /******************************************************************************
- Copyright (c) 2004-2012 coconet project (see AUTHORS)
+ Copyright (c) 2004-2013 coconet project (see AUTHORS)
 
  This file is part of Coconet.
 
@@ -20,7 +20,7 @@
 
 /******************************************************************************
  File: createPopulations.c
- Function: anadirNoduloRedes()
+ Function: addNodulesNetworks()
  Author: Pablo Alvarez de Sotomayor Posadillo
  Description: Add a new nodule subpopulation to the network population.
  Input Parameters: None
