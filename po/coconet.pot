@@ -60,7 +60,7 @@ msgstr "Nodules mutation.\n"
 #: src/evolvePopulations.c:132
 #, c-format
 msgid "NODULE_SUBST_INFO"
-msgstr "Susbstitution of the worst nodules by the bes ones.\n"
+msgstr "Susbstitution of the worst nodules by the best ones.\n"
 
 #: src/evolvePopulations.c:135
 #, c-format
@@ -90,7 +90,7 @@ msgstr "Add nodes to networks.\n"
 #: src/main.c:103
 #, c-format
 msgid "EVOLVE_POPULATION_INFO"
-msgstr "Evolve popularions.\n"
+msgstr "Evolve populations.\n"
 
 #: src/main.c:107
 #, c-format
@@ -126,7 +126,7 @@ msgstr "Input/output error. %s\n"
 #, c-format
 msgid "PARAM_ERROR"
 msgstr ""
-"Error inserting the parameters into a function. Either the parameters format "
+"Error passing the parameters to a function. Either a parameter format "
 "is not rigth or is out of range.\n"
 
 #: src/error.c:51
@@ -138,8 +138,7 @@ msgstr ""
 " where conf_file is the configuration file of the problem, training_file is "
 "the file that containsthe training data for the networks and "
 "generalization_file is the file that contains the generalization data to "
-"measure the networks. Output_file is the name of the output file, and is "
-"optional\n"
+"measure the networks. Output_file is optional and contains the name of the output file.\n"
 
 #: src/error.c:54
 #, c-format
@@ -192,7 +191,7 @@ msgid "PRINT_NETWORK_INFO"
 msgstr ""
 "id: %d\n"
 "Number of nodes: %d\n"
-"aptitude: %lf\n"
+"Aptitude: %lf\n"
 "\n"
 "Input connections matrix:"
 
@@ -227,7 +226,7 @@ msgstr ""
 #: src/print.c:112
 #, c-format
 msgid "PRINT_NETWORK_NODULES"
-msgstr "nodules: "
+msgstr "Nodules: "
 
 #: src/print.c:118
 #, c-format
