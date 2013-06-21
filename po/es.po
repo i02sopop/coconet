@@ -20,7 +20,7 @@
 msgid   ""
 msgstr  "Project-Id-Version: coconet 1.0.2\n"
         "Report-Msgid-Bugs-To: \n"
-        "POT-Creation-Date: 2013-06-21 08:58+0200\n"
+        "POT-Creation-Date: 2013-06-21 09:00+0200\n"
         "PO-Revision-Date: 2012-07-02 23:41+0200\n"
         "Last-Translator: Pablo Alvarez de Sotomayor Posadillo "
         "<palvarez@ritho.net>\n"
@@ -34,220 +34,231 @@ msgstr  "Project-Id-Version: coconet 1.0.2\n"
 #: src/evolvePopulations.c:73
 #, c-format
 msgid   "INIT_NODULE_BACKPROPAGATION_INFO"
-msgstr  ""
+msgstr  "Ejecutando retropropagación a una nueva subpoblación de nódulos.\n"
 
 #: src/evolvePopulations.c:81
 #, c-format
 msgid   "NET_TRAIN_FIRST_INFO"
-msgstr  ""
+msgstr  "Entrenando por primera vez las redes.\n"
 
 #: src/evolvePopulations.c:105 src/main.c:112
 #, c-format
 msgid   "SORTING_NETWORKS_INFO"
-msgstr  ""
+msgstr  "Ordenando las redes.\n"
 
 #: src/evolvePopulations.c:109
 #, c-format
 msgid   "TRAINING_NETS_INFO"
-msgstr  ""
+msgstr  "Entrenando las redes por enfriamiento simulado.\n"
 
 #: src/evolvePopulations.c:114
 #, c-format
 msgid   "NODULE_NORM_INFO"
-msgstr  ""
+msgstr  "Normalizando la aptitud de los nódulos.\n"
 
 #: src/evolvePopulations.c:118
 #, c-format
 msgid   "SORTING_NODULES_INFO"
-msgstr  ""
+msgstr  "Ordenando los nódulos.\n"
 
 #: src/evolvePopulations.c:122
 #, c-format
 msgid   "CREATE_SUBPOPULATION_INFO"
-msgstr  ""
+msgstr  "Creando una nueva subpoblación.\n"
 
 #: src/evolvePopulations.c:126
 #, c-format
 msgid   "NODULE_MUTATION_INFO"
-msgstr  ""
+msgstr  "Mutando los nódulos.\n"
 
 #: src/evolvePopulations.c:132
 #, c-format
 msgid   "NODULE_SUBST_INFO"
-msgstr  ""
+msgstr  "Sustituyendo los peores nódulos por los mejores.\n"
 
 #: src/evolvePopulations.c:135
 #, c-format
 msgid   "END_EVOLUTION_INFO"
-msgstr  ""
+msgstr  "Finalizando la evolución.\n"
 
 #: src/main.c:75 src/main.c:120
 #, c-format
 msgid   "SCALING_INPUT_DATA_INFO"
-msgstr  ""
+msgstr  "Escalando los datos de entrada.\n"
 
 #: src/main.c:77 src/main.c:122
 #, c-format
 msgid   "SCALING_OUTPUT_DATA_INFO"
-msgstr  ""
+msgstr  "Escalando los datos de salida.\n"
 
 #: src/main.c:92
 #, c-format
 msgid   "SPECIES_NUM_INFO"
-msgstr  ""
+msgstr  "Especies %d\n"
 
 #: src/main.c:99
 #, c-format
 msgid   "ADDING_NODES_INFO"
-msgstr  ""
+msgstr  "Añadiendo nodos a las redes.\n"
 
 #: src/main.c:103
 #, c-format
 msgid   "EVOLVE_POPULATION_INFO"
-msgstr  ""
+msgstr  "Evolucionando las poblaciones.\n"
 
 #: src/main.c:107
 #, c-format
 msgid   "ADJ_MATRIX_INFO"
-msgstr  ""
+msgstr  "Ajustando matrices\n"
 
 #: src/main.c:116
 #, c-format
 msgid   "READING_GENERALIZATION_DATA_INFO"
-msgstr  ""
+msgstr  "Leyendo los datos de generalización.\n"
 
 #: src/main.c:135
 #, c-format
 msgid   "EXPORTING_NETWORK_INFO"
-msgstr  ""
+msgstr  "Exportando las mejores redes.\n"
 
 #: src/main.c:140
 #, c-format
 msgid   "END_INFO"
-msgstr  ""
+msgstr  "Fin\n"
 
 #: src/error.c:42
 #, c-format
 msgid   "RES_MEM_ERROR"
-msgstr  ""
+msgstr  "Error reservando memoria. %s\n"
 
 #: src/error.c:45
 #, c-format
 msgid   "IO_ERROR"
-msgstr  ""
+msgstr  "Error de entrada/salida. %s\n"
 
 #: src/error.c:48
 #, c-format
 msgid   "PARAM_ERROR"
-msgstr  ""
+msgstr  "Error pasando los parámetros a la función. "
+		"O el formato de los parámetros no esta bien o "
+		"su valor está fuera de rango.\n"
 
 #: src/error.c:51
 #, c-format
 msgid   "COMMAND_ERROR"
-msgstr  ""
+msgstr  "Error ejecutando el programa. El formato es:\n"
+        "\tcoconet fichero_config fichero_entrenamiento "
+		"fichero_generalizacion [-o fichero_salida]\n"
+        " donde fichero_config es el fichero de configuración del problema, "
+        "fichero_entrenamiento es el fichero que contiene los datos de"
+		 " entrenamiento de las redes y fichero_generalizacion es el "
+		 "fichero que contiene los datos de generalización para medir "
+		 "la aptitud de las redes. Fichero_salida es un argumento opcional"
+		 " que indica el fichero de salida al que se van a escribir "
+		 "los resultados.\n"
 
 #: src/error.c:54
 #, c-format
 msgid   "UNKNOWN_ERROR"
-msgstr  ""
+msgstr  "Error desconocido. %s\n"
 
 #: src/files.c:334
 #, c-format
 msgid   "PRINT_NET_APTITUDE"
-msgstr  ""
+msgstr  "Aptitud: %lf\n"
 
 #: src/files.c:335
 #, c-format
 msgid   "PRINT_NET_GENERALIZATION"
-msgstr  ""
+msgstr  "Generalización: %lf\n"
 
 #: src/files.c:336
 #, c-format
 msgid   "PRINT_NUM_NODULES"
-msgstr  ""
+msgstr  "Número de nódulos: %d\n"
 
 #: src/files.c:337
 #, c-format
 msgid   "PRINT_NUM_INPUT_NODES"
-msgstr  ""
+msgstr  "Número de nodos de entrada: %d\n"
 
 #: src/files.c:344
 #, c-format
 msgid   "PRINT_NUM_HIDDEN_NODES"
-msgstr  ""
+msgstr  "Número de nodos ocultos: %d\n"
 
 #: src/files.c:345
 #, c-format
 msgid   "PRINT_NUM_OUTPUT_NODES"
-msgstr  ""
+msgstr  "Número de nodos de salida: %d\n"
 
 #: src/files.c:355
 #, c-format
 msgid   "PRINT_NUM_INPUT_CONNECTIONS"
-msgstr  ""
+msgstr  "Número de conexiones de entrada: %d\n"
 
 #: src/files.c:365
 #, c-format
 msgid   "PRINT_NUM_OUTPUT_CONNECTIONS"
-msgstr  ""
+msgstr  "Número de conexiones de salida: %d\n"
 
 #: src/print.c:48
 #, c-format
 msgid   "PRINT_NETWORK_INFO"
 msgstr  "id: %d\n"
-        "Number of nodes: %d\n"
-        "aptitude: %lf\n"
+        "Número de nodos: %d\n"
+        "aptitud: %lf\n"
         "\n"
-        "Input connections matrix:"
+        "Matriz de conexiones de entrada:"
 
 #: src/print.c:55
 #, c-format
 msgid   "PRINT_NETWORK_OUTPUT_CONN_MATRIX"
 msgstr  "\n"
-        "Output connections matrix:"
+        "Matriz de conexiones de salida:"
 
 #: src/print.c:62
 #, c-format
 msgid   "PRINT_NETWORK_INPUT_WEIGHTS_MATRIX"
 msgstr  "\n"
-        "Input weights matrix:"
+        "Matriz de pesos de entrada:"
 
 #: src/print.c:69
 #, c-format
 msgid   "PRINT_NETWORK_OUTPUT_WEIGHTS_MATRIX"
 msgstr  "\n"
-        "Output weights matrix:"
+        "Matriz de pesos de salida:"
 
 #: src/print.c:76
 #, c-format
 msgid   "PRINT_NETWORK_PARTIAL_OUTPUTS"
 msgstr  "\n"
-        "Partial outputs\n"
+        "Salidas parciales\n"
 
 #: src/print.c:112
 #, c-format
 msgid   "PRINT_NETWORK_NODULES"
-msgstr  "nodules: "
+msgstr  "Nódulos: "
 
 #: src/print.c:118
 #, c-format
 msgid   "PRINT_NETWORK_OUTPUT_VALUES"
 msgstr  "\n"
-        "Output values:\n"
+        "Valores de salida:\n"
 
 #: src/print.c:123
 #, c-format
 msgid   "PRINT_NETWORK_LOGISTIC"
 msgstr  "\n"
-        "Logistic\n"
+        "Logística\n"
 
 #: src/print.c:125
 #, c-format
 msgid   "PRINT_NETWORK_HIPERBOLIC_TANGENT"
 msgstr  "\n"
-        "HyperbolicTangent\n"
+        "Tangente Hiperbólica\n"
 
 #: src/measureChange.c:54
 #, c-format
 msgid   "TRAINING"
-msgstr  "Training\n"
+msgstr  "Entrenando\n"
