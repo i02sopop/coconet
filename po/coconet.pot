@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-06-21 09:00+0200\n"
+"POT-Creation-Date: 2013-06-21 09:35+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -126,8 +126,8 @@ msgstr "Input/output error. %s\n"
 #, c-format
 msgid "PARAM_ERROR"
 msgstr ""
-"Error passing the parameters to a function. Either a parameter format "
-"is not rigth or is out of range.\n"
+"Error passing the parameters to a function. Either a parameter format is not "
+"rigth or is out of range.\n"
 
 #: src/error.c:51
 #, c-format
@@ -138,7 +138,8 @@ msgstr ""
 " where conf_file is the configuration file of the problem, training_file is "
 "the file that containsthe training data for the networks and "
 "generalization_file is the file that contains the generalization data to "
-"measure the networks. Output_file is optional and contains the name of the output file.\n"
+"measure the networks. Output_file is optional and contains the name of the "
+"output file.\n"
 
 #: src/error.c:54
 #, c-format
