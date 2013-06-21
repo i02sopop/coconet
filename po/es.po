@@ -20,7 +20,7 @@
 msgid   ""
 msgstr  "Project-Id-Version: coconet 1.0.2\n"
         "Report-Msgid-Bugs-To: \n"
-        "POT-Creation-Date: 2012-12-29 20:55+0100\n"
+        "POT-Creation-Date: 2013-06-21 08:58+0200\n"
         "PO-Revision-Date: 2012-07-02 23:41+0200\n"
         "Last-Translator: Pablo Alvarez de Sotomayor Posadillo "
         "<palvarez@ritho.net>\n"
@@ -190,3 +190,64 @@ msgstr  ""
 #, c-format
 msgid   "PRINT_NUM_OUTPUT_CONNECTIONS"
 msgstr  ""
+
+#: src/print.c:48
+#, c-format
+msgid   "PRINT_NETWORK_INFO"
+msgstr  "id: %d\n"
+        "Number of nodes: %d\n"
+        "aptitude: %lf\n"
+        "\n"
+        "Input connections matrix:"
+
+#: src/print.c:55
+#, c-format
+msgid   "PRINT_NETWORK_OUTPUT_CONN_MATRIX"
+msgstr  "\n"
+        "Output connections matrix:"
+
+#: src/print.c:62
+#, c-format
+msgid   "PRINT_NETWORK_INPUT_WEIGHTS_MATRIX"
+msgstr  "\n"
+        "Input weights matrix:"
+
+#: src/print.c:69
+#, c-format
+msgid   "PRINT_NETWORK_OUTPUT_WEIGHTS_MATRIX"
+msgstr  "\n"
+        "Output weights matrix:"
+
+#: src/print.c:76
+#, c-format
+msgid   "PRINT_NETWORK_PARTIAL_OUTPUTS"
+msgstr  "\n"
+        "Partial outputs\n"
+
+#: src/print.c:112
+#, c-format
+msgid   "PRINT_NETWORK_NODULES"
+msgstr  "nodules: "
+
+#: src/print.c:118
+#, c-format
+msgid   "PRINT_NETWORK_OUTPUT_VALUES"
+msgstr  "\n"
+        "Output values:\n"
+
+#: src/print.c:123
+#, c-format
+msgid   "PRINT_NETWORK_LOGISTIC"
+msgstr  "\n"
+        "Logistic\n"
+
+#: src/print.c:125
+#, c-format
+msgid   "PRINT_NETWORK_HIPERBOLIC_TANGENT"
+msgstr  "\n"
+        "HyperbolicTangent\n"
+
+#: src/measureChange.c:54
+#, c-format
+msgid   "TRAINING"
+msgstr  "Training\n"
