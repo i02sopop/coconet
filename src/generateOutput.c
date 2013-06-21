@@ -52,10 +52,8 @@ void generateNoduleOutput(double *in, int numNodule, int numInput, double *nodOu
 	if(outputs == NULL || inputs == NULL)
 		error(RES_MEM);
 
-	for(i = 0; i < numNodes; i++) {
-		outputs[i] = 0.0;
-		inputs[i] = 0.0;
-	}
+	for(i = 0; i < numNodes; i++)
+        inputs[i] = outputs[i] = 0.0;
 
 	for(i = 0; i < cNetPopulation.numOutputNodes; i++)
 		cNodulePopulation.nodules[numNodule]->partialOutputs[numInput][i] = 0.0;

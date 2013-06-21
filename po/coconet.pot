@@ -185,3 +185,53 @@ msgstr "Number of Input Connections: %d\n"
 #, c-format
 msgid "PRINT_NUM_OUTPUT_CONNECTIONS"
 msgstr "Number of Output Connections: %d\n"
+
+#: src/print.c:48
+#, c-format
+msgid "PRINT_NETWORK_INFO"
+msgstr "id: %d\nNumber of nodes: %d\naptitude: %lf\n\nInput connections matrix:"
+
+#: src/print.c:55
+#, c-format
+msgid "PRINT_NETWORK_OUTPUT_CONN_MATRIX"
+msgstr "\nOutput connections matrix:"
+
+#: src/print.c:62
+#, c-format
+msgid "PRINT_NETWORK_INPUT_WEIGHTS_MATRIX"
+msgstr "\nInput weights matrix:"
+
+#: src/print.c:69
+#, c-format
+msgid "PRINT_NETWORK_OUTPUT_WEIGHTS_MATRIX"
+msgstr "\nOutput weights matrix:"
+
+#: src/print.c:76
+#, c-format
+msgid "PRINT_NETWORK_PARTIAL_OUTPUTS"
+msgstr "\nPartial outputs\n"
+
+#: src/print.c:112
+#, c-format
+msgid "PRINT_NETWORK_NODULES"
+msgstr "nodules: "
+
+#: src/print.c:118
+#, c-format
+msgid "PRINT_NETWORK_OUTPUT_VALUES"
+msgstr "\nOutput values:\n"
+
+#: src/print.c:123
+#, c-format
+msgid "PRINT_NETWORK_LOGISTIC"
+msgstr "\nLogistic\n"
+
+#: src/print.c:125
+#, c-format
+msgid "PRINT_NETWORK_HIPERBOLIC_TANGENT"
+msgstr "\nHyperbolicTangent\n"
+
+#: src/measureChange.c:54
+#, c-format
+msgid "TRAINING"
+msgstr "Training\n"

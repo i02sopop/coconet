@@ -42,11 +42,16 @@ void freeNodule(nodule *nodule)
 	for(i = 0; i < maxNodes; i++) {
 		free(nodule->outConn[i]);
 		free(nodule->outWeights[i]);
-	} for(i = 0; i < cNetPopulation.numInputNodes; i++) {
+	}
+
+	for(i = 0; i < cNetPopulation.numInputNodes; i++) {
 		free(nodule->inConn[i]);
 		free(nodule->inWeights[i]);
-	} for(i = 0; i < cNetPopulation.numOutputNodes; i++)
+	}
+
+	for(i = 0; i < cNetPopulation.numOutputNodes; i++)
 		  nodule->transf = NULL;
+
 	for(i = 0; i < numTrain; i++)
 		free(nodule->partialOutputs[i]);
 

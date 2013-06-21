@@ -51,7 +51,7 @@ bool measureChange(double *networkAptitude, int iter)
 	tmpAptitude = 0;
 	/* We measure the networks to check its aptitude. */
 	if(iter > 0) {
-		fprintf(stderr,"Training\n");
+		fprintf(stderr,_("TRAINING"));
 
 		/* We first train the networks to have an initial value of the networks
 		   and nodules aptitude. */

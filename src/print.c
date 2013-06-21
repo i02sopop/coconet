@@ -45,35 +45,35 @@ void printNodule(nodule *imp, int iter)
 	  TODO: Get the output filename from configuration.
 	*/
 	fOutput = fopen("nodules.txt", "a");
-	fprintf(fOutput, "id: %d\nNumber of nodes: %d\naptitude: %lf\n\nInput connections matrix:", imp->id, imp->nodes, imp->aptitude);
+    fprintf(fOutput, _("PRINT_NETWORK_INFO"), imp->id, imp->nodes, imp->aptitude);
 	for(i = 0; i < cNetPopulation.numInputNodes; i++) {
 		fprintf(fOutput, "\n");
 		for(j = 0; j < imp->nodes; j++)
 			fprintf(fOutput, "%d ", imp->inConn[i][j]);
 	}
 
-	fprintf(fOutput, "\nOutput connections matrix:");
+    fprintf(fOutput, _("PRINT_NETWORK_OUTPUT_CONN_MATRIX"));
 	for(i = 0; i < imp->nodes; i++) {
 		fprintf(fOutput, "\n");
 		for(j = 0; j < cNetPopulation.numOutputNodes; j++)
 			fprintf(fOutput, "%d ", imp->outConn[i][j]);
 	}
 
-	fprintf(fOutput, "\nInput weights matrix:");
+    fprintf(fOutput, _("PRINT_NETWORK_INPUT_WEIGHTS_MATRIX"));
 	for(i = 0; i < cNetPopulation.numInputNodes; i++) {
 		fprintf(fOutput, "\n");
 		for(j = 0; j < imp->nodes; j++)
 			fprintf(fOutput, "%lf ", imp->inWeights[i][j]);
 	}
 
-	fprintf(fOutput, "\nOutput weights matrix:");
+    fprintf(fOutput, _("PRINT_NETWORK_OUTPUT_WEIGHTS_MATRIX"));
 	for(i = 0; i < imp->nodes; i++) {
 		fprintf(fOutput, "\n");
 		for(j = 0; j < cNetPopulation.numOutputNodes; j++)
 			fprintf(fOutput, "%lf ", imp->outWeights[i][j]);
 	}
 
-	fprintf(fOutput, "\nPartial outputs\n");
+    fprintf(fOutput, _("PRINT_NETWORK_PARTIAL_OUTPUTS"));
 	for(i = 0; i < iter; i++)
 		for(j = 0; j < cNetPopulation.numOutputNodes; j++)
 			fprintf(fOutput, "%lf ", imp->partialOutputs[i][j]);
@@ -109,20 +109,20 @@ void printNetwork(network *net)
 	fOutput = fopen("net.txt", "a");
 
 	/* We print the net data. */
-	fprintf(fOutput, "nodules: ");
+    fprintf(fOutput, _("PRINT_NETWORK_NODULES"));
 	for(i = 0; i < cNodulePopulation.numSubpops; i++)
 		fprintf(fOutput, "%d ", net->nodules[i]->id);
 
-	fprintf(fOutput, "\naptitude: %lf\n", net->aptitude);
-	fprintf(fOutput, "Output values:\n");
+    fprintf(fOutput, "\n");
+    fprintf(fOutput, _("PRINT_NET_APTITUDE"), net->aptitude);
+    fprintf(fOutput, _("PRINT_NETWORK_OUTPUT_VALUES"));
 	for(i = 0; i < cNetPopulation.numOutputNodes; i++)
 		fprintf(fOutput, "%lf ", net->outValues[i]);
-	fprintf(fOutput, "\n");
 
 	if(netTransf == (func)&Logistic)
-		fprintf(fOutput, "Logistic\n");
+        fprintf(fOutput, _("PRINT_NETWORK_LOGISTIC"));
 	else
-		fprintf(fOutput, "HyperbolicTangent\n");
+        fprintf(fOutput, _("PRINT_NETWORK_HIPERBOLIC_TANGENT"));
 
 	/* We close the output file. */
 	fclose(fOutput);
