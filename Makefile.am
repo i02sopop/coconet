@@ -1,4 +1,4 @@
-SUBDIRS=po src
+SUBDIRS=po src tests
 ACLOCAL_AMFLAGS=-I m4
 EXTRA_DIST=.build-aux/config.rpath
 EXTRA_CLEAN=.build-aux ABOUT-NLS Makefile Makefile.in aclocal.m4 autom4te.cache \

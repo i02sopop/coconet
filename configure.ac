@@ -50,7 +50,7 @@ dnl AC_SUBST([MAKE], [make])
 
 dnl Output files
 AC_CONFIG_HEADERS([config.h])
-AC_CONFIG_FILES([Makefile src/Makefile po/Makefile])
+AC_CONFIG_FILES([Makefile src/Makefile po/Makefile tests/Makefile])
 
 dnl Generate output
 AC_OUTPUT

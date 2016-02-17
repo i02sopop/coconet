@@ -1,0 +1,5 @@
+/.deps/
+/Makefile
+/Makefile.in
+/check_coconet*
+/test-suite.log
