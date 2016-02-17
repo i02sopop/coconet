@@ -1,5 +1,5 @@
 /******************************************************************************
- Copyright (c) 2004-2013 coconet project (see AUTHORS)
+ Copyright (c) 2004-2014 coconet project (see AUTHORS)
 
  This file is part of Coconet.
 
@@ -21,7 +21,6 @@
 /******************************************************************************
  File: print.c
  Function: printNodule()
- Author: Pablo Alvarez de Sotomayor Posadillo
  Description: Print the information related with a given nodule to an output
               file.
  Input Parameters:
@@ -40,29 +39,27 @@ void printNodule(nodule *imp, int iter)
 	int i, j;
 	FILE *fOutput;
 
-	/*
-	  We open the output file and print the nodule information.
-	  TODO: Get the output filename from configuration.
-	*/
+	/* We open the output file and print the nodule information.
+	 * TODO: Get the output filename from configuration. */
 	fOutput = fopen("nodules.txt", "a");
     fprintf(fOutput, _("PRINT_NETWORK_INFO"), imp->id, imp->nodes, imp->aptitude);
-	for(i = 0; i < cNetPopulation.numInputNodes; i++) {
+	for (i = 0; i < cNetPopulation.numInputNodes; i++) {
 		fprintf(fOutput, "\n");
-		for(j = 0; j < imp->nodes; j++)
+		for (j = 0; j < imp->nodes; j++)
 			fprintf(fOutput, "%d ", imp->inConn[i][j]);
 	}
 
     fprintf(fOutput, _("PRINT_NETWORK_OUTPUT_CONN_MATRIX"));
-	for(i = 0; i < imp->nodes; i++) {
+	for (i = 0; i < imp->nodes; i++) {
 		fprintf(fOutput, "\n");
-		for(j = 0; j < cNetPopulation.numOutputNodes; j++)
+		for (j = 0; j < cNetPopulation.numOutputNodes; j++)
 			fprintf(fOutput, "%d ", imp->outConn[i][j]);
 	}
 
     fprintf(fOutput, _("PRINT_NETWORK_INPUT_WEIGHTS_MATRIX"));
-	for(i = 0; i < cNetPopulation.numInputNodes; i++) {
+	for (i = 0; i < cNetPopulation.numInputNodes; i++) {
 		fprintf(fOutput, "\n");
-		for(j = 0; j < imp->nodes; j++)
+		for (j = 0; j < imp->nodes; j++)
 			fprintf(fOutput, "%lf ", imp->inWeights[i][j]);
 	}
 
@@ -74,8 +71,8 @@ void printNodule(nodule *imp, int iter)
 	}
 
     fprintf(fOutput, _("PRINT_NETWORK_PARTIAL_OUTPUTS"));
-	for(i = 0; i < iter; i++)
-		for(j = 0; j < cNetPopulation.numOutputNodes; j++)
+	for (i = 0; i < iter; i++)
+		for (j = 0; j < cNetPopulation.numOutputNodes; j++)
 			fprintf(fOutput, "%lf ", imp->partialOutputs[i][j]);
 	fprintf(fOutput, "\n\n");
 
@@ -86,7 +83,6 @@ void printNodule(nodule *imp, int iter)
 /******************************************************************************
  File: print.c
  Function: printNetwork()
- Author: Pablo Alvarez de Sotomayor Posadillo
  Description: Print the network data into an output file.
  Input Parameters:
    net: Red. Network to print.
@@ -102,24 +98,22 @@ void printNetwork(network *net)
 	int i;
 	FILE *fOutput;
 
-	/*
-	  We open the output file.
-	  TODO: Get the output file from somewhere in the config.
-	*/
+	/* We open the output file.
+	 * TODO: Get the output file from somewhere in the config. */
 	fOutput = fopen("net.txt", "a");
 
 	/* We print the net data. */
     fprintf(fOutput, _("PRINT_NETWORK_NODULES"));
-	for(i = 0; i < cNodulePopulation.numSubpops; i++)
+	for (i = 0; i < cNodulePopulation.numSubpops; i++)
 		fprintf(fOutput, "%d ", net->nodules[i]->id);
 
     fprintf(fOutput, "\n");
     fprintf(fOutput, _("PRINT_NET_APTITUDE"), net->aptitude);
     fprintf(fOutput, _("PRINT_NETWORK_OUTPUT_VALUES"));
-	for(i = 0; i < cNetPopulation.numOutputNodes; i++)
+	for (i = 0; i < cNetPopulation.numOutputNodes; i++)
 		fprintf(fOutput, "%lf ", net->outValues[i]);
 
-	if(netTransf == (func)&Logistic)
+	if (netTransf == (func)&Logistic)
         fprintf(fOutput, _("PRINT_NETWORK_LOGISTIC"));
 	else
         fprintf(fOutput, _("PRINT_NETWORK_HIPERBOLIC_TANGENT"));

@@ -1,58 +1,35 @@
-/******************************************************************************
- Copyright (c) 2004-2013 coconet project (see AUTHORS)
-
- This file is part of Coconet.
-
- Coconet is free software: you can redistribute it and/or modify it under the
- terms of the GNU General Public License as published by the Free Software
- Foundation, either version 3 of the License, or (at your option) any later
- version.
-
- Coconet is distributed in the hope that it will be useful, but WITHOUT ANY
- WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR
- A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
-
- You should have received a copy of the GNU General Public License along with
- coconet. If not, see <http://www.gnu.org/licenses/>.
-******************************************************************************/
+/*********************************************************************************
+ * Copyright (c) 2004-2015 coconet project (see AUTHORS)                         *
+ *                                                                               *
+ * This file is part of Coconet.                                                 *
+ *                                                                               *
+ * Coconet is free software: you can redistribute it and/or modify it under the  *
+ * terms of the GNU General Public License as published by the Free Software     *
+ * Foundation, either version 3 of the License, or (at your option) any later    *
+ * version.                                                                      *
+ *                                                                               *
+ * Coconet is distributed in the hope that it will be useful, but WITHOUT ANY    *
+ * WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR *
+ * A PARTICULAR PURPOSE.  See the GNU General Public License for more details.   *
+ *                                                                               *
+ * You should have received a copy of the GNU General Public License along with  *
+ * coconet. If not, see <http://www.gnu.org/licenses/>.                          *
+ ********************************************************************************/
 
 #include <string.h>
 #include <definitions.h>
 
-/******************************************************************************
- File: main.c
- Function: main
- Author: Pablo Alvarez de Sotomayor Posadillo
- Description: Manage the program flow.
- Input Parameters:
-	argc: Integer. Number of arguments of the program.
-	argv: Vector of strings. Arguments passed to the program.
- Local Variables:
-   i: Integer. Counter.
-   j: Integer. Counter.
-   netAptitude: Float. Store the average flair of the networks.
- Return Value: 0 with no errors and -1 otherwise.
- Calling Functions:
-   error(): Function to show an error message depending on an error number.
-   loadFile(): Function to load the data from config and training files.
-   scaleInputData(): Scale the data from the input nodes.
-   scaleOutputData(): Scale the data from the output nodes.
-   measureChange(): Measure the average flair change in the network population.
-   createNodulePopulation(): Create a new subpopulation of nodes.
-   anadirNoduloRedes(): Add a new node subpopulation to the networks
-                        population.
-   evolvePopulations(): Evolve the networks and nodes populations.
-   sortNetworks(): Order the networks by aptitude.
-   readGeneralization(): Read the data to measure the network generalization.
-   exportBestNetwork(): Export the best network in the generalization process.
-   adjustMatrix(): Adjust the size of the matrix used in the new nodes
-				      subpopulation.
-******************************************************************************/
+/*********************************************************************************
+ * Manage the program flow.                                                      *
+ * @param int argc: Number of arguments of the program.                          *
+ * @param char** argv: Arguments passed to the program.                          *
+ * @returns 0 with no errors and -1 otherwise.                                   *
+ ********************************************************************************/
 
-int main(int argc, char **argv)
-{
+int
+main(int argc, char **argv) {
 	int i;
-	double netAptitude;
+	double netAptitude = 0.0; /* Store the average flair of the networks. */
 
 	/* Set gettext configuration. */
 	setlocale(LC_ALL, "");
@@ -68,14 +45,11 @@ int main(int argc, char **argv)
 	if(nodSel > numNodules)
 		nodSel = numNodules;
 
-	/* Initialization of the average flair of the networks. */
-	netAptitude = 0.0;
-
 	/* Scaling of input and output data from the training file. */
 	fprintf(stderr, _("SCALING_INPUT_DATA_INFO"));
 	scaleInputData(numTrain);
 	fprintf(stderr, _("SCALING_OUTPUT_DATA_INFO"));
-	if(netTransf == (func)&Logistic)
+	if (netTransf == (func)&Logistic)
 		scaleOutputData(outputData,
 						numTrain,
 						0.0 + pTransfer.epsilon,
@@ -87,15 +61,13 @@ int main(int argc, char **argv)
 						pTransfer.htan_a - pTransfer.epsilon);
 
 	/* We evolve the networks and nodes ppulations. */
-	for(i = 0; measureChange(&netAptitude, i) == false; i++) {
+	for (i = 0; measureChange(&netAptitude, i) == false; i++) {
 		/* We create a new population of nodes. */
 		fprintf(stderr, _("SPECIES_NUM_INFO"), i + 1);
 		createNodulePopulation();
 
-		/*
-		  We add the new population of nodes to the previous population of
-		  networks.
-		*/
+		/* We add the new population of nodes to the previous population of
+		   networks. */
 		fprintf(stderr,_("ADDING_NODES_INFO"));
 		addNodulesNetworks();
 
@@ -120,7 +92,7 @@ int main(int argc, char **argv)
 	fprintf(stderr, _("SCALING_INPUT_DATA_INFO"));
 	scaleInputData(numGeneral);
 	fprintf(stderr, _("SCALING_OUTPUT_DATA_INFO"));
-	if(netTransf == (func)&Logistic)
+	if (netTransf == (func)&Logistic)
 		scaleOutputData(outputData,
 						numGeneral,
 						0.0 + pTransfer.epsilon,
@@ -133,7 +105,7 @@ int main(int argc, char **argv)
 
 	/* We export the best network found. */
 	fprintf(stderr, _("EXPORTING_NETWORK_INFO"));
-	if(argc == 6)
+	if (argc == 6)
 		exportBestNetwork(argv[5]);
 	else
 		exportBestNetwork("output.txt");

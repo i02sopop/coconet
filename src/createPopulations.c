@@ -1,46 +1,34 @@
-/******************************************************************************
- Copyright (c) 2004-2013 coconet project (see AUTHORS)
-
- This file is part of Coconet.
-
- Coconet is free software: you can redistribute it and/or modify it under the
- terms of the GNU General Public License as published by the Free Software
- Foundation, either version 3 of the License, or (at your option) any later
- version.
-
- Coconet is distributed in the hope that it will be useful, but WITHOUT ANY
- WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR
- A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
-
- You should have received a copy of the GNU General Public License along with
- coconet. If not, see <http://www.gnu.org/licenses/>.
-******************************************************************************/
+/*********************************************************************************
+ * Copyright (c) 2004-2015 coconet project (see AUTHORS)                         *
+ *                                                                               *
+ * This file is part of Coconet.                                                 *
+ *                                                                               *
+ * Coconet is free software: you can redistribute it and/or modify it under the  *
+ * terms of the GNU General Public License as published by the Free Software     *
+ * Foundation, either version 3 of the License, or (at your option) any later    *
+ * version.                                                                      *
+ *                                                                               *
+ * Coconet is distributed in the hope that it will be useful, but WITHOUT ANY    *
+ * WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR *
+ * A PARTICULAR PURPOSE.  See the GNU General Public License for more details.   *
+ *                                                                               *
+ * You should have received a copy of the GNU General Public License along with  *
+ * coconet. If not, see <http://www.gnu.org/licenses/>.                          *
+ ********************************************************************************/
 
 #include <definitions.h>
 
-/******************************************************************************
- File: createPopulations.c
- Function: addNodulesNetworks()
- Author: Pablo Alvarez de Sotomayor Posadillo
- Description: Add a new nodule subpopulation to the network population.
- Input Parameters: None
- Local Variables: None
- Return Value: None
- Calling Functions:
-   createNetworks(): Create a new network population from the previous nodes
-                 population.
-   createDescendant(): Create a new network population from the nodule
-                        subpopulation and the previous network population.
-   error(): Function to show an error message depending on an error number.
-*****************************************************************************/
-
-void addNodulesNetworks()
-{
+/*********************************************************************************
+ * Add a new nodule subpopulation to the network population.                     *
+ * @returns void                                                                 *
+ ********************************************************************************/
+void
+addNodulesNetworks() {
 	/* If it's the first nodes population we create a network per node. */
-	if(cNodulePopulation.numSubpops == 1) {
+	if (cNodulePopulation.numSubpops == 1) {
 		cNetPopulation.numNets = numNodules;
 		cNetPopulation.nets = (network **)malloc(numNodules * sizeof(network));
-		if(cNetPopulation.nets == NULL)
+		if (cNetPopulation.nets == NULL)
 			error(RES_MEM);
 		createNetworks();
 	} else {
@@ -49,44 +37,32 @@ void addNodulesNetworks()
 	}
 }
 
-/******************************************************************************
- File: createPopulations.c
- Function: createDescendant()
- Author: Pablo Álvarez de Sotomayor Posadillo
- Description: Create a new network population from a new nodule population
-			  and the previous network population.
- Input parameters: None
- Local Variables:
-   i: Integer. Counter.
-   j: Integer. Counter.
-   netsel: Integer. Selection of a network of the present network.
-   nodsel: Integer. Selection of a nodule from the new subpopulation.
-   dnet: Array of networks. New descendant network population.
- Return Value: None
- Calling Functions:
-   freeNetwork(): Function to free a given network.
-   error(): Function to show an error message depending on an error number.
-*****************************************************************************/
-
-void createDescendant()
-{
-	int i, j, net, node;
+/*********************************************************************************
+ * Create a new network population from a new nodule population and the previous *
+ * network population.                                                           *
+ * @returns void                                                                 *
+ ********************************************************************************/
+void
+createDescendant() {
+	int i, j;
+	int net; /* Selection of a network of the present network. */
+	int node; /* Selection of a nodule from the new subpopulation. */
 	network **dnet; /* New network population. Descend of the actual population. */
 
 	/* Creation of the new network. */
 	dnet = (network **)malloc(maxNetworks * sizeof(network));
-	if(dnet == NULL)
+	if (dnet == NULL)
 		error(RES_MEM);
 
-	for(i = 0; i < maxNetworks; i++) {
+	for (i = 0; i < maxNetworks; i++) {
 		dnet[i] = (network *)malloc(sizeof(network));
-		if(dnet[i] == NULL)
+		if (dnet[i] == NULL)
 			error(RES_MEM);
 
 		dnet[i]->aptitude = 0;
 		dnet[i]->outValues = (double *)malloc(cNetPopulation.numOutputNodes * sizeof(double));
 		dnet[i]->nodules = (nodule **)malloc(cNodulePopulation.numSubpops * sizeof(nodule));
-		if(dnet[i]->outValues == NULL || dnet[i]->nodules == NULL)
+		if (dnet[i]->outValues == NULL || dnet[i]->nodules == NULL)
 			error(RES_MEM);
 
 		/* Select a new network randomly. */
@@ -96,14 +72,15 @@ void createDescendant()
 		node = random() % numNodules;
 
 		/* Creation of the new network. */
-		for(j = 0; j < cNodulePopulation.numSubpops - 1; j++)
+		for (j = 0; j < cNodulePopulation.numSubpops - 1; j++)
 			dnet[i]->nodules[j] = cNetPopulation.nets[net]->nodules[j];
 
-		dnet[i]->nodules[cNodulePopulation.numSubpops - 1] = cNodulePopulation.nodules[(cNodulePopulation.numSubpops - 1) * numNodules + node];
+		dnet[i]->nodules[cNodulePopulation.numSubpops - 1] =
+			cNodulePopulation.nodules[(cNodulePopulation.numSubpops - 1) * numNodules + node];
 	}
 
 	/* We fix the new network. */
-	for(i = 0; i < cNetPopulation.numNets; i++)
+	for (i = 0; i < cNetPopulation.numNets; i++)
 		freeNetwork(cNetPopulation.nets[i]);
 
 	free(cNetPopulation.nets);
@@ -111,25 +88,17 @@ void createDescendant()
 	dnet = NULL;
 }
 
-/******************************************************************************
- File: createPopulations.c
- Function: freeNetwork()
- Author: Pablo Álvarez de Sotomayor Posadillo
- Description: Function to free a given network.
- Input Parameters:
-   network: Red. Network to delete.
- Local Variables:
-   i: Integer. Counter.
- Return Value: None
- Calling Functions: None
-*****************************************************************************/
-
-void freeNetwork(network *net)
-{
+/*********************************************************************************
+ * Function to free a given network.                                             *
+ * @param network* net: Network to delete.                                       *
+ * @returns void                                                                 *
+ ********************************************************************************/
+void
+freeNetwork(network *net) {
 	int i;
 
 	/* We delete all the network. */
-	for(i = 0; i < cNodulePopulation.numSubpops; i++)
+	for (i = 0; i < cNodulePopulation.numSubpops; i++)
 		net->nodules[i] = NULL;
 
 	free(net->nodules);
@@ -138,10 +107,7 @@ void freeNetwork(network *net)
 }
 
 /******************************************************************************
- File: createPopulations.c
- Function: createNodules()
- Author: Pablo Álvarez de Sotomayor Posadillo
- Description: Create a new nodule subpopulation.
+ * Create a new nodule subpopulation.
  Input OParameters: None
  Local Variables:
    i: Integer. Counter.

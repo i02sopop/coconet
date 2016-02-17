@@ -1,5 +1,5 @@
 /******************************************************************************
- Copyright (c) 2004-2013 coconet project (see AUTHORS)
+ Copyright (c) 2004-2014 coconet project (see AUTHORS)
 
  This file is part of Coconet.
 
@@ -21,7 +21,6 @@
 /******************************************************************************
  File: sort.c
  Funtion: sortNodules()
- Author: Pablo Álvarez de Sotomayor Posadillo
  Description: Order the nodules by aptitude.
  Input Parameters: None
  Local Variables
@@ -38,9 +37,9 @@ void sortNodules()
 	nodule *aux;
 
 	/* We order the nodules and copy them to the new population. */
-	for(i = numNodules * (cNodulePopulation.numSubpops - 1); i < cNodulePopulation.numNodules; i++) {
-		for(j = i; j < cNodulePopulation.numNodules; j++) {
-			if(cNodulePopulation.nodules[i]->aptitude < cNodulePopulation.nodules[j]->aptitude) {
+	for (i = numNodules * (cNodulePopulation.numSubpops - 1); i < cNodulePopulation.numNodules; i++) {
+		for (j = i; j < cNodulePopulation.numNodules; j++) {
+			if (cNodulePopulation.nodules[i]->aptitude < cNodulePopulation.nodules[j]->aptitude) {
 				aux = cNodulePopulation.nodules[i];
 				cNodulePopulation.nodules[i] = cNodulePopulation.nodules[j];
 				cNodulePopulation.nodules[j] = aux;
@@ -54,7 +53,6 @@ void sortNodules()
 /******************************************************************************
  File: sort.c
  Function: sortNetworks()
- Author: Pablo Álvarez de Sotomayor Posadillo
  Description: Order the networks by aptitude.
  Input Parameters: None
  Local Variables:
@@ -67,13 +65,13 @@ void sortNodules()
 
 void sortNetworks()
 {
-	int i,j;
+	int i, j;
 	network *aux;
 
 	/* We order the networks from higher to lower aptitude. */
-	for(i = 0; i < cNetPopulation.numNets; i++) {
-		for(j = i; j < cNetPopulation.numNets; j++) {
-			if(cNetPopulation.nets[i]->aptitude < cNetPopulation.nets[j]->aptitude) {
+	for (i = 0; i < cNetPopulation.numNets; i++) {
+		for (j = i; j < cNetPopulation.numNets; j++) {
+			if (cNetPopulation.nets[i]->aptitude < cNetPopulation.nets[j]->aptitude) {
 				aux = cNetPopulation.nets[i];
 				cNetPopulation.nets[i] = cNetPopulation.nets[j];
 				cNetPopulation.nets[j] = aux;

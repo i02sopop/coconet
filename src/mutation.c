@@ -1,5 +1,5 @@
 /******************************************************************************
- Copyright (c) 2004-2013 coconet project (see AUTHORS)
+ Copyright (c) 2004-2014 coconet project (see AUTHORS)
 
  This file is part of Coconet.
 
@@ -21,7 +21,6 @@
 /******************************************************************************
  File: mutation.c
  Function: copyDescendant()
- Author: Pablo Álvarez de Sotomayor Posadillo
  Description: Copy the actual nodule population into a new descendant
               population.
  Input Parameters: None
@@ -43,13 +42,13 @@ void copyDescendant()
 	/* Initialization of variables. */
 	initialNodule = numNodules * (cNodulePopulation.numSubpops - 1);
 	descend = (nodule **)malloc(numNodules * sizeof(nodule));
-	if(descend == NULL)
+	if (descend == NULL)
 		error(RES_MEM);
 
 	/* We copy the nodules to the new population. */
-	for(i = 0; i < numNodules; i++) {
+	for (i = 0; i < numNodules; i++) {
 		descend[i] = (nodule *)malloc(sizeof(nodule));
-		if(descend[i] == NULL)
+		if (descend[i] == NULL)
 			error(RES_MEM);
 
 		/* We copy the nodule from the old to the new population. */
@@ -64,7 +63,7 @@ void copyDescendant()
 		descend[i]->outWeights = (double **)malloc(maxNodes * sizeof(double));
 		descend[i]->transf = (func *)malloc(maxNodes * sizeof(func));
 		descend[i]->partialOutputs = (double **)malloc(numTrain * sizeof(double));
-		if(descend[i]->inConn == NULL ||
+		if (descend[i]->inConn == NULL ||
 		   descend[i]->inWeights == NULL ||
 		   descend[i]->outConn == NULL ||
 		   descend[i]->outWeights == NULL ||
@@ -72,49 +71,48 @@ void copyDescendant()
 		   descend[i]->partialOutputs == NULL)
 			error(RES_MEM);
 
-		for(j = 0; j < cNetPopulation.numInputNodes; j++) {
+		for (j = 0; j < cNetPopulation.numInputNodes; j++) {
 			descend[i]->inConn[j] = (int *)malloc(maxNodes * sizeof(int));
 			descend[i]->inWeights[j] = (double *)malloc(maxNodes * sizeof(double));
-			if(descend[i]->inConn[j] == NULL ||
+			if (descend[i]->inConn[j] == NULL ||
 			   descend[i]->inWeights[j] == NULL)
 				error(RES_MEM);
 
-			for(k = 0; k < maxNodes; k++) {
+			for (k = 0; k < maxNodes; k++) {
 				descend[i]->inConn[j][k] = cNodulePopulation.nodules[noduleOrig]->inConn[j][k];
 				descend[i]->inWeights[j][k] = cNodulePopulation.nodules[noduleOrig]->inWeights[j][k];
-			} /* end for */
-		} /* end for */
+			}
+		}
 
-		for(j = 0; j < maxNodes; j++) {
+		for (j = 0; j < maxNodes; j++) {
 			descend[i]->outConn[j] = (int *)malloc(cNetPopulation.numOutputNodes * sizeof(int));
 			descend[i]->outWeights[j] = (double *)malloc(cNetPopulation.numOutputNodes * sizeof(double));
-			if(descend[i]->outConn[j] == NULL ||
+			if (descend[i]->outConn[j] == NULL ||
 				descend[i]->outWeights[j] == NULL)
 				error(RES_MEM);
 
 			descend[i]->transf[j] = cNodulePopulation.nodules[noduleOrig]->transf[j];
 
-			for(k = 0; k < cNetPopulation.numOutputNodes; k++) {
+			for (k = 0; k < cNetPopulation.numOutputNodes; k++) {
 				descend[i]->outConn[j][k] = cNodulePopulation.nodules[noduleOrig]->outConn[j][k];
 				descend[i]->outWeights[j][k] = cNodulePopulation.nodules[noduleOrig]->outWeights[j][k];
-			} /* end for */
-		} /* end for */
+			}
+		}
 
-		for(j = 0; j < numTrain; j++) {
+		for (j = 0; j < numTrain; j++) {
 			descend[i]->partialOutputs[j] = (double *)malloc(cNetPopulation.numOutputNodes * sizeof(double));
-			if(descend[i]->partialOutputs[j] == NULL)
+			if (descend[i]->partialOutputs[j] == NULL)
 				error(RES_MEM);
 
-			for(k = 0; k < cNetPopulation.numOutputNodes; k++)
+			for (k = 0; k < cNetPopulation.numOutputNodes; k++)
 				descend[i]->partialOutputs[j][k] = cNodulePopulation.nodules[noduleOrig]->partialOutputs[j][k];
-		} /* end for */
-	} /* end for */
+		}
+	}
 }
 
 /******************************************************************************
  File: mutation.c
  Function: mutasteNodules()
- Author: Pablo Álvarez de Sotomayor Posadillo
  Description: Make an estructural mutation in a given nodule.
  Input Parameters:
    nodule: Integer. Number of nodule to mutate.
@@ -142,29 +140,29 @@ void mutasteNodules(int nodule)
 	num = (int)(delta_min + doubleRandom() *
 				(1 - cNodulePopulation.nodules[nodule]->aptitude) *
 				(delta_min - delta_max));
-	if(num < 0)
+	if (num < 0)
 		num = 0;
-	else if(cNodulePopulation.nodules[nodule]->nodes < num)
+	else if (cNodulePopulation.nodules[nodule]->nodes < num)
 		num = cNodulePopulation.nodules[nodule]->nodes;
-	else if(num > 0)
+	else if (num > 0)
 		deleteNode(nodule, num);
 
 	/* Add nodes. */
 	num = (int)(delta_min + doubleRandom() *
 				(1 - cNodulePopulation.nodules[nodule]->aptitude) *
 				(delta_min - delta_max));
-	if(num < 0)
+	if (num < 0)
 		num = 0;
-	else if((cNodulePopulation.nodules[nodule]->nodes + num) > maxNodes)
+	else if ((cNodulePopulation.nodules[nodule]->nodes + num) > maxNodes)
 		num = maxNodes - cNodulePopulation.nodules[nodule]->nodes;
-	else if(num > 0)
+	else if (num > 0)
 		addNode(nodule, num); /* We add a new node,*/
 
 	/* Delete connections. */
 	num = (int)(delta_min + doubleRandom() *
 				(1 - cNodulePopulation.nodules[nodule]->aptitude) *
 				(delta_min - delta_max));
-	for(i = 0; i < num && cNodulePopulation.nodules[nodule]->nodes > 0; i++) {
+	for (i = 0; i < num && cNodulePopulation.nodules[nodule]->nodes > 0; i++) {
 		j = random() % (cNetPopulation.numInputNodes + cNetPopulation.numOutputNodes);
 		deleteConnection(nodule, j);
 	}
@@ -173,20 +171,17 @@ void mutasteNodules(int nodule)
 	num = (int)(delta_min + doubleRandom() *
 				(1 - cNodulePopulation.nodules[nodule]->aptitude) *
 				(delta_min - delta_max));
-	for(i = 0; i < num && cNodulePopulation.nodules[nodule]->nodes > 0; i++)
+	for (i = 0; i < num && cNodulePopulation.nodules[nodule]->nodes > 0; i++)
 		addConnection(nodule);
 
-	/*
-	  We make the calculations over the modified nodule, both his partial
-	  outputs and his aptitude.
-	*/
+	/* We make the calculations over the modified nodule, both his partial
+	 * outputs and his aptitude. */
 	measureNoduleChange(nodule);
 }
 
 /******************************************************************************
  File: mutation.c
  Function: addConnection()
- Author: Pablo Álvarez de Sotomayor Posadillo
  Description: Add a connection to a given nodule.
  Input Parameters:
    nodule: Integer. Number of nodule to modify.
@@ -212,61 +207,60 @@ void addConnection(int nodule)
 	sel = random() % 2;
 	origin = (int *)malloc(sizeof(int));
 	destination = (int *)malloc(sizeof(int));
-	if(origin == NULL || destination == NULL)
+	if (origin == NULL || destination == NULL)
 		error(RES_MEM);
 
-	if(sel == 0) {
+	if (sel == 0) {
 		/* We add an input connection. */
-		for(i = 0; i < cNetPopulation.numInputNodes; i++)
-			for(j = 0; j < cNodulePopulation.nodules[nodule]->nodes; j++)
-				if(cNodulePopulation.nodules[nodule]->inConn[i][j] == 0) {
+		for (i = 0; i < cNetPopulation.numInputNodes; i++)
+			for (j = 0; j < cNodulePopulation.nodules[nodule]->nodes; j++)
+				if (cNodulePopulation.nodules[nodule]->inConn[i][j] == 0) {
 					origin = (int *)realloc(origin, (num + 1) * sizeof(int));
 					destination = (int *)realloc(destination, (num + 1) * sizeof(int));
 					origin[num] = i;
 					destination[num] = j;
 					num++;
-				} /* end if */
+				}
 
-		if(num != 0){
+		if (num != 0) {
 			pos = random() % num;
 			cNodulePopulation.nodules[nodule]->inConn[origin[pos]][destination[pos]] = 1;
 			cNodulePopulation.nodules[nodule]->inWeights[origin[pos]][destination[pos]] = doubleRandom() / 2;
 			free(origin);
 			free(destination);
-		} /* end if */
-	} /* end if */
+		}
+	}
 
-	if((sel == 1 && num == 0) || num == 0) {
+	if ((sel == 1 && num == 0) || num == 0) {
 		/* We add an output connection. */
-		for(i = 0; i < cNodulePopulation.nodules[nodule]->nodes; i++)
-			for(j = 0; j < cNetPopulation.numOutputNodes; j++)
-				if(cNodulePopulation.nodules[nodule]->outConn[i][j] == 0) {
+		for (i = 0; i < cNodulePopulation.nodules[nodule]->nodes; i++)
+			for (j = 0; j < cNetPopulation.numOutputNodes; j++)
+				if (cNodulePopulation.nodules[nodule]->outConn[i][j] == 0) {
 					origin = (int *)realloc(origin, (num + 1) * sizeof(int));
 					destination = (int *)realloc(destination, (num + 1) * sizeof(int));
 					origin[num] = i;
 					destination[num] = j;
 					num++;
-				} /* end if */
+				}
 
-		if(num != 0) {
+		if (num != 0) {
 			pos = random() % num;
 			cNodulePopulation.nodules[nodule]->outConn[origin[pos]][destination[pos]] = 1;
 			cNodulePopulation.nodules[nodule]->outWeights[origin[pos]][destination[pos]] = doubleRandom() / 2;
 			free(origin);
 			free(destination);
-		} /* end if */
-	} /* end if */
+		}
+	}
 
-	if(num == 0) {
+	if (num == 0) {
 		free(origin);
 		free(destination);
-	} /* end if */
+	}
 }
 
 /********************************************************************************
  File: mutation.c
  Function: addNode()
- Author: Pablo Álvarez de Sotomayor Posadillo
  Description: Add some nodes to a nodule.
  Input Parameters:
    nodule: Integer. Number of nodule to work with.
@@ -281,9 +275,9 @@ void addNode(int nodule, int nodes)
 {
 	int i;
 
-	for(i = 0; i < nodes; i++) {
+	for (i = 0; i < nodes; i++) {
 		/* We assign the transfer function to the node. */
-		if((random() % 2) == 0)
+		if ((random() % 2) == 0)
 			cNodulePopulation.nodules[nodule]->transf[cNodulePopulation.nodules[nodule]->nodes + i] = (func)&HyperbolicTangent;
 		else
 			cNodulePopulation.nodules[nodule]->transf[cNodulePopulation.nodules[nodule]->nodes + i] = (func)&Logistic;
@@ -296,7 +290,6 @@ void addNode(int nodule, int nodes)
 /*******************************************************************************
  File: mutation.c
  Function: deleteConnection()
- Author: Pablo Álvarez de Sotomayor Posadillo
  Description: Delete a connection of a given node.
  Input Parameters:
    nodule: Integer. Number of nodule to work with.
@@ -312,38 +305,37 @@ void deleteConnection(int nodule, int node)
 {
 	int i, sel;
 
-	if(node < cNetPopulation.numInputNodes){
+	if (node < cNetPopulation.numInputNodes){
 		/* We delete an input connection. */
-		for(i = 0; i < cNodulePopulation.nodules[nodule]->nodes &&
-				cNodulePopulation.nodules[nodule]->inConn[node][i] != 1; i++);
+		for (i = 0; i < cNodulePopulation.nodules[nodule]->nodes &&
+				 cNodulePopulation.nodules[nodule]->inConn[node][i] != 1; i++);
 
-		if(i < cNodulePopulation.nodules[nodule]->nodes){
+		if (i < cNodulePopulation.nodules[nodule]->nodes){
 			sel = random() % cNodulePopulation.nodules[nodule]->nodes;
-			for(; cNodulePopulation.nodules[nodule]->inConn[node][sel] != 1;
+			for (; cNodulePopulation.nodules[nodule]->inConn[node][sel] != 1;
 				sel = random() % cNodulePopulation.nodules[nodule]->nodes);
 			cNodulePopulation.nodules[nodule]->inConn[node][sel] = 0;
 			cNodulePopulation.nodules[nodule]->inWeights[node][sel] = 0;
-		} /* end if */
+		}
 	} else {
 		/* We delete an output connection. */
 		node -= cNetPopulation.numInputNodes;
-		for(i = 0; i < cNodulePopulation.nodules[nodule]->nodes &&
+		for (i = 0; i < cNodulePopulation.nodules[nodule]->nodes &&
 				cNodulePopulation.nodules[nodule]->outConn[i][node] != 1; i++);
 
-		if(i < cNodulePopulation.nodules[nodule]->nodes) {
+		if (i < cNodulePopulation.nodules[nodule]->nodes) {
 			sel = random() % cNodulePopulation.nodules[nodule]->nodes;
-			for(; cNodulePopulation.nodules[nodule]->outConn[sel][node] != 1;
+			for (; cNodulePopulation.nodules[nodule]->outConn[sel][node] != 1;
 				sel = random() % cNodulePopulation.nodules[nodule]->nodes);
 			cNodulePopulation.nodules[nodule]->outConn[sel][node] = 0;
 			cNodulePopulation.nodules[nodule]->outWeights[sel][node] = 0;
-		} /* end if */
-	} /* end if */
+		}
+	}
 }
 
 /********************************************************************************
  File: mutation.c
  Function: deleteNode()
- Author: Pablo Álvarez de Sotomayor Posadillo
  Description: Delete a given number of nodes from a nodule.
  Input Parameters:
    nodule: Integer. Number of nodule to work with.
@@ -362,50 +354,49 @@ void deleteNode(int nodule, int nodes)
 {
 	int i, j, k, node;
   
-	for(k = 0; k < nodes; k++) {
+	for (k = 0; k < nodes; k++) {
 		node = random() % cNodulePopulation.nodules[nodule]->nodes;
 
 		/* All the nodes after the node to delete have to go back a position. */
-		for(i = node + 1; i < cNodulePopulation.nodules[nodule]->nodes; i++) {
+		for (i = node + 1; i < cNodulePopulation.nodules[nodule]->nodes; i++) {
 			cNodulePopulation.nodules[nodule]->transf[i - 1] =
 				cNodulePopulation.nodules[nodule]->transf[i];
-			for(j = 0; j < cNetPopulation.numOutputNodes; j++) {
+			for (j = 0; j < cNetPopulation.numOutputNodes; j++) {
 				cNodulePopulation.nodules[nodule]->outConn[i - 1][j] =
 					cNodulePopulation.nodules[nodule]->outConn[i][j];
 				cNodulePopulation.nodules[nodule]->outWeights[i - 1][j] =
 					cNodulePopulation.nodules[nodule]->outWeights[i][j];
 				cNodulePopulation.nodules[nodule]->outConn[i][j] = 0;
 				cNodulePopulation.nodules[nodule]->outWeights[i][j] = 0;
-			} /* end for */
-		} /* end for */
+			}
+		}
 
-		for(j = 0; j < cNetPopulation.numOutputNodes; j++) {
+		for (j = 0; j < cNetPopulation.numOutputNodes; j++) {
 			cNodulePopulation.nodules[nodule]->outConn[i - 1][j] = 0;
 			cNodulePopulation.nodules[nodule]->outWeights[i - 1][j] = 0;
-		} /* end for */
+		}
 
-		for(i = 0; i < cNetPopulation.numInputNodes; i++) {
-			for(j = node + 1; j < cNodulePopulation.nodules[nodule]->nodes; j++) {
+		for (i = 0; i < cNetPopulation.numInputNodes; i++) {
+			for (j = node + 1; j < cNodulePopulation.nodules[nodule]->nodes; j++) {
 				cNodulePopulation.nodules[nodule]->inConn[i][j - 1] =
 					cNodulePopulation.nodules[nodule]->inConn[i][j];
 				cNodulePopulation.nodules[nodule]->inWeights[i][j - 1] =
 					cNodulePopulation.nodules[nodule]->inWeights[i][j];
 				cNodulePopulation.nodules[nodule]->inConn[i][j] = 0;
 				cNodulePopulation.nodules[nodule]->inWeights[i][j] = 0;
-			} /* end for */
+			}
 
 			cNodulePopulation.nodules[nodule]->inConn[i][j-1] = 0;
 			cNodulePopulation.nodules[nodule]->inWeights[i][j-1] = 0;
-		} /* end for */
+		}
   
 		cNodulePopulation.nodules[nodule]->nodes--;
-	} /* end for */
+	}
 }
 
 /********************************************************************************
  File: mutation.c
  Function: replaceNodules()
- Author: Pablo Álvarez de Sotomayor Posadillo
  Description: Substitude the worst nodules of a population with the bset nodules
               of its descendant population.
  Input Parameters: None
@@ -430,33 +421,30 @@ void replaceNodules()
 	/* We order the nodules by aptitude. */
 	id = (int *)malloc(numNodules * sizeof(int));
 	order = (double *)malloc(numNodules * sizeof(double));
-	if(id == NULL || order == NULL)
+	if (id == NULL || order == NULL)
 		error(RES_MEM);
 
-	for(i = 0; i < numNodules; i++) {
+	for (i = 0; i < numNodules; i++) {
 		id[i] = ((cNodulePopulation.numSubpops - 1) * numNodules) + i;
 		order[i] =
 			cNodulePopulation.nodules[(cNodulePopulation.numSubpops - 1) * numNodules + i]->aptitude;
 	}
 
-	for(i = 0; i < numNodules; i++)
-		for(j = i; j < numNodules; j++)
-			if(order[i] < order[j]) {
+	for (i = 0; i < numNodules; i++)
+		for (j = i; j < numNodules; j++)
+			if (order[i] < order[j]) {
 				id[i] = ((cNodulePopulation.numSubpops - 1) * numNodules) + j;
 				id[j] = ((cNodulePopulation.numSubpops - 1) * numNodules) + i;
 				order[i] = cNodulePopulation.nodules[((cNodulePopulation.numSubpops - 1) * numNodules) + j]->aptitude;
 				order[j] = cNodulePopulation.nodules[((cNodulePopulation.numSubpops - 1) * numNodules) + i]->aptitude;
 			}
 
-	/*
-	  We substitude the best nodules of the descendant subpopulation by the worst
-	  nodules of the original subpopulation. 
-	*/
-
-	for(i = numNodules; i > nodSel; i--){
-		for(j = 0; j < cNetPopulation.numNets; j++)
-			if(cNetPopulation.nets[j]->nodules[cNodulePopulation.numSubpops - 1] ==
-			   cNodulePopulation.nodules[id[i - 1]])
+	/* We substitude the best nodules of the descendant subpopulation by the worst
+	 * nodules of the original sub-population. */
+	for (i = numNodules; i > nodSel; i--){
+		for (j = 0; j < cNetPopulation.numNets; j++)
+			if (cNetPopulation.nets[j]->nodules[cNodulePopulation.numSubpops - 1] ==
+				cNodulePopulation.nodules[id[i - 1]])
 				cNetPopulation.nets[j]->nodules[cNodulePopulation.numSubpops - 1] =
 					descend[i - nodSel - 1];
 		freeNodule(cNodulePopulation.nodules[id[i - 1]]);
@@ -465,7 +453,7 @@ void replaceNodules()
 		descend[i - nodSel - 1] = NULL;
 	}
 
-	for(i = numNodules - nodSel; i < numNodules; i++)
+	for (i = numNodules - nodSel; i < numNodules; i++)
 		freeNodule(descend[i]);
 	free(descend);
 	descend = NULL;
