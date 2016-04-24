@@ -7,10 +7,10 @@ EXTRA_CLEAN=.build-aux ABOUT-NLS Makefile Makefile.in aclocal.m4 autom4te.cache 
 
 .PHONY: update-pot update-po
 update-pot:
-	@make -C ${PO_DIR} update-pot
+	@${MAKE} -C ${PO_DIR} update-pot
 
 update-po:
-	@make -C ${PO_DIR} update-po
+	@${MAKE} -C ${PO_DIR} update-po
 
 .PHONY: check-syntax
 check-syntax:

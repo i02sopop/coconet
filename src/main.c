@@ -1,5 +1,5 @@
 /*********************************************************************************
- * Copyright (c) 2004-2015 coconet project (see AUTHORS)                         *
+ * Copyright (c) 2004-2016 coconet project (see AUTHORS)                         *
  *                                                                               *
  * This file is part of Coconet.                                                 *
  *                                                                               *
@@ -22,10 +22,9 @@
 /*********************************************************************************
  * Manage the program flow.                                                      *
  * @param int argc: Number of arguments of the program.                          *
- * @param char** argv: Arguments passed to the program.                          *
+ * @param char **argv: Arguments passed to the program.                          *
  * @returns 0 with no errors and -1 otherwise.                                   *
  ********************************************************************************/
-
 int
 main(int argc, char **argv) {
 	int i;
@@ -46,9 +45,9 @@ main(int argc, char **argv) {
 		nodSel = numNodules;
 
 	/* Scaling of input and output data from the training file. */
-	fprintf(stderr, _("SCALING_INPUT_DATA_INFO"));
+	fprintf(stderr, _("Scaling input data.\n"));
 	scaleInputData(numTrain);
-	fprintf(stderr, _("SCALING_OUTPUT_DATA_INFO"));
+	fprintf(stderr, _("Scaling output data.\n"));
 	if (netTransf == (func)&Logistic)
 		scaleOutputData(outputData,
 						numTrain,
@@ -63,35 +62,35 @@ main(int argc, char **argv) {
 	/* We evolve the networks and nodes ppulations. */
 	for (i = 0; measureChange(&netAptitude, i) == false; i++) {
 		/* We create a new population of nodes. */
-		fprintf(stderr, _("SPECIES_NUM_INFO"), i + 1);
+		fprintf(stderr, _("Species %d\n"), i + 1);
 		createNodulePopulation();
 
 		/* We add the new population of nodes to the previous population of
 		   networks. */
-		fprintf(stderr,_("ADDING_NODES_INFO"));
+		fprintf(stderr,_("Add nodes to networks.\n"));
 		addNodulesNetworks();
 
 		/* We evolve the populations of networks and nodes. */
-		fprintf(stderr, _("EVOLVE_POPULATION_INFO"));
+		fprintf(stderr, _("Evolve populations.\n"));
 		evolvePopulations();
 
 		/* We adjust the size of the last node's subpopulation matrix. */
-		fprintf(stderr, _("ADJ_MATRIX_INFO"));
+		fprintf(stderr, _("Ajust matrix\n"));
 		adjustMatrix();
 	}
 
 	/* We order the networks by its flair. */
-	fprintf(stderr, _("SORTING_NETWORKS_INFO"));
+	fprintf(stderr, _("Sorting networks.\n"));
 	sortNetworks();
 
 	/* We read the data of the generalization file. */
-	fprintf(stderr, _("READING_GENERALIZATION_DATA_INFO"));
+	fprintf(stderr, _("Read the generalization data.\n"));
 	readGeneralization(argv[3]);
 
 	/* We scale the input and output data from the generalization file. */
-	fprintf(stderr, _("SCALING_INPUT_DATA_INFO"));
+	fprintf(stderr, _("Scaling input data.\n"));
 	scaleInputData(numGeneral);
-	fprintf(stderr, _("SCALING_OUTPUT_DATA_INFO"));
+	fprintf(stderr, _("Scaling output data.\n"));
 	if (netTransf == (func)&Logistic)
 		scaleOutputData(outputData,
 						numGeneral,
@@ -104,12 +103,12 @@ main(int argc, char **argv) {
 						pTransfer.htan_a - pTransfer.epsilon);
 
 	/* We export the best network found. */
-	fprintf(stderr, _("EXPORTING_NETWORK_INFO"));
+	fprintf(stderr, _("Exporting the best network.\n"));
 	if (argc == 6)
 		exportBestNetwork(argv[5]);
 	else
 		exportBestNetwork("output.txt");
-	fprintf(stderr, _("END_INFO"));
+	fprintf(stderr, _("End\n"));
 
 	return 0;
 }

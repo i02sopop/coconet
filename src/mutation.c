@@ -1,43 +1,32 @@
-/******************************************************************************
- Copyright (c) 2004-2014 coconet project (see AUTHORS)
-
- This file is part of Coconet.
-
- Coconet is free software: you can redistribute it and/or modify it under the
- terms of the GNU General Public License as published by the Free Software
- Foundation, either version 3 of the License, or (at your option) any later
- version.
-
- Coconet is distributed in the hope that it will be useful, but WITHOUT ANY
- WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR
- A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
-
- You should have received a copy of the GNU General Public License along with
- coconet. If not, see <http://www.gnu.org/licenses/>.
-******************************************************************************/
+/*********************************************************************************
+ * Copyright (c) 2004-2016 coconet project (see AUTHORS)                         *
+ *                                                                               *
+ * This file is part of Coconet.                                                 *
+ *                                                                               *
+ * Coconet is free software: you can redistribute it and/or modify it under the  *
+ * terms of the GNU General Public License as published by the Free Software     *
+ * Foundation, either version 3 of the License, or (at your option) any later    *
+ * version.                                                                      *
+ *                                                                               *
+ * Coconet is distributed in the hope that it will be useful, but WITHOUT ANY    *
+ * WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR *
+ * A PARTICULAR PURPOSE.  See the GNU General Public License for more details.   *
+ *                                                                               *
+ * You should have received a copy of the GNU General Public License along with  *
+ * coconet. If not, see <http://www.gnu.org/licenses/>.                          *
+ ********************************************************************************/
 
 #include <definitions.h>
 
-/******************************************************************************
- File: mutation.c
- Function: copyDescendant()
- Description: Copy the actual nodule population into a new descendant
-              population.
- Input Parameters: None
- Local Variables:
-   i: Integer. Counter.
-   j: Integer. Counter.
-   k: Integer. Counter.
-   noduleOrig: Integer. Nodule to copy.
-   initialNodule: Integer. Initial nodule of the descendant.
- Return Value: None
- Calling Functions:
-   error(): Function to show an error message depending on an error number.
-******************************************************************************/
-
-void copyDescendant()
-{
-	int i, j, k, noduleOrig, initialNodule;
+/*********************************************************************************
+ * Copy the actual nodule population into a new descendant population.           *
+ * @return void                                                                  *
+ ********************************************************************************/
+void
+copyDescendant() {
+	int i, j, k;
+	int noduleOrig; /* Nodule to copy. */
+	int initialNodule; /* Initial nodule of the descendant. */
 
 	/* Initialization of variables. */
 	initialNodule = numNodules * (cNodulePopulation.numSubpops - 1);
@@ -45,13 +34,13 @@ void copyDescendant()
 	if (descend == NULL)
 		error(RES_MEM);
 
-	/* We copy the nodules to the new population. */
+	/* Copy the nodules to the new population. */
 	for (i = 0; i < numNodules; i++) {
 		descend[i] = (nodule *)malloc(sizeof(nodule));
 		if (descend[i] == NULL)
 			error(RES_MEM);
 
-		/* We copy the nodule from the old to the new population. */
+		/* Copy the nodule from the old to the new population. */
 		noduleOrig = initialNodule + i;
 		descend[i]->id = cNodulePopulation.nodules[noduleOrig]->id;
 		descend[i]->nodes = cNodulePopulation.nodules[noduleOrig]->nodes;
@@ -63,12 +52,9 @@ void copyDescendant()
 		descend[i]->outWeights = (double **)malloc(maxNodes * sizeof(double));
 		descend[i]->transf = (func *)malloc(maxNodes * sizeof(func));
 		descend[i]->partialOutputs = (double **)malloc(numTrain * sizeof(double));
-		if (descend[i]->inConn == NULL ||
-		   descend[i]->inWeights == NULL ||
-		   descend[i]->outConn == NULL ||
-		   descend[i]->outWeights == NULL ||
-		   descend[i]->transf == NULL ||
-		   descend[i]->partialOutputs == NULL)
+		if (descend[i]->inConn == NULL || descend[i]->inWeights == NULL ||
+		   descend[i]->outConn == NULL || descend[i]->outWeights == NULL ||
+		   descend[i]->transf == NULL || descend[i]->partialOutputs == NULL)
 			error(RES_MEM);
 
 		for (j = 0; j < cNetPopulation.numInputNodes; j++) {
@@ -105,38 +91,23 @@ void copyDescendant()
 				error(RES_MEM);
 
 			for (k = 0; k < cNetPopulation.numOutputNodes; k++)
-				descend[i]->partialOutputs[j][k] = cNodulePopulation.nodules[noduleOrig]->partialOutputs[j][k];
+				descend[i]->partialOutputs[j][k] =
+				    cNodulePopulation.nodules[noduleOrig]->partialOutputs[j][k];
 		}
 	}
 }
 
-/******************************************************************************
- File: mutation.c
- Function: mutasteNodules()
- Description: Make an estructural mutation in a given nodule.
- Input Parameters:
-   nodule: Integer. Number of nodule to mutate.
- Local Variables:
-   i: Integer. Counter.
-   j: Integer. Counter.
-   num: Integer. Number of mutation elements.
- Return Value: None
- Calling Functions: 
-   addNode(): Add a node to the nodule.
-   deleteNode(): Delete a node from the nodule.
-   addConnection(): Add a connection to the nodule.
-   deleteConnection(): Delete a connection from the nodule.
-   measureNoduleChange(): Calculate the nodules aptitude variation after the
-                        mutation.
-   doubleRandom(): Returns a random float of double precision.
-******************************************************************************/
-
-void mutasteNodules(int nodule)
-{
+/*********************************************************************************
+ * Make an estructural mutation in a given nodule.                               *
+ * @param int nodule: Number of nodule to mutate.                                *
+ * @return void                                                                  *
+ ********************************************************************************/
+void
+mutateNodules(int nodule) {
 	int i, j, num;
 
-	/* We made the estructural mutation. */
-	/* Deletion of nodes. */
+	/* Make the estructural mutation. */
+	/* Delete nodes. */
 	num = (int)(delta_min + doubleRandom() *
 				(1 - cNodulePopulation.nodules[nodule]->aptitude) *
 				(delta_min - delta_max));
@@ -156,7 +127,7 @@ void mutasteNodules(int nodule)
 	else if ((cNodulePopulation.nodules[nodule]->nodes + num) > maxNodes)
 		num = maxNodes - cNodulePopulation.nodules[nodule]->nodes;
 	else if (num > 0)
-		addNode(nodule, num); /* We add a new node,*/
+		addNode(nodule, num); /* Add a new node. */
 
 	/* Delete connections. */
 	num = (int)(delta_min + doubleRandom() *
@@ -174,34 +145,22 @@ void mutasteNodules(int nodule)
 	for (i = 0; i < num && cNodulePopulation.nodules[nodule]->nodes > 0; i++)
 		addConnection(nodule);
 
-	/* We make the calculations over the modified nodule, both his partial
-	 * outputs and his aptitude. */
+	/* Make the calculations over the modified nodule, both its partial outputs
+	 * and aptitude. */
 	measureNoduleChange(nodule);
 }
 
-/******************************************************************************
- File: mutation.c
- Function: addConnection()
- Description: Add a connection to a given nodule.
- Input Parameters:
-   nodule: Integer. Number of nodule to modify.
- Local Variables:
-   i. Integer. Counter.
-   j: Integer. Counter.
-   sel: Integer. Type of connection to add (input, internal or outpunt).
-   origin: Vector if integers. Possible origin nodes for the connection.
-   destination: Vector of integers. Possible destination nodes for the connection.
-   num: Integer. Counter.
-   pos: Integer. Position to add the connection.
- Return Value: None
- Calling Functions
-   error(): Function to show an error message depending on an error number.
-   doubleRandom(): Returns a random float of double precision.
-******************************************************************************/
-
-void addConnection(int nodule)
-{
-	int i, j, sel, *origin, *destination, num, pos;
+/*********************************************************************************
+ * Add a connection to a given nodule.                                           *
+ * @param int nodule: Number of nodule to modify.                                *
+ * @return void                                                                  *
+ ********************************************************************************/
+void
+addConnection(int nodule) {
+	int i, j, num, pos;
+	int sel; /* Type of connection to add (input, internal or output). */
+	int *origin; /* Possible origin nodes for the connection. */
+	int *destination; /* Possible destination nodes for the connection. */
 
 	num = 0;
 	sel = random() % 2;
@@ -211,7 +170,7 @@ void addConnection(int nodule)
 		error(RES_MEM);
 
 	if (sel == 0) {
-		/* We add an input connection. */
+		/* Add an input connection. */
 		for (i = 0; i < cNetPopulation.numInputNodes; i++)
 			for (j = 0; j < cNodulePopulation.nodules[nodule]->nodes; j++)
 				if (cNodulePopulation.nodules[nodule]->inConn[i][j] == 0) {
@@ -232,7 +191,7 @@ void addConnection(int nodule)
 	}
 
 	if ((sel == 1 && num == 0) || num == 0) {
-		/* We add an output connection. */
+		/* Add an output connection. */
 		for (i = 0; i < cNodulePopulation.nodules[nodule]->nodes; i++)
 			for (j = 0; j < cNetPopulation.numOutputNodes; j++)
 				if (cNodulePopulation.nodules[nodule]->outConn[i][j] == 0) {
@@ -258,55 +217,38 @@ void addConnection(int nodule)
 	}
 }
 
-/********************************************************************************
- File: mutation.c
- Function: addNode()
- Description: Add some nodes to a nodule.
- Input Parameters:
-   nodule: Integer. Number of nodule to work with.
-   nodes: Integer. Number of nodes to add.
- Local Variables:
-   i: Integer. Counter
- Return Value: None
- Calling Functions: None
-*******************************************************************************/
-
-void addNode(int nodule, int nodes)
-{
+/*********************************************************************************
+ * Add some nodes to a nodule.                                                   *
+ * @param int nodule: Number of nodule to work with.                             *
+ * @param int nodes: Number of nodes to add.                                     *
+ * @return void                                                                  *
+ ********************************************************************************/
+void
+addNode(int nodule, int nodes) {
 	int i;
 
 	for (i = 0; i < nodes; i++) {
-		/* We assign the transfer function to the node. */
-		if ((random() % 2) == 0)
-			cNodulePopulation.nodules[nodule]->transf[cNodulePopulation.nodules[nodule]->nodes + i] = (func)&HyperbolicTangent;
-		else
-			cNodulePopulation.nodules[nodule]->transf[cNodulePopulation.nodules[nodule]->nodes + i] = (func)&Logistic;
+		/* Assign the transfer function to the node. */
+		cNodulePopulation.nodules[nodule]->transf[cNodulePopulation.nodules[nodule]->nodes + i] =
+			((random() % 2) == 0) ? (func)&HyperbolicTangent : (func)&Logistic;
 	}
 
-	/* We update the number of nodes. */
+	/* Update the number of nodes. */
 	cNodulePopulation.nodules[nodule]->nodes += nodes;
 }
 
-/*******************************************************************************
- File: mutation.c
- Function: deleteConnection()
- Description: Delete a connection of a given node.
- Input Parameters:
-   nodule: Integer. Number of nodule to work with.
-   node: Integer. Node to delete the connection from.
- Local Variables:
-   i: Integer. Counter
-   sel: Integer. Connection to delete.
- Return Value: None
- Calling Functions: None
-*******************************************************************************/
-
-void deleteConnection(int nodule, int node)
-{
-	int i, sel;
+/*********************************************************************************
+ * Delete a connection of a given node.                                          *
+ * @param int nodule: Number of nodule to work with.                             *
+ * @param int node: Node to delete the connection from.                          *
+ * @return void                                                                  *
+ ********************************************************************************/
+void
+deleteConnection(int nodule, int node) {
+	int i, sel; /* Connection to delete. XXX: Rename it. */
 
 	if (node < cNetPopulation.numInputNodes){
-		/* We delete an input connection. */
+		/* Delete an input connection. */
 		for (i = 0; i < cNodulePopulation.nodules[nodule]->nodes &&
 				 cNodulePopulation.nodules[nodule]->inConn[node][i] != 1; i++);
 
@@ -318,10 +260,10 @@ void deleteConnection(int nodule, int node)
 			cNodulePopulation.nodules[nodule]->inWeights[node][sel] = 0;
 		}
 	} else {
-		/* We delete an output connection. */
+		/* Delete an output connection. */
 		node -= cNetPopulation.numInputNodes;
 		for (i = 0; i < cNodulePopulation.nodules[nodule]->nodes &&
-				cNodulePopulation.nodules[nodule]->outConn[i][node] != 1; i++);
+				 cNodulePopulation.nodules[nodule]->outConn[i][node] != 1; i++);
 
 		if (i < cNodulePopulation.nodules[nodule]->nodes) {
 			sel = random() % cNodulePopulation.nodules[nodule]->nodes;
@@ -333,26 +275,15 @@ void deleteConnection(int nodule, int node)
 	}
 }
 
-/********************************************************************************
- File: mutation.c
- Function: deleteNode()
- Description: Delete a given number of nodes from a nodule.
- Input Parameters:
-   nodule: Integer. Number of nodule to work with.
-   nodes. Integer. Number of nodes to delete.
- Local Variables:
-   i: Integer. Counter.
-   j: Integer. Counter.
-   k: Integer. Counter.
-   node: Integer. Node to delete.
- Return Value: None
- Calling Functions:
-   error(): Function to show an error message depending on an error number.
-*******************************************************************************/
-
-void deleteNode(int nodule, int nodes)
-{
-	int i, j, k, node;
+/*********************************************************************************
+ * Delete a given number of nodes from a nodule.                                 *
+ * @param int nodule: Number of nodule to work with.                             *
+ * @param int nodes: Number of nodes to delete.                                  *
+ * @return void                                                                  *
+ ********************************************************************************/
+void
+deleteNode(int nodule, int nodes) {
+	int i, j, k, node; /* Node to delete. XXX: Rename it. */
   
 	for (k = 0; k < nodes; k++) {
 		node = random() % cNodulePopulation.nodules[nodule]->nodes;
@@ -394,31 +325,17 @@ void deleteNode(int nodule, int nodes)
 	}
 }
 
-/********************************************************************************
- File: mutation.c
- Function: replaceNodules()
- Description: Substitude the worst nodules of a population with the bset nodules
-              of its descendant population.
- Input Parameters: None
- Local Variables:
-   i: Integer. Counter.
-   j: Integer. Counter.
-   id: Vector of Integers. Store the nodules id in order to sort them by
-       aptitude.
-   order: Vector of floats. Store the nodules aptitude in order to sort them.
- Return Value: None
- Calling Functions
-   freeNodule(): Free the memory ocuppied by a given nodule.
-   sortNodules(): Sort the nodules of the population.
-   error(): Function to show an error message depending on an error number.
-*******************************************************************************/
+/*********************************************************************************
+ * Replace the worst nodules of a population by the best nodules of its          *
+ * descendant population.                                                        *
+ * @return void                                                                  *
+ ********************************************************************************/
+void
+replaceNodules() {
+	int i, j, *id; /* Store the nodules id in order to sort them by aptitude. */
+	double *order; /* Store the nodules aptitude in order to sort them. */
 
-void replaceNodules()
-{
-	int i, j, *id;
-	double *order;
-
-	/* We order the nodules by aptitude. */
+	/* Order the nodules by aptitude. */
 	id = (int *)malloc(numNodules * sizeof(int));
 	order = (double *)malloc(numNodules * sizeof(double));
 	if (id == NULL || order == NULL)
@@ -439,7 +356,7 @@ void replaceNodules()
 				order[j] = cNodulePopulation.nodules[((cNodulePopulation.numSubpops - 1) * numNodules) + i]->aptitude;
 			}
 
-	/* We substitude the best nodules of the descendant subpopulation by the worst
+	/* Replace the best nodules of the descendant subpopulation by the worst
 	 * nodules of the original sub-population. */
 	for (i = numNodules; i > nodSel; i--){
 		for (j = 0; j < cNetPopulation.numNets; j++)

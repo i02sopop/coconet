@@ -1,5 +1,5 @@
 /*********************************************************************************
- * Copyright (c) 2004-2015 coconet project (see AUTHORS)                         *
+ * Copyright (c) 2004-2016 coconet project (see AUTHORS)                         *
  *                                                                               *
  * This file is part of Coconet.                                                 *
  *                                                                               *
@@ -106,27 +106,18 @@ freeNetwork(network *net) {
 	free(net);
 }
 
-/******************************************************************************
- * Create a new nodule subpopulation.
- Input OParameters: None
- Local Variables:
-   i: Integer. Counter.
-   j: Integer. Counter.
-   k: Integer. Counter.
- Return Value: None
- Calling Functions:
-   error(): Function to show an error message depending on an error number.
-   doubleRandom(): Returns a random float of double precision.
- *****************************************************************************/
-
-void createNodules()
-{
+/*********************************************************************************
+ * Create a new nodule subpopulation.                                            *
+ * @return void.                                                                 *
+ ********************************************************************************/
+void
+createNodules() {
 	int i, j, k;
 
 	/* We create the nodule subpopulation. */
-	for(i = cNodulePopulation.numNodules - numNodules; i < cNodulePopulation.numNodules; i++) {
+	for (i = cNodulePopulation.numNodules - numNodules; i < cNodulePopulation.numNodules; i++) {
 		cNodulePopulation.nodules[i] = (nodule *)malloc(sizeof(nodule));
-		if(cNodulePopulation.nodules[i] == NULL)
+		if (cNodulePopulation.nodules[i] == NULL)
 			error(RES_MEM);
 
 		/* Nodule id. */
@@ -156,21 +147,22 @@ void createNodules()
 		cNodulePopulation.nodules[i]->partialOutputs = (double **)malloc(numTrain * sizeof(double));
 		cNodulePopulation.nodules[i]->transf = (func *)malloc(maxNodes * sizeof(func));
 
-		if(cNodulePopulation.nodules[i]->inConn == NULL || cNodulePopulation.nodules[i]->outConn == NULL ||
-		   cNodulePopulation.nodules[i]->inWeights == NULL || cNodulePopulation.nodules[i]->outWeights == NULL ||
-		   cNodulePopulation.nodules[i]->partialOutputs == NULL || cNodulePopulation.nodules[i]->transf == NULL)
+		if (cNodulePopulation.nodules[i]->inConn == NULL || cNodulePopulation.nodules[i]->outConn == NULL ||
+			cNodulePopulation.nodules[i]->inWeights == NULL || cNodulePopulation.nodules[i]->outWeights == NULL ||
+			cNodulePopulation.nodules[i]->partialOutputs == NULL || cNodulePopulation.nodules[i]->transf == NULL)
 			error(RES_MEM);
 
 		/* Creation of connections and weigths. */
 		/* Entry connections and weights. */
-		for(j = 0; j < cNetPopulation.numInputNodes; j++) {
+		for (j = 0; j < cNetPopulation.numInputNodes; j++) {
 			cNodulePopulation.nodules[i]->inConn[j] = (int *)malloc(maxNodes * sizeof(int));
 			cNodulePopulation.nodules[i]->inWeights[j] = (double *)malloc(maxNodes * sizeof(double));
-			if(cNodulePopulation.nodules[i]->inConn[j] == NULL || cNodulePopulation.nodules[i]->inWeights[j] == NULL)
+			if (cNodulePopulation.nodules[i]->inConn[j] == NULL ||
+			    cNodulePopulation.nodules[i]->inWeights[j] == NULL)
 				error(RES_MEM);
 
-			for(k = 0; k < maxNodes; k++) {
-				if(random() % 2 == 1 && k < cNodulePopulation.nodules[i]->nodes) {
+			for (k = 0; k < maxNodes; k++) {
+				if (random() % 2 == 1 && k < cNodulePopulation.nodules[i]->nodes) {
 					cNodulePopulation.nodules[i]->inConn[j][k] = 1;
 					cNodulePopulation.nodules[i]->inWeights[j][k] = doubleRandom() / 2;
 				} else {
@@ -181,14 +173,15 @@ void createNodules()
 		}
 
 		/* Output connections and weights. */
-		for(j = 0; j < maxNodes; j++) {
+		for (j = 0; j < maxNodes; j++) {
 			cNodulePopulation.nodules[i]->outConn[j] = (int *)malloc(cNetPopulation.numOutputNodes * sizeof(int));
 			cNodulePopulation.nodules[i]->outWeights[j] = (double *)malloc(cNetPopulation.numOutputNodes * sizeof(double));
-			if(cNodulePopulation.nodules[i]->outConn[j] == NULL || cNodulePopulation.nodules[i]->outWeights[j] == NULL)
+			if (cNodulePopulation.nodules[i]->outConn[j] == NULL ||
+			    cNodulePopulation.nodules[i]->outWeights[j] == NULL)
 				error(RES_MEM);
 
-			for(k = 0; k < cNetPopulation.numOutputNodes; k++) {
-				if(random() % 2 == 1 && j < cNodulePopulation.nodules[i]->nodes) {
+			for (k = 0; k < cNetPopulation.numOutputNodes; k++) {
+				if (random() % 2 == 1 && j < cNodulePopulation.nodules[i]->nodes) {
 					cNodulePopulation.nodules[i]->outConn[j][k] = 1;
 					cNodulePopulation.nodules[i]->outWeights[j][k] = doubleRandom() / 2;
 				} else {
@@ -199,12 +192,12 @@ void createNodules()
 		}
 
 		/* Partial outputs. */
-		for(j = 0; j < numTrain; j++) {
+		for (j = 0; j < numTrain; j++) {
 			cNodulePopulation.nodules[i]->partialOutputs[j] = (double *)malloc(cNetPopulation.numOutputNodes * sizeof(double));
-			if(cNodulePopulation.nodules[i]->partialOutputs[j] == NULL)
+			if (cNodulePopulation.nodules[i]->partialOutputs[j] == NULL)
 				error(RES_MEM);
 
-			for(k = 0; k < cNetPopulation.numOutputNodes; k++)
+			for (k = 0; k < cNetPopulation.numOutputNodes; k++)
 				cNodulePopulation.nodules[i]->partialOutputs[j][k] = 0.0;
 		}
 
@@ -214,25 +207,14 @@ void createNodules()
 	}
 }
 
-/******************************************************************************
- File: createPopulations.c
- Function: createNodulePopulation()
- Author: Pablo Álvarez de Sotomayor Posadillo
- Description: Create or expand the nodule population.
- Input Parameters: None
- Local Variables: None
- Return Value: None
- Callimg Functions:
-   createNodules(): Function to create a new nodule subpopulation.
-   error(): Function to show an error message depending on an error number.
-******************************************************************************/
-
-void createNodulePopulation()
-{
-	/*
-	  We update the number of subpopulations and nodules of the nodule
-	  population.
-	*/
+/*********************************************************************************
+ * Create or expand the nodule population.                                       *
+ * @return void.                                                                 *
+ ********************************************************************************/
+void
+createNodulePopulation() {
+	/* We update the number of subpopulations and nodules of the nodule
+	 * population. */
 	cNodulePopulation.numSubpops++;
 	cNodulePopulation.numNodules = cNodulePopulation.numSubpops * numNodules;
 
@@ -240,45 +222,35 @@ void createNodulePopulation()
 	cNodulePopulation.nodules = (cNodulePopulation.numSubpops == 1) ?
 		(nodule **)malloc(numNodules * sizeof(nodule)) :
 		(nodule **)realloc(cNodulePopulation.nodules, cNodulePopulation.numNodules * sizeof(nodule));
-	if(cNodulePopulation.nodules == NULL)
+	if (cNodulePopulation.nodules == NULL)
 		error(RES_MEM);
 
 	/* We create the nodules of the new subpopulation. */
 	createNodules();
 }
 
-/******************************************************************************
- File: createPopulations.c
- Function: createNetworks()
- Author: Pablo Alvarez de Sotomayor Posadillo
- Description: Create a new network population.
- Input Parameters: None
- Local Variables:
-   i: Integer. Counter.
-   j: Integer. Counter.
- Return Value: None
- Calling Functions:
-   error(): Function to show an error message depending on an error number.
- *****************************************************************************/
-
-void createNetworks()
-{
+/*********************************************************************************
+ * Create a new network population.                                              *
+ * @return void.                                                                 *
+ ********************************************************************************/
+void
+createNetworks() {
 	int i, j;
 
-	for(i = 0; i < numNodules; i++) {
-		if((cNetPopulation.nets[i] = (network *)malloc(sizeof(network))) == NULL)
+	for (i = 0; i < numNodules; i++) {
+		if ((cNetPopulation.nets[i] = (network *)malloc(sizeof(network))) == NULL)
 			error(RES_MEM);
 
 		/* Allocation of memory. */
 		cNetPopulation.nets[i]->nodules = (nodule **)malloc(sizeof(nodule));
 		cNetPopulation.nets[i]->outValues = (double *)malloc(cNetPopulation.numOutputNodes * sizeof(double));
-		if(cNetPopulation.nets[i]->nodules == NULL || cNetPopulation.nets[i]->outValues == NULL)
+		if (cNetPopulation.nets[i]->nodules == NULL || cNetPopulation.nets[i]->outValues == NULL)
 			error(RES_MEM);
 
 		/* Initialization of variables. */
 		cNetPopulation.nets[i]->aptitude = 0.0;
 		cNetPopulation.nets[i]->nodules[0] = cNodulePopulation.nodules[i];
-		for(j = 0; j < cNetPopulation.numOutputNodes; j++)
+		for (j = 0; j < cNetPopulation.numOutputNodes; j++)
 			cNetPopulation.nets[i]->outValues[j] = 0.0;
 	}
 }

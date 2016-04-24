@@ -1,5 +1,5 @@
 /*********************************************************************************
- * Copyright (c) 2004-2015 coconet project (see AUTHORS)                         *
+ * Copyright (c) 2004-2016 coconet project (see AUTHORS)                         *
  *                                                                               *
  * This file is part of Coconet.                                                 *
  *                                                                               *
@@ -32,37 +32,37 @@ measureChange(double *networkAptitude, int iter) {
 	double tmpAptitude = 0; /* New average aptitude of the network population. */
 	double diff; /* Difference between the two average aptitudes. */
 
-	/* We measure the networks to check its aptitude. */
+	/* Measure the networks to check its aptitude. */
 	if (iter > 0) {
 		fprintf(stderr, _("TRAINING"));
 
-		/* We first train the networks to have an initial value of the networks
-		   and nodules aptitude. */
+		/* First train the networks to have an initial value of the networks
+		 * and nodules aptitude. */
 		for (i = 0; i < numTrain; i++) {
-			/* We generate the nodule output. */
+			/* Generate the nodule output. */
 			for (j = cNodulePopulation.numNodules - numNodules; j < cNodulePopulation.numNodules; j++)
 				generateNoduleOutput(inputData[i], j, i, NULL);
 
-			/* We measure the network aptitude. */
+			/* Measure the network aptitude. */
 			for (j = 0; j < cNetPopulation.numNets; j++) {
 				generateNetOutput(j, i);
 				measureNetworkAptitude(outputData[i], j);
 			}
 		}
 
-		/* We normalize the networks aptitude. */
+		/* Normalize the networks aptitude. */
 		for (i = 0; i < cNetPopulation.numNets; i++)
 			cNetPopulation.nets[i]->aptitude /= numTrain;
 
-		/* We measure the nodules aptitude. */
+		/* Measure the nodules aptitude. */
 		for (i = 0; i < cNodulePopulation.numNodules; i++)
 			measureNoduleAptitude(i);
 
-		/* We normalize the nodules aptitude. */
+		/* Normalize the nodules aptitude. */
 		normalizeNoduleAptitude();
 		tmpAptitude = 0.0;
 
-		/* We measure the average aptitude of all the networks. */
+		/* Measure the average aptitude of all the networks. */
 		for (i = 0; i < cNetPopulation.numNets; i++)
 			tmpAptitude += cNetPopulation.nets[i]->aptitude;
 		tmpAptitude /= cNetPopulation.numNets;
@@ -90,26 +90,26 @@ measureNoduleChange(int nodule) {
 	int i, j;
 
 	for (i = 0; i < cNetPopulation.numNets; i++) {
-		/* We train the networks of the modified nodule. */
+		/* Train the networks of the modified nodule. */
 		if (cNetPopulation.nets[i]->nodules[cNodulePopulation.numSubpops - 1] == cNodulePopulation.nodules[nodule]) {
 			cNetPopulation.nets[i]->aptitude = 0;
 
-			/* We calculate the networks aptitude. */
+			/* Calculate the networks aptitude. */
 			for (j = 0; j < numTrain; j++) {
 				generateNoduleOutput(inputData[j], nodule, j, NULL);
 				generateNetOutput(i, j);
 				measureNetworkAptitude(outputData[j], i);
 			}
 
-			/* We normalize the networks aptitude. */
+			/* Normalize the networks aptitude. */
 			cNetPopulation.nets[i]->aptitude /= numTrain;
 		}
 	}
 
-	/* We sort the networks by aptitude. */
+	/* Sort the networks by aptitude. */
 	sortNetworks();
 
-	/* We measure the new nodule aptitude. */
+	/* Measure the new nodule aptitude. */
 	measureNoduleAptitude(nodule);
 	normalizeNoduleAptitude();
 }

@@ -1,81 +1,63 @@
-/******************************************************************************
- Copyright (c) 2004-2014 coconet project (see AUTHORS)
-
- This file is part of Coconet.
-
- Coconet is free software: you can redistribute it and/or modify it under the
- terms of the GNU General Public License as published by the Free Software
- Foundation, either version 3 of the License, or (at your option) any later
- version.
-
- Coconet is distributed in the hope that it will be useful, but WITHOUT ANY
- WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR
- A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
-
- You should have received a copy of the GNU General Public License along with
- coconet. If not, see <http://www.gnu.org/licenses/>.
-******************************************************************************/
+/*********************************************************************************
+ * Copyright (c) 2004-2016 coconet project (see AUTHORS)                         *
+ *                                                                               *
+ * This file is part of Coconet.                                                 *
+ *                                                                               *
+ * Coconet is free software: you can redistribute it and/or modify it under the  *
+ * terms of the GNU General Public License as published by the Free Software     *
+ * Foundation, either version 3 of the License, or (at your option) any later    *
+ * version.                                                                      *
+ *                                                                               *
+ * Coconet is distributed in the hope that it will be useful, but WITHOUT ANY    *
+ * WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR *
+ * A PARTICULAR PURPOSE.  See the GNU General Public License for more details.   *
+ *                                                                               *
+ * You should have received a copy of the GNU General Public License along with  *
+ * coconet. If not, see <http://www.gnu.org/licenses/>.                          *
+ ********************************************************************************/
 
 #include <definitions.h>
 
-/******************************************************************************
- File: sort.c
- Funtion: sortNodules()
- Description: Order the nodules by aptitude.
- Input Parameters: None
- Local Variables
-   i: Integer. Counter.
-   j: Integer. Counter.
-   aux: Nodule. Auxiliar variable to change the order of the nodules.
- Return Value: None
- Calling Functions: None
-******************************************************************************/
-
-void sortNodules()
-{
+/*********************************************************************************
+ * Order the nodules by aptitude.                                                *
+ * @return void                                                                  *
+ ********************************************************************************/
+void
+sortNodules() {
 	int i, j;
-	nodule *aux;
+	nodule *aux; /* Auxiliar variable to change the order of the nodules. */
 
-	/* We order the nodules and copy them to the new population. */
+	/* Order the nodules and copy them to the new population. */
 	for (i = numNodules * (cNodulePopulation.numSubpops - 1); i < cNodulePopulation.numNodules; i++) {
 		for (j = i; j < cNodulePopulation.numNodules; j++) {
 			if (cNodulePopulation.nodules[i]->aptitude < cNodulePopulation.nodules[j]->aptitude) {
 				aux = cNodulePopulation.nodules[i];
 				cNodulePopulation.nodules[i] = cNodulePopulation.nodules[j];
 				cNodulePopulation.nodules[j] = aux;
-			} /* end if */
+			}
 
 			cNodulePopulation.nodules[i]->id = i;
-		} /* end for */
-	} /* end for */
+		}
+	}
 }
 
-/******************************************************************************
- File: sort.c
- Function: sortNetworks()
- Description: Order the networks by aptitude.
- Input Parameters: None
- Local Variables:
-   i: Integer. Counter.
-   j: Integer. Counter.
-   aux: Red. Auxiliar variable to change the order of the networks.
- Return Value: None
- Calling Functions: None
-******************************************************************************/
-
-void sortNetworks()
-{
+/*********************************************************************************
+ * Order the networks by aptitude.                                               *
+ * @return void                                                                  *
+ ********************************************************************************/
+void
+sortNetworks() {
 	int i, j;
-	network *aux;
+	network *aux; /* Auxiliar variable to change the order of the networks. */
 
-	/* We order the networks from higher to lower aptitude. */
+	/* Order the networks from higher to lower aptitude. */
 	for (i = 0; i < cNetPopulation.numNets; i++) {
 		for (j = i; j < cNetPopulation.numNets; j++) {
 			if (cNetPopulation.nets[i]->aptitude < cNetPopulation.nets[j]->aptitude) {
 				aux = cNetPopulation.nets[i];
 				cNetPopulation.nets[i] = cNetPopulation.nets[j];
 				cNetPopulation.nets[j] = aux;
-			} /* end if */
-		} /* end for */
-	} /* end for */
+			}
+		}
+	}
 }
