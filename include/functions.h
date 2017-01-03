@@ -64,5 +64,6 @@ void deleteConnection(int, int);
 void scaleIputData(int);
 void scaleOutputData(double **, int, double, double);
 void adjustMatrix();
+void scaleInputData(int);
 
 #endif /* FUNCTIONS_H */
