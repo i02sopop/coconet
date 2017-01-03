@@ -1,5 +1,5 @@
 /*********************************************************************************
- * Copyright (c) 2004-2016 coconet project (see AUTHORS)                         *
+ * Copyright (c) 2004-2017 coconet project (see AUTHORS)                         *
  *                                                                               *
  * This file is part of Coconet.                                                 *
  *                                                                               *
@@ -27,7 +27,6 @@
  ********************************************************************************/
 int
 main(int argc, char **argv) {
-	int i;
 	double netAptitude = 0.0; /* Store the average flair of the networks. */
 
 	/* Set gettext configuration. */
@@ -49,25 +48,23 @@ main(int argc, char **argv) {
 	scaleInputData(numTrain);
 	fprintf(stderr, _("Scaling output data.\n"));
 	if (netTransf == (func)&Logistic)
-		scaleOutputData(outputData,
-						numTrain,
-						0.0 + pTransfer.epsilon,
-						pTransfer.logistic_a - pTransfer.epsilon);
+		scaleOutputData(outputData, numTrain,
+		                0.0 + pTransfer.epsilon,
+		                pTransfer.logistic_a - pTransfer.epsilon);
 	else
-		scaleOutputData(outputData,
-						numTrain,
-						pTransfer.epsilon - pTransfer.htan_a,
-						pTransfer.htan_a - pTransfer.epsilon);
+		scaleOutputData(outputData, numTrain,
+		                pTransfer.epsilon - pTransfer.htan_a,
+		                pTransfer.htan_a - pTransfer.epsilon);
 
 	/* We evolve the networks and nodes ppulations. */
-	for (i = 0; measureChange(&netAptitude, i) == false; i++) {
+	for (int i = 0; measureChange(&netAptitude, i) == false; i++) {
 		/* We create a new population of nodes. */
 		fprintf(stderr, _("Species %d\n"), i + 1);
 		createNodulePopulation();
 
 		/* We add the new population of nodes to the previous population of
 		   networks. */
-		fprintf(stderr,_("Add nodes to networks.\n"));
+		fprintf(stderr, _("Add nodes to networks.\n"));
 		addNodulesNetworks();
 
 		/* We evolve the populations of networks and nodes. */
@@ -92,15 +89,13 @@ main(int argc, char **argv) {
 	scaleInputData(numGeneral);
 	fprintf(stderr, _("Scaling output data.\n"));
 	if (netTransf == (func)&Logistic)
-		scaleOutputData(outputData,
-						numGeneral,
-						0.0 + pTransfer.epsilon,
-						pTransfer.logistic_a - pTransfer.epsilon);
+		scaleOutputData(outputData, numGeneral,
+		                0.0 + pTransfer.epsilon,
+		                pTransfer.logistic_a - pTransfer.epsilon);
 	else
-		scaleOutputData(outputData,
-						numGeneral,
-						-pTransfer.htan_a + pTransfer.epsilon,
-						pTransfer.htan_a - pTransfer.epsilon);
+		scaleOutputData(outputData, numGeneral,
+		                -pTransfer.htan_a + pTransfer.epsilon,
+		                pTransfer.htan_a - pTransfer.epsilon);
 
 	/* We export the best network found. */
 	fprintf(stderr, _("Exporting the best network.\n"));
