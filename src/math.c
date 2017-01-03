@@ -1,5 +1,5 @@
 /*********************************************************************************
- * Copyright (c) 2004-2016 coconet project (see AUTHORS)                         *
+ * Copyright (c) 2004-2017 coconet project (see AUTHORS)                         *
  *                                                                               *
  * This file is part of Coconet.                                                 *
  *                                                                               *
@@ -58,9 +58,9 @@ Normal(double media, double sigma) {
 
 	if (!gliset) {
 		do {
-			v1 = 2 * doubleRandom() -1;
+			v1 = 2 * doubleRandom() - 1;
 			v2 = 2 * doubleRandom() - 1;
-			r = v1 * v1 + v2 * v2;
+			r = pow(v1, 2) + pow(v2, 2);
 		} while (r >= 1);
 
 		fac = sqrt(-2 * log(r) / r);
@@ -82,14 +82,13 @@ Normal(double media, double sigma) {
  ********************************************************************************/
 void
 scaleInputData(int iterations) {
-	int i, j;
 	double max, min, a, b;
 
 	/* Scale the input data. */
-	for (i = 0; i < cNetPopulation.numInputNodes; i++) {
+	for (int i = 0; i < cNetPopulation.numInputNodes; i++) {
 		/* Obtain the max and min values of the column. */
 		min = max = inputData[0][i];
-		for (j = 0; j < iterations; j++) {
+		for (int j = 0; j < iterations; j++) {
 			if (max < inputData[j][i])
 				max = inputData[j][i];
 			else if (min > inputData[j][i])
@@ -103,7 +102,7 @@ scaleInputData(int iterations) {
 			b = (MIN_ESC * max - MAX_ESC * min) / (max - min);
       
 			/* Scale the column. */
-			for (j = 0; j < iterations; j++)
+			for (int j = 0; j < iterations; j++)
 				inputData[j][i] = a * inputData[j][i] + b;
 		}
 	}
@@ -119,14 +118,13 @@ scaleInputData(int iterations) {
  ********************************************************************************/
 void
 scaleOutputData(double **data, int iterations, double lbound, double ubound) {
-	int i, j;
 	double max, min, a, b;
 
 	/* Scale the output. */
-	for (i = 0; i < cNetPopulation.numOutputNodes; i++) {
+	for (int i = 0; i < cNetPopulation.numOutputNodes; i++) {
 		/* Calculate the min and max values of the column. */
 		min = max = data[0][i];
-		for (j = 0; j < iterations; j++) {
+		for (int j = 0; j < iterations; j++) {
 			if (max < data[j][i])
 				max = data[j][i];
 			else if (min > data[j][i])
@@ -140,7 +138,7 @@ scaleOutputData(double **data, int iterations, double lbound, double ubound) {
 			b = (lbound * max-ubound * min) / (max - min);
 
 			/* Scale the column. */
-			for (j = 0; j < iterations; j++)
+			for (int j = 0; j < iterations; j++)
 				data[j][i] = a * data[j][i] + b;
 		}
 	}
