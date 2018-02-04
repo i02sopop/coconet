@@ -1,5 +1,5 @@
 /******************************************************************************
- Copyright (c) 2004-2012 coconet project (see AUTHORS)
+ Copyright (c) 2004-2018 coconet project (see AUTHORS)
 
  This file is part of Coconet.
 
@@ -65,5 +65,10 @@ void scaleIputData(int);
 void scaleOutputData(double **, int, double, double);
 void adjustMatrix();
 void scaleInputData(int);
+
+/* util.c */
+void *xmalloc(size_t);
+void *xcalloc(size_t, size_t);
+void *xrealloc(void *, size_t);
 
 #endif /* FUNCTIONS_H */

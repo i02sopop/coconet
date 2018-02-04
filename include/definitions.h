@@ -33,11 +33,11 @@
 
 /* Parameters for the transfer function. */
 typedef struct {
-    double logistic_a;
-    double logistic_b;
-    double htan_a;
-    double htan_b;
-    double epsilon;
+	double logistic_a;
+	double logistic_b;
+	double htan_a;
+	double htan_b;
+	double epsilon;
 } transfParam;
 
 typedef struct {

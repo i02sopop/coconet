@@ -1,5 +1,5 @@
 /*********************************************************************************
- * Copyright (c) 2004-2016 coconet project (see AUTHORS)                         *
+ * Copyright (c) 2004-2018 coconet project (see AUTHORS)                         *
  *                                                                               *
  * This file is part of Coconet.                                                 *
  *                                                                               *
@@ -19,12 +19,12 @@
 #include <definitions.h>
 #include <time.h>
 
-/*********************************************************************************
- * Load the input data from training and configuration files.                    *
- * @param char *config: Name of the configuration file.                          *
- * @param char *training: Name of the training file.                             *
- * @return void                                                                  *
- ********************************************************************************/
+/******************************************************************************
+ * Load the input data from training and configuration files.                 *
+ * @param char *config: Name of the configuration file.                       *
+ * @param char *training: Name of the training file.                          *
+ * @return void                                                               *
+ *****************************************************************************/
 void
 loadFile(char *config, char *training) {
 	int i, j;

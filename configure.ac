@@ -3,7 +3,7 @@ AC_PREREQ([2.69])
 AC_CONFIG_SRCDIR([src/main.c])
 AC_CONFIG_AUX_DIR([.build-aux])
 dnl AC_CONFIG_SUBDIRS([subdir])
-AM_INIT_AUTOMAKE([foreign -Wall -Werror dist-bzip2])
+AM_INIT_AUTOMAKE([foreign -Wall dist-bzip2])
 
 dnl Gettext
 AM_GNU_GETTEXT_VERSION([0.18.1])
@@ -39,6 +39,8 @@ dnl AC_CHECK_FUNC(atol,,AC_MSG_ERROR(Oops! no atol ?!?))
 AC_FUNC_ERROR_AT_LINE
 AC_FUNC_MALLOC
 AC_FUNC_REALLOC
+
+PKG_CHECK_MODULES([CHECK], [check >= 0.9.4])
 
 dnl Variables for Makefiles.
 AC_SUBST([PROJ_DIR], [`pwd`])

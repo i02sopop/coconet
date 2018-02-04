@@ -1,5 +1,6 @@
 /.deps/
 /Makefile
 /Makefile.in
-/check_coconet*
+/coconet_check*
 /test-suite.log
+/*.o

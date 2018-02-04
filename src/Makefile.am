@@ -9,7 +9,7 @@ coconet_LDADD=$(LIBMATH) $(LIBINTL)
 coconet_LDFLAG=
 coconet_SOURCES=createPopulations.c evolvePopulations.c freeMemory.c main.c \
 	measureAptitude.c mutation.c sort.c error.c files.c generateOutput.c \
-	math.c measureChange.c print.c
+	math.c measureChange.c print.c utils.c
 coconet_HEADERS=$(INCLUDE_DIR)/definitions.h $(INCLUDE_DIR)/functions.h \
 	$(INCLUDE_DIR)/gettext.h $(INCLUDE_DIR)/macros.h
 

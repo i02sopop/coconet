@@ -1,5 +1,5 @@
 /*********************************************************************************
- * Copyright (c) 2004-2017 coconet project (see AUTHORS)                         *
+ * Copyright (c) 2004-2018 coconet project (see AUTHORS)                         *
  *                                                                               *
  * This file is part of Coconet.                                                 *
  *                                                                               *
@@ -19,27 +19,51 @@
 #include <string.h>
 #include <definitions.h>
 
-/*********************************************************************************
- * Manage the program flow.                                                      *
- * @param int argc: Number of arguments of the program.                          *
- * @param char **argv: Arguments passed to the program.                          *
- * @returns 0 with no errors and -1 otherwise.                                   *
- ********************************************************************************/
-int
-main(int argc, char **argv) {
-	double netAptitude = 0.0; /* Store the average flair of the networks. */
-
-	/* Set gettext configuration. */
+void
+setGettextConfigs() {
 	setlocale(LC_ALL, "");
 	bindtextdomain(PACKAGE, LOCALEDIR);
 	textdomain(PACKAGE);
+}
 
-	/* Checking the number of arguments. */
+typedef struct Configs {
+	char *configFilename;
+	char *trainingFilename;
+} Configs;
+
+Configs *
+parseArguments(int argc, char **argv) {
+	Configs *configs;
+
 	if(argc < 4 || (argc > 4 && (argc != 6 || strcmp(argv[4], "-o") != 0)))
 		error(COMMAND);
 
+	configs = xmalloc(sizeof(Configs));
+	configs->configFilename = argv[1];
+	configs->trainingFilename = argv[2];
+
+	return configs;
+}
+
+/******************************************************************************
+ * Manage the program flow.                                                   *
+ * @param int argc: Number of arguments of the program.                       *
+ * @param char **argv: Arguments passed to the program.                       *
+ * @returns 0 with no errors and -1 otherwise.                                *
+ *****************************************************************************/
+int
+main(int argc, char **argv) {
+	Configs *configs;
+	double netAptitude = 0.0; /* Store the average flair of the networks. */
+
+	/* Set gettext configuration. */
+	setGettextConfigs();
+
+	/* Checking the number of arguments. */
+	configs = parseArguments(argc, argv);
+
 	/* We load the config and training files. */
-	loadFile(argv[1], argv[2]);
+	loadFile(configs->configFilename, configs->trainingFilename);
 	if(nodSel > numNodules)
 		nodSel = numNodules;
 
@@ -49,12 +73,12 @@ main(int argc, char **argv) {
 	fprintf(stderr, _("Scaling output data.\n"));
 	if (netTransf == (func)&Logistic)
 		scaleOutputData(outputData, numTrain,
-		                0.0 + pTransfer.epsilon,
-		                pTransfer.logistic_a - pTransfer.epsilon);
+						0.0 + pTransfer.epsilon,
+						pTransfer.logistic_a - pTransfer.epsilon);
 	else
 		scaleOutputData(outputData, numTrain,
-		                pTransfer.epsilon - pTransfer.htan_a,
-		                pTransfer.htan_a - pTransfer.epsilon);
+						pTransfer.epsilon - pTransfer.htan_a,
+						pTransfer.htan_a - pTransfer.epsilon);
 
 	/* We evolve the networks and nodes ppulations. */
 	for (int i = 0; measureChange(&netAptitude, i) == false; i++) {
@@ -90,12 +114,12 @@ main(int argc, char **argv) {
 	fprintf(stderr, _("Scaling output data.\n"));
 	if (netTransf == (func)&Logistic)
 		scaleOutputData(outputData, numGeneral,
-		                0.0 + pTransfer.epsilon,
-		                pTransfer.logistic_a - pTransfer.epsilon);
+						0.0 + pTransfer.epsilon,
+						pTransfer.logistic_a - pTransfer.epsilon);
 	else
 		scaleOutputData(outputData, numGeneral,
-		                -pTransfer.htan_a + pTransfer.epsilon,
-		                pTransfer.htan_a - pTransfer.epsilon);
+						-pTransfer.htan_a + pTransfer.epsilon,
+						pTransfer.htan_a - pTransfer.epsilon);
 
 	/* We export the best network found. */
 	fprintf(stderr, _("Exporting the best network.\n"));
