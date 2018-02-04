@@ -18,12 +18,12 @@
 
 #include <definitions.h>
 
-/*********************************************************************************
- * Measure the network aptitude from its outputs.                                *
- * @param double *output: Output of the network.                                 *
- * @param int netNumber: Network number to work with.                            *
- * @returns void                                                                 *
- ********************************************************************************/
+/******************************************************************************
+ * Measure the network aptitude from its outputs.                             *
+ * @param double *output: Output of the network.                              *
+ * @param int netNumber: Network number to work with.                         *
+ * @returns void                                                              *
+ *****************************************************************************/
 void
 measureNetworkAptitude(double *output, int netNumber) {
 	int i;
@@ -55,11 +55,11 @@ measureNetworkAptitude(double *output, int netNumber) {
 		cNetPopulation.nets[netNumber]->aptitude++;
 }
 
-/*********************************************************************************
- * Measure the nodule aptitude from several parameters.                          *
- * @param int nodule: Nodule number to measure.                                  *
- * @returns void                                                                 *
- ********************************************************************************/
+/******************************************************************************
+ * Measure the nodule aptitude from several parameters.                       *
+ * @param int nodule: Nodule number to measure.                               *
+ * @returns void                                                              *
+ *****************************************************************************/
 void
 measureNoduleAptitude(int nodule) {
 	int i;
@@ -70,9 +70,7 @@ measureNoduleAptitude(int nodule) {
 	network **population = NULL; /* Copy of the network population. */
 
 	/* Variable initialization. */
-	population = (network **)malloc(cNetPopulation.numNets * sizeof(network));
-	if (population == NULL)
-		error(RES_MEM);
+	population = (network **)xmalloc(cNetPopulation.numNets * sizeof(network));
 
 	/* Make a copy of the network population. */
 	copyNetwork(cNetPopulation.nets, population);
@@ -83,8 +81,8 @@ measureNoduleAptitude(int nodule) {
 		freeNetwork(cNetPopulation.nets[i]);
 
 	free(cNetPopulation.nets);
-	if ((cNetPopulation.nets = (network **)malloc(cNetPopulation.numNets * sizeof(network))) == NULL)
-		error(RES_MEM);
+	cNetPopulation.nets = (network **)xmalloc(cNetPopulation.numNets *
+											  sizeof(network));
 
 	/* Restore the network population. */
 	copyNetwork(population, cNetPopulation.nets);
@@ -103,31 +101,27 @@ measureNoduleAptitude(int nodule) {
 
 	/* Measure the partial aptitude of the nodule. Calculate the final aptitude
 	 * by ponderating the aptitudes calculated previously. */
-	cNodulePopulation.nodules[nodule]->aptitude = adj.sust * subst + adj.dif * diff +
-		adj.best * bestNets;
+	cNodulePopulation.nodules[nodule]->aptitude = adj.sust * subst + adj.dif *
+		diff + adj.best * bestNets;
 }
 
-/*********************************************************************************
- * Make a copy of the network population.                                        *
- * @param network **origin: Population of origin.                                *
- * @param network **destination: Population of destination.                      *
- * @returns void                                                                 *
- ********************************************************************************/
+/******************************************************************************
+ * Make a copy of the network population.                                     *
+ * @param network **origin: Population of origin.                             *
+ * @param network **destination: Population of destination.                   *
+ * @returns void                                                              *
+ *****************************************************************************/
 void
 copyNetwork(network **origin, network **destination) {
 	int i, j;
 
 	/* Make a copy of the network population. */
 	for (i = 0; i < cNetPopulation.numNets; i++) {
-		destination[i] = (network *)malloc(sizeof(network));
-		if (destination[i] == NULL)
-			error(RES_MEM);
-
-		destination[i]->nodules = (nodule **)malloc(cNodulePopulation.numSubpops * sizeof(nodule));
-		destination[i]->outValues = (double *)malloc(cNetPopulation.numOutputNodes * sizeof(double));
-		if (destination[i]->nodules == NULL || destination[i]->outValues == NULL)
-			error(RES_MEM);
-
+		destination[i] = (network *)xmalloc(sizeof(network));
+		destination[i]->nodules =
+			(nodule **)xmalloc(cNodulePopulation.numSubpops * sizeof(nodule));
+		destination[i]->outValues =
+			(double *)xmalloc(cNetPopulation.numOutputNodes * sizeof(double));
 		destination[i]->aptitude = origin[i]->aptitude;
 		for (j = 0; j < cNodulePopulation.numSubpops; j++)
 			destination[i]->nodules[j] = origin[i]->nodules[j];
@@ -136,26 +130,24 @@ copyNetwork(network **origin, network **destination) {
 	}
 }
 
-/*********************************************************************************
- * Measure the partial output of a nodule by difference.                         *
- * @param int nodule: Number of nodule to work with.                             *
- * @param network **population: Copy of the network population.                  *
- * @returns Double. Partial output of the nodule.                                *
- ********************************************************************************/
+/******************************************************************************
+ * Measure the partial output of a nodule by difference.                      *
+ * @param int nodule: Number of nodule to work with.                          *
+ * @param network **population: Copy of the network population.               *
+ * @returns Double. Partial output of the nodule.                             *
+ *****************************************************************************/
 double
 differ(int nodule, network **population) {
 	int i, j, k, l;
 	int netNumber = 0; /* Number of network in which the nodule takes part. */
 	/* Network ids in which the nodule takes part. */
-	int *netIds = (int *)malloc(maxNetworks * sizeof(int));
+	int *netIds = (int *)xmalloc(maxNetworks * sizeof(int));
 	double sum = 0.0;
-  
-	if (netIds == NULL)
-		error(RES_MEM);
 
 	/* Store the networks in which the nodule takes part. */
 	for (i = 0; i < cNetPopulation.numNets; i++)
-		if (cNetPopulation.nets[i]->nodules[cNodulePopulation.numSubpops - 1] == cNodulePopulation.nodules[nodule]) {
+		if (cNetPopulation.nets[i]->nodules[cNodulePopulation.numSubpops - 1] ==
+			cNodulePopulation.nodules[nodule]) {
 			cNetPopulation.nets[i]->aptitude = 0;
 			netIds[netNumber] = i;
 			netNumber++;
@@ -168,7 +160,8 @@ differ(int nodule, network **population) {
 			for (k = 0; k < cNetPopulation.numOutputNodes; k++) {
 				cNetPopulation.nets[netIds[i]]->outValues[k] = 0.0;
 				for (l = 0; l < cNodulePopulation.numSubpops - 1; l++)
-					cNetPopulation.nets[netIds[i]]->outValues[k] += (*(netTransf))(cNetPopulation.nets[netIds[i]]->nodules[l]->partialOutputs[j][k]);
+					cNetPopulation.nets[netIds[i]]->outValues[k] +=
+						(*(netTransf))(cNetPopulation.nets[netIds[i]]->nodules[l]->partialOutputs[j][k]);
 			}
 
 			/* Measure the networks aptitude. */
@@ -202,9 +195,10 @@ best(int nodule) {
 	int i;
 	int netNumber = 0; /* Number of networks the nodule take part of. */
 	double sum = 0.0;
-  
+
 	for (i = 0; i < cNetPopulation.numNets && netNumber < selNets; i++) {
-		if (cNetPopulation.nets[i]->nodules[cNodulePopulation.numSubpops - 1] == cNodulePopulation.nodules[nodule]) {
+		if (cNetPopulation.nets[i]->nodules[cNodulePopulation.numSubpops - 1] ==
+			cNodulePopulation.nodules[nodule]) {
 			netNumber++;
 			sum += cNetPopulation.nets[i]->aptitude;
 		}
@@ -216,23 +210,25 @@ best(int nodule) {
 	return sum;
 }
 
-/*********************************************************************************
- * Measure the nodule partial aptitude by substitution.                          *
- * @param int nodule: Number of nodule to work with.                             *
- * @param network **population: Copy of the network population.                  *
- * @return Double. Partial aptitude of the nodule.                               *
- ********************************************************************************/
+/******************************************************************************
+ * Measure the nodule partial aptitude by substitution.                       *
+ * @param int nodule: Number of nodule to work with.                          *
+ * @param network **population: Copy of the network population.               *
+ * @return Double. Partial aptitude of the nodule.                            *
+ *****************************************************************************/
 double
 replace(int nodule, network **population) {
 	int i, j;
 	int netNumber = 0; /* Number of networks the nodule takes part of. */
 	int selected = selNets; /* Number of networks selected. */
 	double sum = 0;
-  
+
 	for (i = 0; i < selected && i < cNetPopulation.numNets; i++) {
-		if (cNetPopulation.nets[i]->nodules[cNodulePopulation.numSubpops - 1] != cNodulePopulation.nodules[nodule]) {
+		if (cNetPopulation.nets[i]->nodules[cNodulePopulation.numSubpops - 1] !=
+			cNodulePopulation.nodules[nodule]) {
 			/* Change the nodules of its subpopulation by the nodule to measure. */
-			cNetPopulation.nets[i]->nodules[cNodulePopulation.numSubpops - 1] = cNodulePopulation.nodules[nodule];
+			cNetPopulation.nets[i]->nodules[cNodulePopulation.numSubpops - 1] =
+				cNodulePopulation.nodules[nodule];
 
 			/* Initializate the networks aptitude to make a new measure. */
 			cNetPopulation.nets[i]->aptitude = 0;
@@ -256,19 +252,19 @@ replace(int nodule, network **population) {
 
 	/* Return the average difference of the networks aptitude that have been modified. */
 	sum /= (selected - netNumber);
-  
+
 	return sum;
 }
 
-/*********************************************************************************
- * Normalize the nodule aptitude by setting the minimal aptitude to 0.           *
- * @returns void                                                                 *
- *********************************************************************************/
+/******************************************************************************
+ * Normalize the nodule aptitude by setting the minimal aptitude to 0.        *
+ * @returns void                                                              *
+ *****************************************************************************/
 void
 normalizeNoduleAptitude() {
 	int i;
 	double min;
-  
+
 	/* Calculate the minimal value of the nodules aptitude. */
 	min = 0;
 	for (i = 0; i < cNodulePopulation.numNodules; i++)

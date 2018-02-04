@@ -45,7 +45,6 @@ void generateNetOutput(int, int);
 void generateNoduleOutput(double *, int, int, double *);
 void exportBestNetwork(char *);
 void evolvePopulations();
-void error(int);
 void simulatedAnnealing(int);
 double differ(int, network **);
 void createNetworks();
@@ -71,5 +70,6 @@ void *xmalloc(size_t);
 void *xcalloc(size_t, size_t);
 void *xrealloc(void *, size_t);
 void xlog(int level, char *fmt, ...);
+void xerror(int);
 
 #endif /* FUNCTIONS_H */

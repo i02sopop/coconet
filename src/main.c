@@ -19,24 +19,27 @@
 #include <string.h>
 #include <definitions.h>
 
+/* Initialize the gettext context. */
 void
-setGettextConfigs() {
+initGettext() {
 	setlocale(LC_ALL, "");
 	bindtextdomain(PACKAGE, LOCALEDIR);
 	textdomain(PACKAGE);
 }
 
+/* Configurations. */
 typedef struct Configs {
 	char *configFilename;
 	char *trainingFilename;
 } Configs;
 
+/* Parse the arguments and put them in a config variable. */
 Configs *
 parseArguments(int argc, char **argv) {
 	Configs *configs;
 
 	if(argc < 4 || (argc > 4 && (argc != 6 || strcmp(argv[4], "-o") != 0)))
-		error(COMMAND);
+		xerror(COMMAND);
 
 	configs = xmalloc(sizeof(Configs));
 	configs->configFilename = argv[1];
@@ -56,13 +59,9 @@ main(int argc, char **argv) {
 	Configs *configs;
 	double netAptitude = 0.0; /* Store the average flair of the networks. */
 
-	/* Set gettext configuration. */
-	setGettextConfigs();
-
-	/* Checking the number of arguments. */
+	/* Program initialization. */
+	initGettext();
 	configs = parseArguments(argc, argv);
-
-	/* We load the config and training files. */
 	loadFile(configs->configFilename, configs->trainingFilename);
 	if (nodSel > numNodules)
 		nodSel = numNodules;
@@ -70,6 +69,7 @@ main(int argc, char **argv) {
 	/* Scaling of input and output data from the training file. */
 	xlog(0, "Scaling input data.\n");
 	scaleInputData(numTrain);
+
 	xlog(0, "Scaling output data.\n");
 	if (netTransf == (func)&Logistic)
 		scaleOutputData(outputData, numTrain,

@@ -36,38 +36,32 @@ loadFile(char *config, char *training) {
 	configFile = fopen(config, "r");
 	trainingFile = fopen(training, "r");
 	if (configFile == NULL || trainingFile == NULL)
-		error(IO);
+		xerror(IO);
 
 	if (fscanf(trainingFile, "$ %d\n", &numTrain) == EOF ||
 		fscanf(trainingFile, "$ %d\n", &cNetPopulation.numInputNodes) == EOF ||
 		fscanf(trainingFile,"$ %d\n",&cNetPopulation.numOutputNodes) == EOF)
-		error(IO);
+		xerror(IO);
 
 	/* Loading the training data. */
-	inputData = (double **)malloc(numTrain * sizeof(double));
-	outputData = (double **)malloc(numTrain * sizeof(double));
-	if (inputData == NULL || outputData == NULL)
-		error(RES_MEM);
-
+	inputData = (double **)xmalloc(numTrain * sizeof(double));
+	outputData = (double **)xmalloc(numTrain * sizeof(double));
 	for (i = 0; i < numTrain; i++) {
-		inputData[i] = (double *)malloc(cNetPopulation.numInputNodes * sizeof(double));
-		outputData[i] = (double *)malloc(cNetPopulation.numOutputNodes * sizeof(double));
-		if (inputData[i] == NULL || outputData[i] == NULL)
-			error(RES_MEM);
-
+		inputData[i] = (double *)xmalloc(cNetPopulation.numInputNodes * sizeof(double));
+		outputData[i] = (double *)xmalloc(cNetPopulation.numOutputNodes * sizeof(double));
 		for (j = 0; j < cNetPopulation.numInputNodes; j++)
 			if (fscanf(trainingFile, "%lf", &inputData[i][j]) == EOF)
-				error(IO);
+				xerror(IO);
 
 		for (j = 0; j < cNetPopulation.numOutputNodes; j++)
 			if (fscanf(trainingFile, "%lf", &outputData[i][j]) == EOF)
-				error(IO);
+				xerror(IO);
 	}
 
 	if (fscanf(configFile, "Networks: %d\n", &maxNetworks) == EOF ||
 		fscanf(configFile, "Nodes: %d\n", &maxNodes) == EOF ||
 		fscanf(configFile, "Nodules: %d\n", &numNodules) == EOF)
-		error(IO);
+		xerror(IO);
 
 	/* Parameters of the transfer functions. */
 	if (fscanf(configFile, "Htan a: %lf\n", &pTransfer.htan_a) == EOF ||
@@ -75,33 +69,33 @@ loadFile(char *config, char *training) {
 		fscanf(configFile, "Logistic a: %lf\n", &pTransfer.logistic_a) == EOF ||
 		fscanf(configFile, "Logistic b: %lf\n", &pTransfer.logistic_b) == EOF ||
 		fscanf(configFile, "Epsilon: %lf\n", &pTransfer.epsilon) == EOF)
-		error(IO);
+		xerror(IO);
 
 	/* Adjustment for nodule aptitude. */
 	if (fscanf(configFile, "replace: %lf\n", &adj.sust) == EOF ||
 		fscanf(configFile, "differ: %lf\n", &adj.dif) == EOF ||
 		fscanf(configFile, "best: %lf\n", &adj.best) == EOF)
-		error(IO);
+		xerror(IO);
 
 	if (fscanf(configFile, "Networks to pick: %d\n", &selNets) == EOF ||
-	    fscanf(configFile, "Nodules to pick: %d\n", &nodSel) == EOF)
-		error(IO);
+		fscanf(configFile, "Nodules to pick: %d\n", &nodSel) == EOF)
+		xerror(IO);
 
 	if (fscanf(configFile, "Iterations SA: %d\n", &numSAIterantions) == EOF ||
 		fscanf(configFile, "To SA: %lf\n", &ToSA) == EOF ||
 		fscanf(configFile, "alpha SA: %lf\n", &alphasa) == EOF)
-		error(IO);
+		xerror(IO);
 
 	if (fscanf(configFile, "Min Delta: %d\n", &delta_min) == EOF ||
 		fscanf(configFile, "Max Delta: %d\n", &delta_max) == EOF)
-		error(IO);
+		xerror(IO);
 
 	if (fscanf(configFile, "Evolution limit: %lf\n", &evolim) == EOF ||
 		fscanf(configFile, "Alpha backpropagation: %lf\n", &alpharet) == EOF)
-		error(IO);
+		xerror(IO);
 
 	if (fclose(configFile) == EOF || fclose(trainingFile) == EOF)
-		error(IO);
+		xerror(IO);
 
 	srandom(time(NULL));
 	netTransf = (random() % 2 == 0) ? (func)&HyperbolicTangent : (func)&Logistic;
@@ -114,11 +108,11 @@ loadFile(char *config, char *training) {
 		nodSel = numNodules;
 }
 
-/*********************************************************************************
- * Read the input data to measure the generalization.                            *
- * @param char *filename: Name of the generalization file.                       *
- * @return void                                                                  *
- ********************************************************************************/
+/******************************************************************************
+ * Read the input data to measure the generalization.                         *
+ * @param char *filename: Name of the generalization file.                    *
+ * @return void                                                               *
+ *****************************************************************************/
 void
 readGeneralization(char *filename) {
 	int i, j;
@@ -126,13 +120,13 @@ readGeneralization(char *filename) {
 
 	/* Open the generalization file. */
 	if ((file = fopen(filename, "r")) == NULL)
-		error(IO);
+		xerror(IO);
 
 	/* Load the generalization data. */
 	if (fscanf(file, "$ %d\n", &numGeneral) == EOF ||
 		fscanf(file, "$ %d\n", &cNetPopulation.numInputNodes) == EOF ||
 		fscanf(file, "$ %d\n", &cNetPopulation.numOutputNodes) == EOF)
-		error(IO);
+		xerror(IO);
 
 	for (i = 0; i < numTrain; i++) {
 		free(inputData[i]);
@@ -142,59 +136,49 @@ readGeneralization(char *filename) {
 	free(inputData);
 	free(outputData);
 
-	inputData = (double **)malloc(numGeneral * sizeof(double));
-	outputData = (double **)malloc(numGeneral * sizeof(double));
-	if (inputData == NULL || outputData == NULL)
-		error(RES_MEM);
-
+	inputData = (double **)xmalloc(numGeneral * sizeof(double));
+	outputData = (double **)xmalloc(numGeneral * sizeof(double));
 	for (i = 0; i < numGeneral; i++) {
-		inputData[i] = (double *)malloc(cNetPopulation.numInputNodes * sizeof(double));
-		outputData[i] = (double *)malloc(cNetPopulation.numOutputNodes * sizeof(double));
-		if (inputData[i] == NULL || outputData[i] == NULL)
-			error(RES_MEM);
-
+		inputData[i] =
+			(double *)xmalloc(cNetPopulation.numInputNodes * sizeof(double));
+		outputData[i] =
+			(double *)xmalloc(cNetPopulation.numOutputNodes * sizeof(double));
 		for (j = 0; j < cNetPopulation.numInputNodes; j++)
 			if (fscanf(file, "%lf", &inputData[i][j]) == EOF)
-				error(IO);
+				xerror(IO);
 
 		for (j = 0; j < cNetPopulation.numOutputNodes; j++)
 			if(fscanf(file, "%lf", &outputData[i][j]) == EOF)
-				error(IO);
+				xerror(IO);
 	}
 
 	/* Close the file. */
 	if (fclose(file) == EOF)
-		error(IO);
+		xerror(IO);
 }
 
-/*********************************************************************************
- * Export the network who fits best to the problem to an output file.            *
- * @param char *filename: Name of the output file.                               *
- * @return void.                                                                 *
- ********************************************************************************/
+/******************************************************************************
+ * Export the network who fits best to the problem to an output file.         *
+ * @param char *filename: Name of the output file.                            *
+ * @return void.                                                              *
+ *****************************************************************************/
 void
 exportBestNetwork(char *filename) {
 	int i, j, k, l, nodes, idmax, connections;
 	double *aptitude, max;
 	FILE *out;
 
-	if ((aptitude = (double *)malloc(5 * sizeof(double))) == NULL)
-		error(RES_MEM);
-
+	aptitude = (double *)xmalloc(5 * sizeof(double));
 	for (i = 0; i < cNodulePopulation.numNodules; i++) {
 		for (j = 0; j < numTrain; j++)
 			free(cNodulePopulation.nodules[i]->partialOutputs[j]);
 		free(cNodulePopulation.nodules[i]->partialOutputs);
 
-		cNodulePopulation.nodules[i]->partialOutputs = (double **)malloc(numGeneral * sizeof(double));
-		if (cNodulePopulation.nodules[i]->partialOutputs == NULL)
-			error(RES_MEM);
-
+		cNodulePopulation.nodules[i]->partialOutputs =
+			(double **)xmalloc(numGeneral * sizeof(double));
 		for (j = 0; j < numGeneral; j++){
-			cNodulePopulation.nodules[i]->partialOutputs[j] = (double *)malloc(cNetPopulation.numOutputNodes * sizeof(double));
-			if (cNodulePopulation.nodules[i]->partialOutputs[j] == NULL)
-				error(RES_MEM);
-
+			cNodulePopulation.nodules[i]->partialOutputs[j] =
+				(double *)xmalloc(cNetPopulation.numOutputNodes * sizeof(double));
 			for (k = 0; k < cNetPopulation.numOutputNodes; k++)
 				cNodulePopulation.nodules[i]->partialOutputs[j][k] = 0.0;
 		}
@@ -202,7 +186,7 @@ exportBestNetwork(char *filename) {
 
 	/* Open the output file. */
 	if ((out = fopen(filename,"w")) == NULL)
-		error(IO);
+		xerror(IO);
 
 	/* Store the aptitude of the selected networks. */
 	for (i = 0; i < 5; i++){
@@ -288,7 +272,7 @@ exportBestNetwork(char *filename) {
 		fprintf(out, _("Generalization: %lf\n"), cNetPopulation.nets[idmax]->aptitude) == EOF ||
 		fprintf(out, _("Number of Nodules: %d\n"), cNodulePopulation.numSubpops) == EOF ||
 		fprintf(out, _("Number of Input Nodes: %d\n"), cNetPopulation.numInputNodes) == EOF)
-		error(IO);
+		xerror(IO);
 
 	nodes = 0;
 	for (i = 0; i < cNodulePopulation.numSubpops; i++)
@@ -296,7 +280,7 @@ exportBestNetwork(char *filename) {
 
 	if (fprintf(out, _("Number of Hidden Nodes: %d\n"), nodes) == EOF ||
 		fprintf(out, _("Number of Output Nodes: %d\n"), cNetPopulation.numOutputNodes) == EOF)
-		error(IO);
+		xerror(IO);
 
 	connections = 0;
 	for (i = 0; i < cNodulePopulation.numSubpops; i++)
@@ -306,7 +290,7 @@ exportBestNetwork(char *filename) {
 					connections++;
 
 	if (fprintf(out, _("Number of Input Connections: %d\n"), connections) == EOF)
-		error(IO);
+		xerror(IO);
 
 	connections = 0;
 	for (i = 0; i < cNodulePopulation.numSubpops; i++)
@@ -316,10 +300,10 @@ exportBestNetwork(char *filename) {
 					connections++;
 
 	if (fprintf(out, _("Number of Output Connections: %d\n"), connections) == EOF)
-		error(IO);
+		xerror(IO);
 
 	/* Close the output file. */
 	if (fclose(out) == EOF)
-		error(IO);
+		xerror(IO);
 	free(aptitude);
 }

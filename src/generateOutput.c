@@ -18,29 +18,25 @@
 
 #include <definitions.h>
 
-/*********************************************************************************
- * Generate the nodule output from an input data.                                *
- * @param double *in: Input data of each input node.                             *
- * @param int numNodule: Number of nodule to work with.                          *
- * @param int numInput: Number of input data to generate an output data.         *
- * @param double *nodOut: Store the partial outputs of each node.                *
- * @return void                                                                  *
- ********************************************************************************/
+/******************************************************************************
+ * Generate the nodule output from an input data.                             *
+ * @param double *in: Input data of each input node.                          *
+ * @param int numNodule: Number of nodule to work with.                       *
+ * @param int numInput: Number of input data to generate an output data.      *
+ * @param double *nodOut: Store the partial outputs of each node.             *
+ * @return void                                                               *
+ *****************************************************************************/
 void
 generateNoduleOutput(double *in, int numNodule, int numInput, double *nodOut) {
 	int i, j, numNodes;
 	double *outputs, *inputs;
- 
+
 	/* Variable initialization. */
 	numNodes = cNodulePopulation.nodules[numNodule]->nodes;
-	outputs = (double *)malloc(numNodes * sizeof(double));
-	inputs = (double *)malloc(numNodes * sizeof(double));
-
-	if (outputs == NULL || inputs == NULL)
-		error(RES_MEM);
-
+	outputs = (double *)xmalloc(numNodes * sizeof(double));
+	inputs = (double *)xmalloc(numNodes * sizeof(double));
 	for (i = 0; i < numNodes; i++)
-        inputs[i] = outputs[i] = 0.0;
+		inputs[i] = outputs[i] = 0.0;
 
 	for (i = 0; i < cNetPopulation.numOutputNodes; i++)
 		cNodulePopulation.nodules[numNodule]->partialOutputs[numInput][i] = 0.0;
@@ -68,13 +64,13 @@ generateNoduleOutput(double *in, int numNodule, int numInput, double *nodOut) {
 	if (nodOut != NULL) {
 		for (i = 0; i < cNetPopulation.numInputNodes; i++)
 			nodOut[i] = in[i];
-  
+
 		for (i = 0; i < numNodes; i++)
 			nodOut[i + cNetPopulation.numInputNodes] = outputs[i];
-    
+
 		for (i = 0; i < cNetPopulation.numOutputNodes; i++)
 			nodOut[i + cNetPopulation.numInputNodes + numNodes] =
-			    (*(netTransf))(cNodulePopulation.nodules[numNodule]->partialOutputs[numInput][i]);
+				(*(netTransf))(cNodulePopulation.nodules[numNodule]->partialOutputs[numInput][i]);
 	}
 
 	free(outputs);

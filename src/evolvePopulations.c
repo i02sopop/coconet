@@ -1,5 +1,5 @@
 /*********************************************************************************
- * Copyright (c) 2004-2016 coconet project (see AUTHORS)                         *
+ * Copyright (c) 2004-2018 coconet project (see AUTHORS)                         *
  *                                                                               *
  * This file is part of Coconet.                                                 *
  *                                                                               *
@@ -18,10 +18,10 @@
 
 #include <definitions.h>
 
-/*********************************************************************************
- * Evolve the networks and nodules populations.                                  *
- * @return void                                                                  *
- ********************************************************************************/
+/******************************************************************************
+ * Evolve the networks and nodules populations.                               *
+ * @return void                                                               *
+ *****************************************************************************/
 void
 evolvePopulations() {
 	int i, j, k, initNumNodules; /* Initial number of nodules of the subpopulation. */
@@ -39,17 +39,17 @@ evolvePopulations() {
 		if (!i) {
 			/* If the subpopulation is new we run the backpropagation to reduce
 			 * its error. */
-			fprintf(stderr, _("Doing the backpropagation to a new nodule subpopulation.\n"));
+			xlog(0, "Doing the backpropagation to a new nodule subpopulation.\n");
 			for (j = 0; j < numNodules; j++)
 				backpropagation(initNumNodules + j, numTrain, 5000);
 
 			/* Train by first time the networks to have an initial value of
 			 * the nodules and networks aptitude. */
-			fprintf(stderr, _("Train by first time the networks.\n"));
+			xlog(0, "Train by first time the networks.\n");
 			for (j = 0; j < numTrain; j++) {
 				/* Generate the nodules output. */
 				for (k = cNodulePopulation.numNodules - numNodules;
-				     k < cNodulePopulation.numNodules; k++)
+					 k < cNodulePopulation.numNodules; k++)
 					generateNoduleOutput(inputData[j], k, j, NULL);
 
 				/* Measure the networks aptitude. */
@@ -70,47 +70,47 @@ evolvePopulations() {
 		}
 
 		/* Sort the networks by aptitude. */
-		fprintf(stderr, _("Sorting networks.\n"));
+		xlog(0, "Sorting networks.\n");
 		sortNetworks();
 
 		/* Train the networks by simulate annealing. */
-		fprintf(stderr, _("Training the networks by simulate annealing.\n"));
+		xlog(0, "Training the networks by simulate annealing.\n");
 		for (j = initNumNodules; j < cNodulePopulation.numNodules; j++)
 			simulatedAnnealing(j);
 
 		/* Normalize the nodules aptitude. */
-		fprintf(stderr, _("Normalize the nodules aptitude.\n"));
+		xlog(0, "Normalize the nodules aptitude.\n");
 		normalizeNoduleAptitude();
 
 		/* Sort the nodules by aptitude. */
-		fprintf(stderr, _("Sorting nodules.\n"));
+		xlog(0, "Sorting nodules.\n");
 		sortNodules();
 
 		/* Create a new subpopulation descendant of the actual one. */
-		fprintf(stderr, _("Creating new subpopulation.\n"));
+		xlog(0, "Creating new subpopulation.\n");
 		copyDescendant();
 
 		/* Make the structural mutation of the nodules. */
-		fprintf(stderr, _("Nodules mutation.\n"));
+		xlog(0, "Nodules mutation.\n");
 		for (j = initNumNodules; j < cNodulePopulation.numNodules; j++)
 			mutateNodules(j);
 
 		/* Replace the worst nodules by the best ones in the descendant
 		 * population. */
-		fprintf(stderr, _("Replace the worst nodules by the best ones.\n"));
+		xlog(0, "Replace the worst nodules by the best ones.\n");
 		replaceNodules();
 
-		fprintf(stderr, _("End of the evolve.\n"));
+		xlog(0, "End of the evolve.\n");
 	}
 }
 
-/*********************************************************************************
- * Run the backpropagation algorithm to a given nodule.                          *
- * @param int nodule: Number of the nodule to work with.                         *
- * @param int numPatterns: Number of input patterns.                             *
- * @param int iter: Number of iterations of the algorithm.                       *
- * @return void                                                                  *
- ********************************************************************************/
+/******************************************************************************
+ * Run the backpropagation algorithm to a given nodule.                       *
+ * @param int nodule: Number of the nodule to work with.                      *
+ * @param int numPatterns: Number of input patterns.                          *
+ * @param int iter: Number of iterations of the algorithm.                    *
+ * @return void                                                               *
+ *****************************************************************************/
 void
 backpropagation(int nodule, int numPatterns, int iter) {
 	int i, j, k;
@@ -123,23 +123,17 @@ backpropagation(int nodule, int numPatterns, int iter) {
 	func *transf; /* Store the transfer functions of each node of the nodule. */
 
 	/* Initializate the local variables. */
-	numNodes = cNodulePopulation.nodules[nodule]->nodes + cNetPopulation.numInputNodes +
-		cNetPopulation.numOutputNodes;
-	transf = (func *)malloc((cNetPopulation.numOutputNodes + cNodulePopulation.nodules[nodule]->nodes) * sizeof(func));
-	out = (double *)malloc(numNodes * sizeof(double));
-	F_W = (double **)malloc(numNodes * sizeof(double));
-	weights = (double **)malloc(numNodes * sizeof(double));
-	initialError = (double *)malloc(cNetPopulation.numOutputNodes * sizeof(double));
-
-	if (transf == NULL || out == NULL || F_W == NULL || weights == NULL || initialError == NULL)
-		error(RES_MEM);
-
+	numNodes = cNodulePopulation.nodules[nodule]->nodes +
+		cNetPopulation.numInputNodes + cNetPopulation.numOutputNodes;
+	transf = (func *)xmalloc((cNetPopulation.numOutputNodes +
+							  cNodulePopulation.nodules[nodule]->nodes) * sizeof(func));
+	out = (double *)xmalloc(numNodes * sizeof(double));
+	F_W = (double **)xmalloc(numNodes * sizeof(double));
+	weights = (double **)xmalloc(numNodes * sizeof(double));
+	initialError = (double *)xmalloc(cNetPopulation.numOutputNodes * sizeof(double));
 	for (i = 0; i < numNodes; i++) {
-		F_W[i] = (double *)malloc(numNodes * sizeof(double));
-		weights[i] = (double *)malloc(numNodes * sizeof(double));
-		if (F_W[i] == NULL || weights[i] == NULL)
-			error(RES_MEM);
-
+		F_W[i] = (double *)xmalloc(numNodes * sizeof(double));
+		weights[i] = (double *)xmalloc(numNodes * sizeof(double));
 		for (j = 0; j < numNodes; j++) {
 			F_W[i][j] = 0.0;
 			weights[i][j] = 0.0;
@@ -174,7 +168,8 @@ backpropagation(int nodule, int numPatterns, int iter) {
 					cNodulePopulation.nodules[nodule]->outWeights[j][i];
 
 		/* Obtain the weight change. */
-		changeWeight(initialError, weights, out, F_W, cNodulePopulation.nodules[nodule]->nodes, transf);
+		changeWeight(initialError, weights, out, F_W,
+					 cNodulePopulation.nodules[nodule]->nodes, transf);
 
 		/* Update the weigths. */
 		for (i = 0; i < cNodulePopulation.nodules[nodule]->nodes; i++)
@@ -221,11 +216,10 @@ changeWeight(double *initialError, double **weights, double *out, double **F_W,
 
 	/* Variable initialization. */
 	numNodes = cNetPopulation.numInputNodes + nodes;
-	nodeError = (double *)malloc((numNodes + cNetPopulation.numOutputNodes) * sizeof(double));
-	netError = (double *)malloc((numNodes + cNetPopulation.numOutputNodes) * sizeof(double));
-	if (nodeError == NULL || netError == NULL)
-		error(RES_MEM);
-
+	nodeError = (double *)xmalloc((numNodes + cNetPopulation.numOutputNodes) *
+								  sizeof(double));
+	netError = (double *)xmalloc((numNodes + cNetPopulation.numOutputNodes) *
+								 sizeof(double));
 	for (i = 0; i < numNodes; i++)
 		nodeError[i] = 0.0;
 
@@ -233,7 +227,8 @@ changeWeight(double *initialError, double **weights, double *out, double **F_W,
 		nodeError[numNodes + i] = initialError[i];
 
 	/* Get the updates. */
-	for (i = numNodes + cNetPopulation.numOutputNodes - 1; i >= cNetPopulation.numInputNodes; i--) {
+	for (i = numNodes + cNetPopulation.numOutputNodes - 1;
+		 i >= cNetPopulation.numInputNodes; i--) {
 		for (j = i + 1; j < numNodes + cNetPopulation.numOutputNodes; j++)
 			nodeError[i] += weights[j][i] * netError[j];
 
@@ -249,11 +244,11 @@ changeWeight(double *initialError, double **weights, double *out, double **F_W,
 	}
 }
 
-/*********************************************************************************
- * Run the simulated annealing over a given nodule.                              *
- * @param int nodule: Number of nodule to run over.                              *
- * @return void                                                                  *
- ********************************************************************************/
+/******************************************************************************
+ * Run the simulated annealing over a given nodule.                           *
+ * @param int nodule: Number of nodule to run over.                           *
+ * @return void                                                               *
+ *****************************************************************************/
 void
 simulatedAnnealing(int nodule) {
 	int i, j, k, steps; /* Number of iterations of the annealing. */
@@ -320,7 +315,7 @@ simulatedAnnealing(int nodule) {
 			/* Recalculate the aptitude of the nodule. */
 			measureNoduleChange(nodule);
 		} else {
-			oldAptitude = cNodulePopulation.nodules[nodule]->aptitude;			
+			oldAptitude = cNodulePopulation.nodules[nodule]->aptitude;
 		}
 
 		/* Update the aptitude temperature. */
@@ -330,11 +325,11 @@ simulatedAnnealing(int nodule) {
 	free(weights);
 }
 
-/*********************************************************************************
- * Make a randon step in each nodule weight.                                     *
- * @param int nodule: Number of the nodule to work with.                         *
- * @return void                                                                  *
- ********************************************************************************/
+/******************************************************************************
+ * Make a randon step in each nodule weight.                                  *
+ * @param int nodule: Number of the nodule to work with.                      *
+ * @return void                                                               *
+ *****************************************************************************/
 void
 randomStep(int nodule) {
 	int i, j;

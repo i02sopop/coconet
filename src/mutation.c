@@ -18,10 +18,10 @@
 
 #include <definitions.h>
 
-/*********************************************************************************
- * Copy the actual nodule population into a new descendant population.           *
- * @return void                                                                  *
- ********************************************************************************/
+/******************************************************************************
+ * Copy the actual nodule population into a new descendant population.        *
+ * @return void                                                               *
+ *****************************************************************************/
 void
 copyDescendant() {
 	int i, j, k;
@@ -30,15 +30,11 @@ copyDescendant() {
 
 	/* Initialization of variables. */
 	initialNodule = numNodules * (cNodulePopulation.numSubpops - 1);
-	descend = (nodule **)malloc(numNodules * sizeof(nodule));
-	if (descend == NULL)
-		error(RES_MEM);
+	descend = (nodule **)xmalloc(numNodules * sizeof(nodule));
 
 	/* Copy the nodules to the new population. */
 	for (i = 0; i < numNodules; i++) {
-		descend[i] = (nodule *)malloc(sizeof(nodule));
-		if (descend[i] == NULL)
-			error(RES_MEM);
+		descend[i] = (nodule *)xmalloc(sizeof(nodule));
 
 		/* Copy the nodule from the old to the new population. */
 		noduleOrig = initialNodule + i;
@@ -46,62 +42,56 @@ copyDescendant() {
 		descend[i]->nodes = cNodulePopulation.nodules[noduleOrig]->nodes;
 		descend[i]->aptitude = cNodulePopulation.nodules[noduleOrig]->aptitude;
 
-		descend[i]->inConn = (int **)malloc(cNetPopulation.numInputNodes * sizeof(int));
-		descend[i]->inWeights = (double **)malloc(cNetPopulation.numInputNodes * sizeof(double));
-		descend[i]->outConn = (int **)malloc(maxNodes * sizeof(int));
-		descend[i]->outWeights = (double **)malloc(maxNodes * sizeof(double));
-		descend[i]->transf = (func *)malloc(maxNodes * sizeof(func));
-		descend[i]->partialOutputs = (double **)malloc(numTrain * sizeof(double));
-		if (descend[i]->inConn == NULL || descend[i]->inWeights == NULL ||
-		   descend[i]->outConn == NULL || descend[i]->outWeights == NULL ||
-		   descend[i]->transf == NULL || descend[i]->partialOutputs == NULL)
-			error(RES_MEM);
-
+		descend[i]->inConn =
+			(int **)xmalloc(cNetPopulation.numInputNodes * sizeof(int));
+		descend[i]->inWeights =
+			(double **)xmalloc(cNetPopulation.numInputNodes * sizeof(double));
+		descend[i]->outConn = (int **)xmalloc(maxNodes * sizeof(int));
+		descend[i]->outWeights = (double **)xmalloc(maxNodes * sizeof(double));
+		descend[i]->transf = (func *)xmalloc(maxNodes * sizeof(func));
+		descend[i]->partialOutputs =
+			(double **)xmalloc(numTrain * sizeof(double));
 		for (j = 0; j < cNetPopulation.numInputNodes; j++) {
-			descend[i]->inConn[j] = (int *)malloc(maxNodes * sizeof(int));
-			descend[i]->inWeights[j] = (double *)malloc(maxNodes * sizeof(double));
-			if (descend[i]->inConn[j] == NULL ||
-			   descend[i]->inWeights[j] == NULL)
-				error(RES_MEM);
-
+			descend[i]->inConn[j] = (int *)xmalloc(maxNodes * sizeof(int));
+			descend[i]->inWeights[j] =
+				(double *)xmalloc(maxNodes * sizeof(double));
 			for (k = 0; k < maxNodes; k++) {
-				descend[i]->inConn[j][k] = cNodulePopulation.nodules[noduleOrig]->inConn[j][k];
-				descend[i]->inWeights[j][k] = cNodulePopulation.nodules[noduleOrig]->inWeights[j][k];
+				descend[i]->inConn[j][k] =
+					cNodulePopulation.nodules[noduleOrig]->inConn[j][k];
+				descend[i]->inWeights[j][k] =
+					cNodulePopulation.nodules[noduleOrig]->inWeights[j][k];
 			}
 		}
 
 		for (j = 0; j < maxNodes; j++) {
-			descend[i]->outConn[j] = (int *)malloc(cNetPopulation.numOutputNodes * sizeof(int));
-			descend[i]->outWeights[j] = (double *)malloc(cNetPopulation.numOutputNodes * sizeof(double));
-			if (descend[i]->outConn[j] == NULL ||
-				descend[i]->outWeights[j] == NULL)
-				error(RES_MEM);
-
+			descend[i]->outConn[j] =
+				(int *)xmalloc(cNetPopulation.numOutputNodes * sizeof(int));
+			descend[i]->outWeights[j] =
+				(double *)xmalloc(cNetPopulation.numOutputNodes * sizeof(double));
 			descend[i]->transf[j] = cNodulePopulation.nodules[noduleOrig]->transf[j];
-
 			for (k = 0; k < cNetPopulation.numOutputNodes; k++) {
-				descend[i]->outConn[j][k] = cNodulePopulation.nodules[noduleOrig]->outConn[j][k];
-				descend[i]->outWeights[j][k] = cNodulePopulation.nodules[noduleOrig]->outWeights[j][k];
+				descend[i]->outConn[j][k] =
+					cNodulePopulation.nodules[noduleOrig]->outConn[j][k];
+				descend[i]->outWeights[j][k] =
+					cNodulePopulation.nodules[noduleOrig]->outWeights[j][k];
 			}
 		}
 
 		for (j = 0; j < numTrain; j++) {
-			descend[i]->partialOutputs[j] = (double *)malloc(cNetPopulation.numOutputNodes * sizeof(double));
-			if (descend[i]->partialOutputs[j] == NULL)
-				error(RES_MEM);
-
+			descend[i]->partialOutputs[j] =
+				(double *)xmalloc(cNetPopulation.numOutputNodes * sizeof(double));
 			for (k = 0; k < cNetPopulation.numOutputNodes; k++)
 				descend[i]->partialOutputs[j][k] =
-				    cNodulePopulation.nodules[noduleOrig]->partialOutputs[j][k];
+					cNodulePopulation.nodules[noduleOrig]->partialOutputs[j][k];
 		}
 	}
 }
 
-/*********************************************************************************
- * Make an estructural mutation in a given nodule.                               *
- * @param int nodule: Number of nodule to mutate.                                *
- * @return void                                                                  *
- ********************************************************************************/
+/******************************************************************************
+ * Make an estructural mutation in a given nodule.                            *
+ * @param int nodule: Number of nodule to mutate.                             *
+ * @return void                                                               *
+ *****************************************************************************/
 void
 mutateNodules(int nodule) {
 	int i, j, num;
@@ -134,7 +124,8 @@ mutateNodules(int nodule) {
 				(1 - cNodulePopulation.nodules[nodule]->aptitude) *
 				(delta_min - delta_max));
 	for (i = 0; i < num && cNodulePopulation.nodules[nodule]->nodes > 0; i++) {
-		j = random() % (cNetPopulation.numInputNodes + cNetPopulation.numOutputNodes);
+		j = random() % (cNetPopulation.numInputNodes +
+						cNetPopulation.numOutputNodes);
 		deleteConnection(nodule, j);
 	}
 
@@ -150,11 +141,11 @@ mutateNodules(int nodule) {
 	measureNoduleChange(nodule);
 }
 
-/*********************************************************************************
- * Add a connection to a given nodule.                                           *
- * @param int nodule: Number of nodule to modify.                                *
- * @return void                                                                  *
- ********************************************************************************/
+/******************************************************************************
+ * Add a connection to a given nodule.                                        *
+ * @param int nodule: Number of nodule to modify.                             *
+ * @return void                                                               *
+ *****************************************************************************/
 void
 addConnection(int nodule) {
 	int i, j, num, pos;
@@ -165,17 +156,15 @@ addConnection(int nodule) {
 	num = 0;
 	sel = random() % 2;
 	origin = (int *)malloc(sizeof(int));
-	destination = (int *)malloc(sizeof(int));
-	if (origin == NULL || destination == NULL)
-		error(RES_MEM);
-
+	destination = (int *)xmalloc(sizeof(int));
 	if (sel == 0) {
 		/* Add an input connection. */
 		for (i = 0; i < cNetPopulation.numInputNodes; i++)
 			for (j = 0; j < cNodulePopulation.nodules[nodule]->nodes; j++)
 				if (cNodulePopulation.nodules[nodule]->inConn[i][j] == 0) {
-					origin = (int *)realloc(origin, (num + 1) * sizeof(int));
-					destination = (int *)realloc(destination, (num + 1) * sizeof(int));
+					origin = (int *)xrealloc(origin, (num + 1) * sizeof(int));
+					destination = (int *)xrealloc(destination,
+												  (num + 1) * sizeof(int));
 					origin[num] = i;
 					destination[num] = j;
 					num++;
@@ -195,8 +184,8 @@ addConnection(int nodule) {
 		for (i = 0; i < cNodulePopulation.nodules[nodule]->nodes; i++)
 			for (j = 0; j < cNetPopulation.numOutputNodes; j++)
 				if (cNodulePopulation.nodules[nodule]->outConn[i][j] == 0) {
-					origin = (int *)realloc(origin, (num + 1) * sizeof(int));
-					destination = (int *)realloc(destination, (num + 1) * sizeof(int));
+					origin = (int *)xrealloc(origin, (num + 1) * sizeof(int));
+					destination = (int *)xrealloc(destination, (num + 1) * sizeof(int));
 					origin[num] = i;
 					destination[num] = j;
 					num++;
@@ -217,12 +206,12 @@ addConnection(int nodule) {
 	}
 }
 
-/*********************************************************************************
- * Add some nodes to a nodule.                                                   *
- * @param int nodule: Number of nodule to work with.                             *
- * @param int nodes: Number of nodes to add.                                     *
- * @return void                                                                  *
- ********************************************************************************/
+/******************************************************************************
+ * Add some nodes to a nodule.                                                *
+ * @param int nodule: Number of nodule to work with.                          *
+ * @param int nodes: Number of nodes to add.                                  *
+ * @return void                                                               *
+ *****************************************************************************/
 void
 addNode(int nodule, int nodes) {
 	int i;
@@ -237,12 +226,12 @@ addNode(int nodule, int nodes) {
 	cNodulePopulation.nodules[nodule]->nodes += nodes;
 }
 
-/*********************************************************************************
- * Delete a connection of a given node.                                          *
- * @param int nodule: Number of nodule to work with.                             *
- * @param int node: Node to delete the connection from.                          *
- * @return void                                                                  *
- ********************************************************************************/
+/******************************************************************************
+ * Delete a connection of a given node.                                       *
+ * @param int nodule: Number of nodule to work with.                          *
+ * @param int node: Node to delete the connection from.                       *
+ * @return void                                                               *
+ *****************************************************************************/
 void
 deleteConnection(int nodule, int node) {
 	int i, sel; /* Connection to delete. XXX: Rename it. */
@@ -275,16 +264,16 @@ deleteConnection(int nodule, int node) {
 	}
 }
 
-/*********************************************************************************
- * Delete a given number of nodes from a nodule.                                 *
- * @param int nodule: Number of nodule to work with.                             *
- * @param int nodes: Number of nodes to delete.                                  *
- * @return void                                                                  *
- ********************************************************************************/
+/******************************************************************************
+ * Delete a given number of nodes from a nodule.                              *
+ * @param int nodule: Number of nodule to work with.                          *
+ * @param int nodes: Number of nodes to delete.                               *
+ * @return void                                                               *
+ *****************************************************************************/
 void
 deleteNode(int nodule, int nodes) {
 	int i, j, k, node; /* Node to delete. XXX: Rename it. */
-  
+
 	for (k = 0; k < nodes; k++) {
 		node = random() % cNodulePopulation.nodules[nodule]->nodes;
 
@@ -320,31 +309,29 @@ deleteNode(int nodule, int nodes) {
 			cNodulePopulation.nodules[nodule]->inConn[i][j-1] = 0;
 			cNodulePopulation.nodules[nodule]->inWeights[i][j-1] = 0;
 		}
-  
+
 		cNodulePopulation.nodules[nodule]->nodes--;
 	}
 }
 
-/*********************************************************************************
- * Replace the worst nodules of a population by the best nodules of its          *
- * descendant population.                                                        *
- * @return void                                                                  *
- ********************************************************************************/
+/******************************************************************************
+ * Replace the worst nodules of a population by the best nodules of its       *
+ * descendant population.                                                     *
+ * @return void                                                               *
+ *****************************************************************************/
 void
 replaceNodules() {
 	int i, j, *id; /* Store the nodules id in order to sort them by aptitude. */
 	double *order; /* Store the nodules aptitude in order to sort them. */
 
 	/* Order the nodules by aptitude. */
-	id = (int *)malloc(numNodules * sizeof(int));
-	order = (double *)malloc(numNodules * sizeof(double));
-	if (id == NULL || order == NULL)
-		error(RES_MEM);
-
+	id = (int *)xmalloc(numNodules * sizeof(int));
+	order = (double *)xmalloc(numNodules * sizeof(double));
 	for (i = 0; i < numNodules; i++) {
 		id[i] = ((cNodulePopulation.numSubpops - 1) * numNodules) + i;
 		order[i] =
-			cNodulePopulation.nodules[(cNodulePopulation.numSubpops - 1) * numNodules + i]->aptitude;
+			cNodulePopulation.nodules[(cNodulePopulation.numSubpops - 1) *
+									  numNodules + i]->aptitude;
 	}
 
 	for (i = 0; i < numNodules; i++)

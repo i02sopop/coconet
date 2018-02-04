@@ -1,5 +1,5 @@
 /*********************************************************************************
- * Copyright (c) 2004-2016 coconet project (see AUTHORS)                         *
+ * Copyright (c) 2004-2018 coconet project (see AUTHORS)                         *
  *                                                                               *
  * This file is part of Coconet.                                                 *
  *                                                                               *
@@ -29,7 +29,7 @@ addNodulesNetworks() {
 		cNetPopulation.numNets = numNodules;
 		cNetPopulation.nets = (network **)malloc(numNodules * sizeof(network));
 		if (cNetPopulation.nets == NULL)
-			error(RES_MEM);
+			xerror(RES_MEM);
 		createNetworks();
 	} else {
 		/* We create the new population adding a new node to each network. */
@@ -52,18 +52,18 @@ createDescendant() {
 	/* Creation of the new network. */
 	dnet = (network **)malloc(maxNetworks * sizeof(network));
 	if (dnet == NULL)
-		error(RES_MEM);
+		xerror(RES_MEM);
 
 	for (i = 0; i < maxNetworks; i++) {
 		dnet[i] = (network *)malloc(sizeof(network));
 		if (dnet[i] == NULL)
-			error(RES_MEM);
+			xerror(RES_MEM);
 
 		dnet[i]->aptitude = 0;
-		dnet[i]->outValues = (double *)malloc(cNetPopulation.numOutputNodes * sizeof(double));
-		dnet[i]->nodules = (nodule **)malloc(cNodulePopulation.numSubpops * sizeof(nodule));
-		if (dnet[i]->outValues == NULL || dnet[i]->nodules == NULL)
-			error(RES_MEM);
+		dnet[i]->outValues = (double *)xmalloc(cNetPopulation.numOutputNodes *
+											  sizeof(double));
+		dnet[i]->nodules = (nodule **)xmalloc(cNodulePopulation.numSubpops *
+											 sizeof(nodule));
 
 		/* Select a new network randomly. */
 		net = random() % cNetPopulation.numNets;
@@ -76,7 +76,8 @@ createDescendant() {
 			dnet[i]->nodules[j] = cNetPopulation.nets[net]->nodules[j];
 
 		dnet[i]->nodules[cNodulePopulation.numSubpops - 1] =
-			cNodulePopulation.nodules[(cNodulePopulation.numSubpops - 1) * numNodules + node];
+			cNodulePopulation.nodules[(cNodulePopulation.numSubpops - 1) *
+									  numNodules + node];
 	}
 
 	/* We fix the new network. */
@@ -115,10 +116,9 @@ createNodules() {
 	int i, j, k;
 
 	/* We create the nodule subpopulation. */
-	for (i = cNodulePopulation.numNodules - numNodules; i < cNodulePopulation.numNodules; i++) {
-		cNodulePopulation.nodules[i] = (nodule *)malloc(sizeof(nodule));
-		if (cNodulePopulation.nodules[i] == NULL)
-			error(RES_MEM);
+	for (i = cNodulePopulation.numNodules - numNodules;
+		 i < cNodulePopulation.numNodules; i++) {
+		cNodulePopulation.nodules[i] = (nodule *)xmalloc(sizeof(nodule));
 
 		/* Nodule id. */
 		cNodulePopulation.nodules[i]->id = i;
@@ -134,33 +134,24 @@ createNodules() {
 
 		/* Memory allocation for the creation of connections and weights. */
 		/* Connections from input to hidden nodes. */
-		cNodulePopulation.nodules[i]->inConn = (int **)malloc(cNetPopulation.numInputNodes * sizeof(int));
+		cNodulePopulation.nodules[i]->inConn = (int **)xmalloc(cNetPopulation.numInputNodes * sizeof(int));
 
 		/* Connections from hidden to output nodes. */
-		cNodulePopulation.nodules[i]->outConn = (int **)malloc(maxNodes * sizeof(int));
+		cNodulePopulation.nodules[i]->outConn = (int **)xmalloc(maxNodes * sizeof(int));
 
 		/* Weights of connections between input and hidden nodes. */
-		cNodulePopulation.nodules[i]->inWeights = (double **)malloc(cNetPopulation.numInputNodes * sizeof(double));
+		cNodulePopulation.nodules[i]->inWeights = (double **)xmalloc(cNetPopulation.numInputNodes * sizeof(double));
 
 		/* Weights of connections between hidden and output nodes. */
-		cNodulePopulation.nodules[i]->outWeights = (double **)malloc(maxNodes * sizeof(double));
-		cNodulePopulation.nodules[i]->partialOutputs = (double **)malloc(numTrain * sizeof(double));
-		cNodulePopulation.nodules[i]->transf = (func *)malloc(maxNodes * sizeof(func));
-
-		if (cNodulePopulation.nodules[i]->inConn == NULL || cNodulePopulation.nodules[i]->outConn == NULL ||
-			cNodulePopulation.nodules[i]->inWeights == NULL || cNodulePopulation.nodules[i]->outWeights == NULL ||
-			cNodulePopulation.nodules[i]->partialOutputs == NULL || cNodulePopulation.nodules[i]->transf == NULL)
-			error(RES_MEM);
+		cNodulePopulation.nodules[i]->outWeights = (double **)xmalloc(maxNodes * sizeof(double));
+		cNodulePopulation.nodules[i]->partialOutputs = (double **)xmalloc(numTrain * sizeof(double));
+		cNodulePopulation.nodules[i]->transf = (func *)xmalloc(maxNodes * sizeof(func));
 
 		/* Creation of connections and weigths. */
 		/* Entry connections and weights. */
 		for (j = 0; j < cNetPopulation.numInputNodes; j++) {
-			cNodulePopulation.nodules[i]->inConn[j] = (int *)malloc(maxNodes * sizeof(int));
-			cNodulePopulation.nodules[i]->inWeights[j] = (double *)malloc(maxNodes * sizeof(double));
-			if (cNodulePopulation.nodules[i]->inConn[j] == NULL ||
-			    cNodulePopulation.nodules[i]->inWeights[j] == NULL)
-				error(RES_MEM);
-
+			cNodulePopulation.nodules[i]->inConn[j] = (int *)xmalloc(maxNodes * sizeof(int));
+			cNodulePopulation.nodules[i]->inWeights[j] = (double *)xmalloc(maxNodes * sizeof(double));
 			for (k = 0; k < maxNodes; k++) {
 				if (random() % 2 == 1 && k < cNodulePopulation.nodules[i]->nodes) {
 					cNodulePopulation.nodules[i]->inConn[j][k] = 1;
@@ -174,12 +165,10 @@ createNodules() {
 
 		/* Output connections and weights. */
 		for (j = 0; j < maxNodes; j++) {
-			cNodulePopulation.nodules[i]->outConn[j] = (int *)malloc(cNetPopulation.numOutputNodes * sizeof(int));
-			cNodulePopulation.nodules[i]->outWeights[j] = (double *)malloc(cNetPopulation.numOutputNodes * sizeof(double));
-			if (cNodulePopulation.nodules[i]->outConn[j] == NULL ||
-			    cNodulePopulation.nodules[i]->outWeights[j] == NULL)
-				error(RES_MEM);
-
+			cNodulePopulation.nodules[i]->outConn[j] =
+				(int *)xmalloc(cNetPopulation.numOutputNodes * sizeof(int));
+			cNodulePopulation.nodules[i]->outWeights[j] =
+				(double *)xmalloc(cNetPopulation.numOutputNodes * sizeof(double));
 			for (k = 0; k < cNetPopulation.numOutputNodes; k++) {
 				if (random() % 2 == 1 && j < cNodulePopulation.nodules[i]->nodes) {
 					cNodulePopulation.nodules[i]->outConn[j][k] = 1;
@@ -193,24 +182,24 @@ createNodules() {
 
 		/* Partial outputs. */
 		for (j = 0; j < numTrain; j++) {
-			cNodulePopulation.nodules[i]->partialOutputs[j] = (double *)malloc(cNetPopulation.numOutputNodes * sizeof(double));
-			if (cNodulePopulation.nodules[i]->partialOutputs[j] == NULL)
-				error(RES_MEM);
-
+			cNodulePopulation.nodules[i]->partialOutputs[j] =
+				(double *)xmalloc(cNetPopulation.numOutputNodes * sizeof(double));
 			for (k = 0; k < cNetPopulation.numOutputNodes; k++)
 				cNodulePopulation.nodules[i]->partialOutputs[j][k] = 0.0;
 		}
 
 		/* Assign the transfer function to each node. */
 		for(j = 0; j < cNodulePopulation.nodules[i]->nodes; j++)
-			cNodulePopulation.nodules[i]->transf[j] = (random() % 2 == 0) ? (func)&HyperbolicTangent : (func)&Logistic;
+			cNodulePopulation.nodules[i]->transf[j] = (random() % 2 == 0) ?
+				(func)&HyperbolicTangent :
+				(func)&Logistic;
 	}
 }
 
-/*********************************************************************************
- * Create or expand the nodule population.                                       *
- * @return void.                                                                 *
- ********************************************************************************/
+/******************************************************************************
+ * Create or expand the nodule population.                                    *
+ * @return void.                                                              *
+ *****************************************************************************/
 void
 createNodulePopulation() {
 	/* We update the number of subpopulations and nodules of the nodule
@@ -220,32 +209,28 @@ createNodulePopulation() {
 
 	/* Memory allocation for the new subpopulation. */
 	cNodulePopulation.nodules = (cNodulePopulation.numSubpops == 1) ?
-		(nodule **)malloc(numNodules * sizeof(nodule)) :
-		(nodule **)realloc(cNodulePopulation.nodules, cNodulePopulation.numNodules * sizeof(nodule));
-	if (cNodulePopulation.nodules == NULL)
-		error(RES_MEM);
+		(nodule **)xmalloc(numNodules * sizeof(nodule)) :
+		(nodule **)xrealloc(cNodulePopulation.nodules,
+							cNodulePopulation.numNodules * sizeof(nodule));
 
 	/* We create the nodules of the new subpopulation. */
 	createNodules();
 }
 
-/*********************************************************************************
- * Create a new network population.                                              *
- * @return void.                                                                 *
- ********************************************************************************/
+/******************************************************************************
+ * Create a new network population.                                           *
+ * @return void.                                                              *
+ *****************************************************************************/
 void
 createNetworks() {
 	int i, j;
 
 	for (i = 0; i < numNodules; i++) {
-		if ((cNetPopulation.nets[i] = (network *)malloc(sizeof(network))) == NULL)
-			error(RES_MEM);
-
 		/* Allocation of memory. */
-		cNetPopulation.nets[i]->nodules = (nodule **)malloc(sizeof(nodule));
-		cNetPopulation.nets[i]->outValues = (double *)malloc(cNetPopulation.numOutputNodes * sizeof(double));
-		if (cNetPopulation.nets[i]->nodules == NULL || cNetPopulation.nets[i]->outValues == NULL)
-			error(RES_MEM);
+		cNetPopulation.nets[i] = (network *)xmalloc(sizeof(network));
+		cNetPopulation.nets[i]->nodules = (nodule **)xmalloc(sizeof(nodule));
+		cNetPopulation.nets[i]->outValues =
+			(double *)xmalloc(cNetPopulation.numOutputNodes * sizeof(double));
 
 		/* Initialization of variables. */
 		cNetPopulation.nets[i]->aptitude = 0.0;
