@@ -16,6 +16,7 @@
  * coconet. If not, see <http://www.gnu.org/licenses/>.                          *
  ********************************************************************************/
 
+#include <stdarg.h>
 #include <stdlib.h>
 
 #include <definitions.h>
@@ -49,4 +50,23 @@ xrealloc(void *ptr, size_t size) {
 	}
 
 	return output;
+}
+
+void
+xlog(int level, char *fmt, ...) {
+	va_list argv;
+
+	va_start(argv, fmt);
+	switch (level) {
+	case 0:
+		vfprintf(stdout, _(fmt), argv);
+		break;
+	case 1:
+		vfprintf(stdout, _(fmt), argv);
+		break;
+	case 2:
+		vfprintf(stderr, _(fmt), argv);
+		break;
+	}
+	va_end(argv);
 }

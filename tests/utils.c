@@ -56,6 +56,12 @@ START_TEST (test_xrealloc)
 }
 END_TEST
 
+START_TEST (test_xlog)
+{
+	xlog(0, "number: %d, character: %c, string: %s", 1, 'a', "string\0");
+}
+END_TEST
+
 Suite *
 utils_suite() {
 	Suite *s;
@@ -68,6 +74,8 @@ utils_suite() {
 
 	tcase_add_test(tc_core, test_xmalloc);
 	tcase_add_test(tc_core, test_xcalloc);
+	tcase_add_test(tc_core, test_xrealloc);
+	tcase_add_test(tc_core, test_xlog);
 	suite_add_tcase(s, tc_core);
 
 	return s;

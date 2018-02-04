@@ -70,5 +70,6 @@ void scaleInputData(int);
 void *xmalloc(size_t);
 void *xcalloc(size_t, size_t);
 void *xrealloc(void *, size_t);
+void xlog(int level, char *fmt, ...);
 
 #endif /* FUNCTIONS_H */

@@ -64,13 +64,13 @@ main(int argc, char **argv) {
 
 	/* We load the config and training files. */
 	loadFile(configs->configFilename, configs->trainingFilename);
-	if(nodSel > numNodules)
+	if (nodSel > numNodules)
 		nodSel = numNodules;
 
 	/* Scaling of input and output data from the training file. */
-	fprintf(stderr, _("Scaling input data.\n"));
+	xlog(0, "Scaling input data.\n");
 	scaleInputData(numTrain);
-	fprintf(stderr, _("Scaling output data.\n"));
+	xlog(0, "Scaling output data.\n");
 	if (netTransf == (func)&Logistic)
 		scaleOutputData(outputData, numTrain,
 						0.0 + pTransfer.epsilon,
@@ -83,35 +83,35 @@ main(int argc, char **argv) {
 	/* We evolve the networks and nodes ppulations. */
 	for (int i = 0; measureChange(&netAptitude, i) == false; i++) {
 		/* We create a new population of nodes. */
-		fprintf(stderr, _("Species %d\n"), i + 1);
+		xlog(0, "Species %d\n", i + 1);
 		createNodulePopulation();
 
 		/* We add the new population of nodes to the previous population of
 		   networks. */
-		fprintf(stderr, _("Add nodes to networks.\n"));
+		xlog(0, "Add nodes to networks.\n");
 		addNodulesNetworks();
 
 		/* We evolve the populations of networks and nodes. */
-		fprintf(stderr, _("Evolve populations.\n"));
+		xlog(0, "Evolve populations.\n");
 		evolvePopulations();
 
 		/* We adjust the size of the last node's subpopulation matrix. */
-		fprintf(stderr, _("Ajust matrix\n"));
+		xlog(0, "Ajust matrix.\n");
 		adjustMatrix();
 	}
 
 	/* We order the networks by its flair. */
-	fprintf(stderr, _("Sorting networks.\n"));
+	xlog(0, "Sorting networks.\n");
 	sortNetworks();
 
 	/* We read the data of the generalization file. */
-	fprintf(stderr, _("Read the generalization data.\n"));
+	xlog(0, "Read the generalization data.\n");
 	readGeneralization(argv[3]);
 
 	/* We scale the input and output data from the generalization file. */
-	fprintf(stderr, _("Scaling input data.\n"));
+	xlog(0, "Scaling input data.\n");
 	scaleInputData(numGeneral);
-	fprintf(stderr, _("Scaling output data.\n"));
+	xlog(0, "Scaling output data.\n");
 	if (netTransf == (func)&Logistic)
 		scaleOutputData(outputData, numGeneral,
 						0.0 + pTransfer.epsilon,
@@ -122,12 +122,12 @@ main(int argc, char **argv) {
 						pTransfer.htan_a - pTransfer.epsilon);
 
 	/* We export the best network found. */
-	fprintf(stderr, _("Exporting the best network.\n"));
+	xlog(0, "Exporting the best network.\n");
 	if (argc == 6)
 		exportBestNetwork(argv[5]);
 	else
 		exportBestNetwork("output.txt");
-	fprintf(stderr, _("End\n"));
+	xlog(0, "End\n");
 
 	return 0;
 }
