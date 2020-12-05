@@ -1,0 +1,58 @@
+AC_INIT([coconet],[0.0.1],[palvarez@ritho.net])
+AC_CONFIG_SRCDIR([src/main.c])
+AC_CONFIG_AUX_DIR([.build-aux])
+dnl AC_CONFIG_SUBDIRS([subdir])
+AM_INIT_AUTOMAKE([foreign -Wall -Werror dist-bzip2])
+
+dnl Maintainer mode
+AM_MAINTAINER_MODE([enable])
+
+dnl Check programs
+dnl Find and test de C compiler
+AC_PROG_CC
+AC_LANG_C
+AC_PROG_INSTALL
+AC_PROG_MAKE_SET
+AC_C_CONST
+AC_C_INLINE
+AC_TYPE_SIZE_T
+
+dnl Check libraries
+dnl AC_CHECK_LIB([rlog], [xerror], [LIBRLOG=-lrlog], [AC_MSG_ERROR([Ritho log library not found])])
+dnl AC_SUBST([LIBRLOG])
+PKG_CHECK_MODULES([CHECK], [check >= 0.10.0])
+
+dnl Checking headers 
+AC_CHECK_HEADERS([stdio.h])
+AC_CHECK_HEADERS([stdlib.h])
+AC_CHECK_HEADERS([string.h])
+AC_CHECK_HEADERS([stdarg.h])
+AC_CHECK_HEADER_STDBOOL
+AC_HEADER_STDC
+
+dnl Check typedefs, structs and compilers characteristics
+
+dnl Checking library functions
+AC_CHECK_FUNCS(vdprintf,,AC_MSG_ERROR(vdprintf is not defined))
+AC_CHECK_FUNC(atol,,AC_MSG_ERROR(Oops! no atol ?!?))
+
+AC_FUNC_ERROR_AT_LINE
+AC_FUNC_MALLOC
+AC_FUNC_REALLOC
+
+dnl Variables for Makefiles.
+VERSION="1.0.1"
+AC_SUBST(VERSION)
+
+AC_SUBST([PROJ_DIR], [`pwd`])
+
+AC_SUBST([INCLUDE_DIR], [${PROJ_DIR}/src/include])
+AC_SUBST([SOURCE_DIR], [${PROJ_DIR}/src])
+AC_SUBST([MAKE], [make])
+
+dnl Output files
+AC_CONFIG_HEADERS([config.h])
+AC_CONFIG_FILES([Makefile src/Makefile tests/Makefile])
+
+dnl Generate output
+AC_OUTPUT
